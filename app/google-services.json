@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "282238006271",
+    "project_id": "realestatemanager-6223e",
+    "storage_bucket": "realestatemanager-6223e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282238006271:android:05660978ebf249627e2dca",
+        "android_client_info": {
+          "package_name": "com.kardabel.realestatemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282238006271-mdt0i0ej2gtv7oevrs83s7ob4s2ffs49.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kardabel.realestatemanager",
+            "certificate_hash": "1b5c19048d1f626b5a0958879f229a5e3ab562f2"
+          }
+        },
+        {
+          "client_id": "282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwib8dG0McTWejMrDkgL58HXnzlrZqPj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

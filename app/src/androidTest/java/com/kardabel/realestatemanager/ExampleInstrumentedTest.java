@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.kardabel.realestatemanager;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

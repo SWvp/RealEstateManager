@@ -5,7 +5,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "com.openclassrooms.realestatemanager"
+        applicationId "com.kardabel.realestatemanager"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
