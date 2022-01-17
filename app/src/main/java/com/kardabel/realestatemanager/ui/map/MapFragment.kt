@@ -1,18 +1,17 @@
-package com.kardabel.realestatemanager.ui.properties
+package com.kardabel.realestatemanager.ui.map
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.kardabel.realestatemanager.databinding.FragmentPropertiesBinding
+import com.kardabel.realestatemanager.databinding.FragmentMapBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PropertiesFragment : Fragment() {
+class MapFragment: Fragment() {
 
-    private var _binding: FragmentPropertiesBinding? = null
-    // TODO: Why this trouble with my little binding ?
+    private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
 
 
@@ -21,7 +20,7 @@ class PropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPropertiesBinding.inflate(
+        _binding = FragmentMapBinding.inflate(
             inflater,
             container,
             false
@@ -37,6 +36,4 @@ class PropertiesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
