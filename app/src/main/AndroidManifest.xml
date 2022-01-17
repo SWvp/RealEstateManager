@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.kardabel.realestatemanager.MainActivity"
+        <activity android:name="com.kardabel.realestatemanager.MainActivityOld"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.kardabel.realestatemanager.SecondActivity"
+        <activity android:name="com.kardabel.realestatemanager.SecondActivityOld"
             android:exported="true">
 
         </activity>
