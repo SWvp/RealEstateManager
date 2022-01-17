@@ -2,6 +2,10 @@ package com.kardabel.realestatemanager.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
@@ -15,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val firstFragment=PropertiesFragment()
+        val secondFragment=DetailsFragment()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -35,5 +42,19 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+        binding.bottomNavigationView!!.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+
+            }
+        }
+
+
     }
+    private fun setCurrentFragment(fragment: Fragment)=
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.properties_list_container,fragment)
+            commit()
+        }
+
 }
