@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager;
+package com.kardabel.realestatemanager.utils;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;

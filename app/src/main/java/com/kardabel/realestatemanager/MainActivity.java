@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kardabel.realestatemanager.utils.Utils;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewMain;
