@@ -3,11 +3,10 @@ package com.kardabel.realestatemanager.ui.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
+import com.kardabel.realestatemanager.ui.map.MapFragment
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val firstFragment=PropertiesFragment()
-        val secondFragment=DetailsFragment()
+        val propertiesFragment = PropertiesFragment()
+        val mapFragment = MapFragment()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -41,19 +40,29 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
+        val isTablet = resources.getBoolean(R.bool.isTablet)
+
+        when {
+            !isTablet -> {
+
+                binding
+                    .bottomNavigationView
+                    ?.setOnItemSelectedListener {
+                        when (it.itemId) {
+                            R.id.properties_icon -> setCurrentFragment(propertiesFragment)
+                            R.id.map_icon -> setCurrentFragment(mapFragment)
 
 
-        binding.bottomNavigationView!!.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-
+                        }
+                        true
+                    }
             }
         }
-
-
     }
-    private fun setCurrentFragment(fragment: Fragment)=
+
+    private fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.properties_list_container,fragment)
+            replace(R.id.properties_list_container, fragment)
             commit()
         }
 
