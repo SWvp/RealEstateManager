@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+
+    <!-- ITEM PROPERTY -->
+    <string name="property_type">Property type</string>
+    <string name="property_place">Property place</string>
+    <string name="property_price">$17,870,000</string>
+
+    <!-- PROPERTY DETAILS -->
+    <string name="media_title">Media</string>
+    <string name="description_title">Description</string>
+    <string name="description_text">One-of-one. A trophy unlike any other in the world. Never before on the market. All furniture and art will be included in the sale.</string>
+    <string name="details_surface_title">Surface:</string>
+    <string name="details_surface_value">720m²</string>
+    <string name="details_surface_description">This is surface icon</string>
+    <string name="details_room_title">Number of rooms:</string>
+    <string name="details_room_value">5</string>
+    <string name="details_room_description">This is room icon</string>
+    <string name="details_bathroom_title">Number of bathrooms:</string>
+    <string name="details_bathroom_value">2</string>
+    <string name="details_bathroom_description">This is bathroom icon</string>
+    <string name="details_bedroom_title">Number of bedrooms:</string>
+    <string name="details_bedroom_value">3</string>
+    <string name="details_bedroom_description">This is bedroom icon</string>
+    <string name="details_location_title">Location:</string>
+    <string name="details_location_description">This is description icon</string>
+    <string name="details_street">10 avenue de la corniche</string>
+    <string name="details_apartment">apt 6B</string>
+    <string name="details_city">Melun</string>
+    <string name="details_post_code">NY 10021</string>
+    <string name="details_country">Uganda</string>
+
+
+
+
 </resources>

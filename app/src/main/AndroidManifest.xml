@@ -24,11 +24,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.kardabel.realestatemanager.SecondActivityOld"
-            android:exported="true">
-
-        </activity>
-
     </application>
 
 </manifest>
