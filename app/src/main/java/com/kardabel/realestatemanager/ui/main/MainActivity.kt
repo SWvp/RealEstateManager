@@ -3,6 +3,8 @@ package com.kardabel.realestatemanager.ui.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
@@ -13,11 +15,20 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    var tabLayout: TabLayout? = null
+    var viewPager: ViewPager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        tabLayout = binding.tabs
+        viewPager = binding.viewPager
+
+        tabLayout!!.getTabAt(0)!!.text = "Properties"
+        tabLayout!!.getTabAt(1)!!.text = "Map"
 
         val propertiesFragment = PropertiesFragment()
         val mapFragment = MapFragment()
@@ -39,24 +50,6 @@ class MainActivity : AppCompatActivity() {
                 )
                 .commitNow()
         }
-
-        val isTablet = resources.getBoolean(R.bool.isTablet)
-
-        when {
-            !isTablet -> {
-                binding
-                    .bottomNavigationView
-                    ?.setOnItemSelectedListener {
-                        when (it.itemId) {
-                            R.id.properties_icon -> setCurrentFragment(propertiesFragment)
-                            R.id.map_icon -> setCurrentFragment(mapFragment)
-
-
-                        }
-                        true
-                    }
-            }
-        }
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
@@ -64,5 +57,4 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.properties_list_container, fragment)
             commit()
         }
-
 }

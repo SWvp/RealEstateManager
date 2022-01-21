@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
 
+    <!-- ACTIVITY MAIN -->
+    <string name="it_s_a_fab">it is a FAB</string>
+    <string name="tab_item_properties">Properties</string>
+    <string name="tab_item_map">Map</string>
+
     <!-- ITEM PROPERTY -->
     <string name="property_type">Property type</string>
     <string name="property_place">Property place</string>
@@ -29,8 +34,5 @@
     <string name="details_city">Melun</string>
     <string name="details_post_code">NY 10021</string>
     <string name="details_country">Uganda</string>
-
-
-
 
 </resources>
