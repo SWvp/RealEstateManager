@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         when {
             !isTablet -> {
-
                 binding
                     .bottomNavigationView
                     ?.setOnItemSelectedListener {

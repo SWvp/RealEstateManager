@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class PropertiesFragment : Fragment() {
 
     private var _binding: FragmentPropertiesBinding? = null
-    // TODO: Why this trouble with my little binding ?
     private val binding get() = _binding!!
 
 

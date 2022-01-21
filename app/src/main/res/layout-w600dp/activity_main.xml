@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kardabel.realestatemanager.MainActivityOld"
+    tools:context=".ui.main.MainActivity"
     android:gravity="center">
 
     <FrameLayout
@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/property_details_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,13 +22,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="200dp" />
+        app:layout_constraintGuide_begin="280dp" />
 
     <FrameLayout
         android:id="@+id/property_details_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/browser_actions_title_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/main_gl_list"
