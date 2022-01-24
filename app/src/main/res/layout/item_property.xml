@@ -15,6 +15,7 @@
             android:id="@+id/property_image"
             android:layout_width="@dimen/property_image_size"
             android:layout_height="@dimen/property_image_size"
+            android:layout_margin="4dp"
             android:src="@drawable/property_sample"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
