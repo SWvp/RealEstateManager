@@ -1,22 +1,20 @@
 package com.kardabel.realestatemanager.ui.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
+import com.kardabel.realestatemanager.ui.create.CreatePropertyActivity
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
-import com.kardabel.realestatemanager.ui.map.MapFragment
+import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    var tabLayout: TabLayout? = null
-    var viewPager: ViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,14 +22,8 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        tabLayout = binding.tabs
-        viewPager = binding.viewPager
-
-        tabLayout!!.getTabAt(0)!!.text = "Properties"
-        tabLayout!!.getTabAt(1)!!.text = "Map"
-
-        val propertiesFragment = PropertiesFragment()
-        val mapFragment = MapFragment()
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -50,11 +42,29 @@ class MainActivity : AppCompatActivity() {
                 )
                 .commitNow()
         }
+
+        binding.fab.setOnClickListener {
+            val intent = Intent(
+                this@MainActivity,
+                CreatePropertyActivity::class.java
+            )
+            startActivity(intent)
+        }
     }
 
-    private fun setCurrentFragment(fragment: Fragment) =
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.properties_list_container, fragment)
-            commit()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.map_item -> {
+                val intent = Intent(this, MapActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
+    }
 }
