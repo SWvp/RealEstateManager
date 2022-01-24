@@ -6,6 +6,15 @@
     <string name="tab_item_properties">Properties</string>
     <string name="tab_item_map">Map</string>
 
+    <!-- ACTIVITY CREATE PROPERTY -->
+    <string name="enter_description">Enter property description:</string>
+    <string name="enter_property_address">Property Address</string>
+    <string name="create_room_title">Rooms:</string>
+    <string name="create_bathroom_title">Bathrooms:</string>
+    <string name="create_bedroom_title">Bedrooms:</string>
+
+    <string name="save_button">SAVE</string>
+
     <!-- ITEM PROPERTY -->
     <string name="property_type">Property type</string>
     <string name="property_place">Property place</string>
@@ -27,6 +36,9 @@
     <string name="details_bedroom_title">Number of bedrooms:</string>
     <string name="details_bedroom_value">3</string>
     <string name="details_bedroom_description">This is bedroom icon</string>
+    <string name="details_interests_title">Point of interests:</string>
+    <string name="details_interests_description">School, Church, Police station</string>
+    <string name="details_start_sale">On sale date: 12/12/2021</string>
     <string name="details_location_title">Location:</string>
     <string name="details_location_description">This is description icon</string>
     <string name="details_street">10 avenue de la corniche</string>
@@ -34,5 +46,8 @@
     <string name="details_city">Melun</string>
     <string name="details_post_code">NY 10021</string>
     <string name="details_country">Uganda</string>
+
+    <!-- ITEM DETAILS PICTURE -->
+    <string name="item_for_details_picture">item for details picture</string>
 
 </resources>
