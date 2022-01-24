@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +30,7 @@
             android:layout_margin="8dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_details_picture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_media_title" />
@@ -85,6 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textStyle="bold"
                 android:text="@string/details_surface_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/surface_icon"
@@ -116,6 +118,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textStyle="bold"
                 android:text="@string/details_room_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/room_icon"
@@ -147,6 +150,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textStyle="bold"
                 android:text="@string/details_bathroom_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/bathroom_icon"
@@ -178,6 +182,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textStyle="bold"
                 android:text="@string/details_bedroom_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/bedroom_icon"
@@ -194,6 +199,54 @@
                 app:layout_constraintTop_toBottomOf="@id/bedroom_title" />
 
             <ImageView
+                android:id="@+id/interests_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/interests"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bedroom_number"
+                android:contentDescription="@string/details_bedroom_description" />
+
+            <TextView
+                android:id="@+id/interests_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textStyle="bold"
+                android:text="@string/details_interests_title"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toTopOf="@+id/interests_icon" />
+
+            <TextView
+                android:id="@+id/interests_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/details_interests_description"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toBottomOf="@id/interests_title" />
+
+            <TextView
+                android:id="@+id/start_sale_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/details_start_sale"
+                android:textStyle="italic"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/interests_list"
+                app:layout_constraintStart_toStartOf="@+id/interests_list"
+                app:layout_constraintTop_toBottomOf="@id/interests_list" />
+
+
+
+            <ImageView
                 android:id="@+id/location_icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -208,6 +261,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textStyle="bold"
                 android:text="@string/details_location_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/location_icon"

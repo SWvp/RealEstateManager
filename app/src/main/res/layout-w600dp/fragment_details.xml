@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -199,6 +197,26 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/bedroom_icon"
                 app:layout_constraintTop_toBottomOf="@id/bedroom_title" />
+
+            <ImageView
+                android:id="@+id/interests_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/interests"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bedroom_number"
+                android:contentDescription="@string/details_bedroom_description" />
+
+            <TextView
+                android:id="@+id/interests_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/details_interests_title"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toTopOf="@+id/interests_icon" />
 
             <ImageView
                 android:id="@+id/location_icon"
