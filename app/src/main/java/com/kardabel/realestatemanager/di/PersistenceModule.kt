@@ -29,7 +29,7 @@ object PersistenceModule {
 
     @Provides
     @Singleton
-    fun provideNotes(
+    fun provideProperties(
         database: PropertiesRoomDatabase
     ): PropertiesDao {
         return database.propertiesDao()
