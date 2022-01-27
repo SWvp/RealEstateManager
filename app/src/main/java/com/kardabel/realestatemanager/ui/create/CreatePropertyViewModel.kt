@@ -1,4 +1,9 @@
 package com.kardabel.realestatemanager.ui.create
 
-class CreatePropertyViewModel {
+import androidx.lifecycle.ViewModel
+
+
+class CreatePropertyViewModel: ViewModel() {
+
+
 }

@@ -1,4 +1,8 @@
 package com.kardabel.realestatemanager.ui.map
 
-class MapViewState {
-}
+import com.google.android.gms.maps.model.LatLng
+
+data class MapViewState (
+    val latLng: LatLng,
+    val zoom: Float
+        )
