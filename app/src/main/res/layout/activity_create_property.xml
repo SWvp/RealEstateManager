@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.create.CreatePropertyActivity">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/grey">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,23 +20,78 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_create"
             app:title="Add a property"
             app:titleTextColor="@color/white" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_type_dropdown_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            app:endIconMode="dropdown_menu"
+            app:helperText="Choose a type of property"
+            app:helperTextEnabled="true"
+            android:hint="@string/chose_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:startIconDrawable="@drawable/type">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/picture_property_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/details_recycler_height"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/property_type_dropdown_menu"
+            tools:listitem="@layout/item_details_picture" />
+
+        <Button
+            android:id="@+id/add_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:cornerRadius="20dp"
+            android:text="Add picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/picture_property_recycler_view" />
 
         <TextView
             android:id="@+id/create_property_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/enter_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/add_picture_button" />
 
         <EditText
             android:id="@+id/type_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_property_description" />
@@ -58,25 +112,25 @@
             android:layout_height="wrap_content"
             android:text="@string/details_surface_title"
             android:textSize="@dimen/details_description_text"
-            app:layout_constraintTop_toTopOf="@id/surface_icon"
-            app:layout_constraintStart_toEndOf="@id/surface_icon"/>
+            app:layout_constraintStart_toEndOf="@id/surface_icon"
+            app:layout_constraintTop_toTopOf="@id/surface_icon" />
 
         <EditText
             android:id="@+id/surface_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/surface_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title"/>
+            app:layout_constraintTop_toBottomOf="@id/surface_title" />
 
         <ImageView
             android:id="@+id/room_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:contentDescription="@string/details_room_description"
             android:src="@drawable/number_of_room"
             app:layout_constraintStart_toEndOf="@id/surface_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description"
-            android:contentDescription="@string/details_room_description" />
+            app:layout_constraintTop_toBottomOf="@id/type_description" />
 
         <TextView
             android:id="@+id/room_title"
@@ -84,25 +138,25 @@
             android:layout_height="wrap_content"
             android:text="@string/create_room_title"
             android:textSize="@dimen/details_description_text"
-            app:layout_constraintTop_toTopOf="@id/surface_icon"
-            app:layout_constraintStart_toEndOf="@id/room_icon"/>
+            app:layout_constraintStart_toEndOf="@id/room_icon"
+            app:layout_constraintTop_toTopOf="@id/surface_icon" />
 
         <EditText
             android:id="@+id/room_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/room_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title"/>
+            app:layout_constraintTop_toBottomOf="@id/surface_title" />
 
         <ImageView
             android:id="@+id/bedroom_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:contentDescription="@string/details_bedroom_description"
             android:src="@drawable/bedroom"
             app:layout_constraintStart_toEndOf="@id/room_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description"
-            android:contentDescription="@string/details_bedroom_description" />
+            app:layout_constraintTop_toBottomOf="@id/type_description" />
 
         <TextView
             android:id="@+id/bedroom_title"
@@ -110,25 +164,25 @@
             android:layout_height="wrap_content"
             android:text="@string/create_bedroom_title"
             android:textSize="@dimen/details_description_text"
-            app:layout_constraintTop_toTopOf="@id/surface_icon"
-            app:layout_constraintStart_toEndOf="@id/bedroom_icon"/>
+            app:layout_constraintStart_toEndOf="@id/bedroom_icon"
+            app:layout_constraintTop_toTopOf="@id/surface_icon" />
 
         <EditText
             android:id="@+id/bedroom_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/bedroom_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title"/>
+            app:layout_constraintTop_toBottomOf="@id/surface_title" />
 
         <ImageView
             android:id="@+id/bathroom_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:contentDescription="@string/details_bathroom_description"
             android:src="@drawable/bathroom"
             app:layout_constraintStart_toEndOf="@id/bedroom_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description"
-            android:contentDescription="@string/details_bathroom_description" />
+            app:layout_constraintTop_toBottomOf="@id/type_description" />
 
         <TextView
             android:id="@+id/bathroom_title"
@@ -136,15 +190,15 @@
             android:layout_height="wrap_content"
             android:text="@string/create_bathroom_title"
             android:textSize="@dimen/details_description_text"
-            app:layout_constraintTop_toTopOf="@id/surface_icon"
-            app:layout_constraintStart_toEndOf="@id/bathroom_icon"/>
+            app:layout_constraintStart_toEndOf="@id/bathroom_icon"
+            app:layout_constraintTop_toTopOf="@id/surface_icon" />
 
         <EditText
             android:id="@+id/bathroom_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/bathroom_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title"/>
+            app:layout_constraintTop_toBottomOf="@id/surface_title" />
 
         <TextView
             android:id="@+id/create_interests"
@@ -152,9 +206,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Interests"
-            app:layout_constraintTop_toBottomOf="@id/surface_input"
-            app:layout_constraintStart_toStartOf="parent"/>
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/surface_input" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -162,9 +215,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
             android:hint="@string/enter_property_address"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline"
@@ -173,6 +227,7 @@
             app:endIconMode="clear_text"
             app:helperText="Enter address"
             app:helperTextEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_interests"
@@ -181,27 +236,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_property_address"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-
-
-        <Button
-            android:id="@+id/create"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:enabled="true"
-            android:text="@string/save_button"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/property_address" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>

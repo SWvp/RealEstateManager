@@ -12,6 +12,7 @@
     <string name="create_room_title">Rooms:</string>
     <string name="create_bathroom_title">Bathrooms:</string>
     <string name="create_bedroom_title">Bedrooms:</string>
+    <string name="chose_type">Property type</string>
 
     <string name="save_button">SAVE</string>
 
