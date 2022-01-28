@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.databinding.FragmentPropertiesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +16,7 @@ class PropertiesFragment : Fragment() {
     private var _binding: FragmentPropertiesBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel by viewModels<PropertiesViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,12 +33,18 @@ class PropertiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView: RecyclerView = binding.root
+        val adapter = PropertiesAdapter()
+        recyclerView.adapter = adapter
+
+        viewModel.getPropertiesLiveData.observe(this){
+            it.let { adapter.submitList(it) }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
