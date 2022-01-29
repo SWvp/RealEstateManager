@@ -36,16 +36,20 @@ class CreatePropertyActivity: AppCompatActivity() {
                 saveProperty()
                 true
             }
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun saveProperty() {
-        viewModel.createProperty(
-            binding.inputPropertyAddress.text.toString(),
-            binding.typeDescription.text.toString(),
-            binding.type.text.toString(),
-
-        )
+//        viewModel.createProperty(
+//            binding.inputPropertyAddress.text.toString(),
+//            binding.typeDescription.text.toString(),
+//            binding.type.text.toString(),
+//
+//        )
     }
 }

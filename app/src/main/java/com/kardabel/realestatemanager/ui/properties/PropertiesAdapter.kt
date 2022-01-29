@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.*
 
-class PropertiesAdapter : ListAdapter<PropertyViewState, ViewHolder>(ListComparator) {
-
-    private var onItemClicked: OnItemClickListener? = null
-
+class PropertiesAdapter(
+    private val listener : (PropertyViewState) -> Unit
+) : ListAdapter<PropertyViewState, ViewHolder>(ListComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.create(parent)
@@ -22,21 +21,22 @@ class PropertiesAdapter : ListAdapter<PropertyViewState, ViewHolder>(ListCompara
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current, onItemClicked)
+        holder.bind(current, listener)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        // TODO Stephane VB
         private val type: TextView = itemView.findViewById(R.id.property_type)
         private val place: TextView = itemView.findViewById(R.id.property_place)
         private val price: TextView = itemView.findViewById(R.id.property_price)
 
-        fun bind(property: PropertyViewState, onItemClicked: OnItemClickListener?) {
+        fun bind(property: PropertyViewState, listener: (PropertyViewState) -> Unit ) {
             type.text = property.type
             place.text = property.place
             price.text = property.price
 
             itemView.setOnClickListener {
-                onItemClicked!!.onItemClicked(property)
+                listener.invoke(property)
             }
         }
 
@@ -50,21 +50,8 @@ class PropertiesAdapter : ListAdapter<PropertyViewState, ViewHolder>(ListCompara
     }
 
     object ListComparator: DiffUtil.ItemCallback<PropertyViewState>() {
-        override fun areItemsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean {
-            return oldItem === newItem
-        }
+        override fun areItemsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean = oldItem === newItem
 
-        override fun areContentsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean = oldItem == newItem
     }
-
-    fun setOnItemClickedListener(listener: OnItemClickListener) {
-        onItemClicked = listener
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(property: PropertyViewState)
-    }
-
 }

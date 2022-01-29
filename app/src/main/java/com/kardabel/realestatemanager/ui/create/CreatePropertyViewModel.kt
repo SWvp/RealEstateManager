@@ -12,8 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreatePropertyViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
-    private val applicationDispatchers: ApplicationDispatchers
-): ViewModel() {
+    private val applicationDispatchers: ApplicationDispatchers,
+) : ViewModel() {
 
 
     fun createProperty(
@@ -21,15 +21,15 @@ class CreatePropertyViewModel @Inject constructor(
         description: String,
         type: String,
         place: String,
-        price: Float
-
-        ){
+        price: String,
+    ) {
+        // TODO Don't trust the user ! :D
         val property = PropertyEntity(
-            address,
-            description,
-            type,
-            place,
-            price
+            address = address,
+            description = description,
+            type = type,
+            place = place,
+            price = price.toFloatOrNull()
         )
     }
 

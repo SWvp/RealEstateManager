@@ -41,7 +41,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            mapViewModel.getMapInfo.observe(this, { (latLng, zoom) ->
+            mapViewModel.getMapInfo.observe(this) { (latLng, zoom) ->
                 googleMap.clear()
 
                 // MOVE THE CAMERA TO THE USER LOCATION
@@ -53,7 +53,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
                 // DISPLAY BLUE DOT FOR USER LOCATION
                 googleMap.isMyLocationEnabled = true
-            })
+            }
         }
     }
 }

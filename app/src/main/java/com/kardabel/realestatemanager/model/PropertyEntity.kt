@@ -5,12 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "property")
-data class PropertyEntity(
-    @ColumnInfo(name = "address") var address: String,
-    @ColumnInfo(name = "description") var description: String,
-    @ColumnInfo(name = "type") var type: String,
-    @ColumnInfo(name = "place") var place: String,
-    @ColumnInfo(name = "price") var price: Float,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
-
+data class PropertyEntity constructor(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "address") val address: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "type") val type: String,
+    @ColumnInfo(name = "place") val place: String,
+    @ColumnInfo(name = "price") val price: Float,
 )

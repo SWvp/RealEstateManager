@@ -13,40 +13,38 @@ import javax.inject.Inject
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
     propertiesRepository: PropertiesRepository,
-    applicationDispatchers: ApplicationDispatchers
-): ViewModel() {
+    applicationDispatchers: ApplicationDispatchers,
+) : ViewModel() {
 
-    private val getProperties: LiveData<List<PropertyEntity>> =
+    private val propertiesLiveData: LiveData<List<PropertyEntity>> =
         propertiesRepository
             .getProperties()
             .asLiveData(applicationDispatchers.ioDispatcher)
 
-    private val _properties = MediatorLiveData<List<PropertyViewState>>().apply {
-        addSource(getProperties) {
+    private val propertiesMediatorLiveData = MediatorLiveData<List<PropertyViewState>>().apply {
+        addSource(propertiesLiveData) {
             combine(it)
         }
     }
 
-    val getPropertiesLiveData: LiveData<List<PropertyViewState>> = _properties
+    val viewStateLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
 
-    private fun combine(it: List<PropertyEntity>?) {
-        _properties.value = it?.let { it1 -> map(it1) }
+    private fun combine(propertyEntities: List<PropertyEntity>?) {
+        propertyEntities ?: return
 
+        propertiesMediatorLiveData.value = propertyEntities.map {
+            toViewState(it)
+        }
     }
 
-    private fun map(propertiesList: List<PropertyEntity>): List<PropertyViewState> {
-        val propertyViewState: MutableList<PropertyViewState> = mutableListOf()
-            for (it in propertiesList){
-                propertyViewState.add(
-                    PropertyViewState(
-                        it.id,
-                        it.type,
-                        it.place,
-                        it.price.toString()
-                    )
-                )
-            }
-        return propertyViewState
+    private fun toViewState(propertyEntity: PropertyEntity) = PropertyViewState(
+        id = propertyEntity.id,
+        type = propertyEntity.type,
+        place = propertyEntity.place,
+        price = propertyEntity.price.toString()
+    )
 
+    fun onPropertyClicked(propertyViewState: PropertyViewState) {
+        TODO("Not yet implemented")
     }
 }

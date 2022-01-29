@@ -35,11 +35,13 @@ class PropertiesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView = binding.root
-        val adapter = PropertiesAdapter()
+        val adapter = PropertiesAdapter {
+            viewModel.onPropertyClicked(it)
+        }
         recyclerView.adapter = adapter
 
-        viewModel.getPropertiesLiveData.observe(this){
-            it.let { adapter.submitList(it) }
+        viewModel.viewStateLiveData.observe(this){
+            adapter.submitList(it)
         }
     }
 
