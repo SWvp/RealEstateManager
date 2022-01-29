@@ -90,125 +90,109 @@
             android:id="@+id/type_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_property_description" />
 
-        <ImageView
-            android:id="@+id/surface_icon"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/surface_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/details_surface_description"
-            android:src="@drawable/surface"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="64dp"
+            app:endIconMode="dropdown_menu"
+            app:helperTextEnabled="true"
+            app:helperText="@string/details_surface_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type_description" />
+            app:layout_constraintTop_toBottomOf="@+id/type_description"
+            app:startIconDrawable="@drawable/surface">
 
-        <TextView
-            android:id="@+id/surface_title"
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/surface_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/room_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/details_surface_title"
-            android:textSize="@dimen/details_description_text"
-            app:layout_constraintStart_toEndOf="@id/surface_icon"
-            app:layout_constraintTop_toTopOf="@id/surface_icon" />
+            android:layout_marginEnd="64dp"
+            app:endIconMode="dropdown_menu"
+            app:helperText="@string/create_room_title"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/surface_menu"
+            app:startIconDrawable="@drawable/number_of_room">
 
-        <EditText
-            android:id="@+id/surface_input"
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/room_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bedroom_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/surface_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title" />
+            android:layout_marginTop="8dp"
+            app:endIconMode="dropdown_menu"
+            app:helperText="@string/create_bedroom_title"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="@+id/surface_menu"
+            app:layout_constraintStart_toStartOf="@+id/surface_menu"
+            app:layout_constraintTop_toBottomOf="@+id/surface_menu"
+            app:startIconDrawable="@drawable/bedroom">
 
-        <ImageView
-            android:id="@+id/room_icon"
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/bedroom_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bathroom_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/details_room_description"
-            android:src="@drawable/number_of_room"
-            app:layout_constraintStart_toEndOf="@id/surface_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description" />
+            android:layout_marginTop="8dp"
+            app:endIconMode="dropdown_menu"
+            app:helperText="@string/create_bathroom_title"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="@+id/room_menu"
+            app:layout_constraintStart_toStartOf="@+id/room_menu"
+            app:layout_constraintTop_toBottomOf="@+id/surface_menu"
+            app:startIconDrawable="@drawable/bathroom">
 
-        <TextView
-            android:id="@+id/room_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/create_room_title"
-            android:textSize="@dimen/details_description_text"
-            app:layout_constraintStart_toEndOf="@id/room_icon"
-            app:layout_constraintTop_toTopOf="@id/surface_icon" />
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/bathroom_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
 
-        <EditText
-            android:id="@+id/room_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/room_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title" />
-
-        <ImageView
-            android:id="@+id/bedroom_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/details_bedroom_description"
-            android:src="@drawable/bedroom"
-            app:layout_constraintStart_toEndOf="@id/room_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description" />
-
-        <TextView
-            android:id="@+id/bedroom_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/create_bedroom_title"
-            android:textSize="@dimen/details_description_text"
-            app:layout_constraintStart_toEndOf="@id/bedroom_icon"
-            app:layout_constraintTop_toTopOf="@id/surface_icon" />
-
-        <EditText
-            android:id="@+id/bedroom_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/bedroom_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title" />
-
-        <ImageView
-            android:id="@+id/bathroom_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/details_bathroom_description"
-            android:src="@drawable/bathroom"
-            app:layout_constraintStart_toEndOf="@id/bedroom_title"
-            app:layout_constraintTop_toBottomOf="@id/type_description" />
-
-        <TextView
-            android:id="@+id/bathroom_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/create_bathroom_title"
-            android:textSize="@dimen/details_description_text"
-            app:layout_constraintStart_toEndOf="@id/bathroom_icon"
-            app:layout_constraintTop_toTopOf="@id/surface_icon" />
-
-        <EditText
-            android:id="@+id/bathroom_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/bathroom_icon"
-            app:layout_constraintTop_toBottomOf="@id/surface_title" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/create_interests"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Interests"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/interests"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/surface_input" />
-
+            app:layout_constraintTop_toBottomOf="@+id/bedroom_menu" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/property_address"
@@ -216,7 +200,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="32dp"
             android:hint="@string/enter_property_address"

@@ -9,10 +9,11 @@
     <!-- ACTIVITY CREATE PROPERTY -->
     <string name="enter_description">Enter property description:</string>
     <string name="enter_property_address">Property Address</string>
-    <string name="create_room_title">Rooms:</string>
-    <string name="create_bathroom_title">Bathrooms:</string>
-    <string name="create_bedroom_title">Bedrooms:</string>
+    <string name="create_room_title">Rooms</string>
+    <string name="create_bathroom_title">Bathrooms</string>
+    <string name="create_bedroom_title">Bedrooms</string>
     <string name="chose_type">Property type</string>
+    <string name="interests">Interests</string>
 
     <string name="save_button">SAVE</string>
 
@@ -25,7 +26,7 @@
     <string name="media_title">Media</string>
     <string name="description_title">Description</string>
     <string name="description_text">One-of-one. A trophy unlike any other in the world. Never before on the market. All furniture and art will be included in the sale.</string>
-    <string name="details_surface_title">Surface:</string>
+    <string name="details_surface_title">Surface</string>
     <string name="details_surface_value">720m²</string>
     <string name="details_surface_description">This is surface icon</string>
     <string name="details_room_title">Number of rooms:</string>
