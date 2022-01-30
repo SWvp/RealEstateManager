@@ -23,6 +23,7 @@ class CreatePropertyActivity: AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -36,16 +37,20 @@ class CreatePropertyActivity: AppCompatActivity() {
                 saveProperty()
                 true
             }
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun saveProperty() {
-        viewModel.createProperty(
-            binding.inputPropertyAddress.text.toString(),
-            binding.typeDescription.text.toString(),
-            binding.type.text.toString(),
+    // viewModel.createProperty(
+    //     binding.inputPropertyAddress.text.toString(),
+    //     binding.typeDescription.text.toString(),
+    //     binding.type.text.toString(),
 
-        )
+    // )
     }
 }
