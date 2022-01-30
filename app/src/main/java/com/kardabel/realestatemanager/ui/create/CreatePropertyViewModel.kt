@@ -21,16 +21,18 @@ class CreatePropertyViewModel @Inject constructor(
         description: String,
         type: String,
         place: String,
-        price: Float
+        price: String,
+    ) {
 
-        ){
-        val property = PropertyEntity(
-            address,
-            description,
-            type,
-            place,
-            price
-        )
+        val property = price.toFloatOrNull()?.let {
+            PropertyEntity(
+                address = address,
+                description = description,
+                type = type,
+                place = place,
+                price = it
+            )
+        }
     }
 
     private fun insertProperty(propertyEntity: PropertyEntity) =
