@@ -15,6 +15,6 @@ class MapViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers
 ) : ViewModel() {
 
-    val getMapInfo: LiveData<MapViewState> = locationRepository.fetchUpdates().asLiveData()
+    val getMapInfo: LiveData<MapViewState> = locationRepository.fetchUpdates().asLiveData(applicationDispatchers.ioDispatcher)
 
 }
