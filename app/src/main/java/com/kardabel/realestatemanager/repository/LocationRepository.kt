@@ -17,21 +17,18 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LocationRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val client: FusedLocationProviderClient,
 ) {
-
-    private lateinit var client: FusedLocationProviderClient
 
     companion object {
         private const val UPDATE_INTERVAL_SECS = 10L
         private const val FASTEST_UPDATE_INTERVAL_SECS = 2L
+        private const val ZOOM_FOCUS = 15f
     }
-
-    val ZOOM_FOCUS = 15f
 
     @SuppressLint("MissingPermission")
     fun fetchUpdates(): Flow<MapViewState> = callbackFlow {
-        val locationRequest = LocationRequest().apply {
+        val locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.SECONDS.toMillis(UPDATE_INTERVAL_SECS)
             fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_UPDATE_INTERVAL_SECS)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -52,9 +49,6 @@ class LocationRepository @Inject constructor(
                 trySend(userLocation).isSuccess
             }
         }
-
-        client = LocationServices.getFusedLocationProviderClient(context)
-
 
         client.requestLocationUpdates(locationRequest, callBack, Looper.getMainLooper())
         awaitClose { client.removeLocationUpdates(callBack) }
