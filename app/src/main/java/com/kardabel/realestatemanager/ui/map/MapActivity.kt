@@ -3,6 +3,8 @@ package com.kardabel.realestatemanager.ui.map
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -11,18 +13,31 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.kardabel.realestatemanager.R
+import com.kardabel.realestatemanager.databinding.ActivityMainBinding
+import com.kardabel.realestatemanager.databinding.ActivityMapBinding
+import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private var _binding: ActivityMapBinding? = null
+    private val binding get() = _binding!!
+
     private val mapViewModel: MapViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        _binding = ActivityMapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
+
+        setSupportActionBar(binding.toolbar)
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
     }
 
