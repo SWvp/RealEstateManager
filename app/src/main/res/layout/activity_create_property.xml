@@ -231,7 +231,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/property_address"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -240,7 +239,6 @@
             android:layout_marginBottom="32dp"
             android:hint="@string/enter_property_address"
             app:boxBackgroundColor="@color/white"
-            app:boxBackgroundMode="outline"
             app:endIconMode="clear_text"
             app:helperText="Enter address"
             app:helperTextEnabled="true"
@@ -257,16 +255,104 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_apartment_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:hint="@string/enter_property_apartment_number"
+            app:boxBackgroundColor="@color/white"
+            app:endIconMode="clear_text"
+            app:helperText="Enter city"
+            app:helperTextEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/property_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_apartment_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:hint="@string/enter_property_city"
+            app:boxBackgroundColor="@color/white"
+            app:endIconMode="clear_text"
+            app:helperText="Enter city"
+            app:helperTextEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/property_apartment_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_property_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_postal_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/enter_property_postal_code"
+            app:boxBackgroundColor="@color/white"
+            app:endIconMode="clear_text"
+            app:helperText="Enter city"
+            app:helperTextEnabled="true"
+            app:layout_constraintStart_toStartOf="@+id/property_city"
+            app:layout_constraintTop_toBottomOf="@id/property_city">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_property_postal_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/enter_property_country"
+            app:boxBackgroundColor="@color/white"
+            app:endIconMode="clear_text"
+            app:helperText="Enter city"
+            app:helperTextEnabled="true"
+            app:layout_constraintStart_toStartOf="@+id/property_postal_code"
+            app:layout_constraintTop_toBottomOf="@+id/property_postal_code">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_property_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:helperText="@string/details_price"
+            android:layout_margin="8dp"
+            android:hint="@string/price"
+            app:helperText="@string/add_price_helper"
             app:helperTextEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/property_address"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/property_country"
             app:startIconDrawable="@drawable/price">
 
             <com.google.android.material.textfield.TextInputEditText

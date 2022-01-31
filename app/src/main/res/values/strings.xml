@@ -8,7 +8,7 @@
 
     <!-- ACTIVITY CREATE PROPERTY -->
     <string name="enter_description">Enter property description here:</string>
-    <string name="enter_property_address">Property Address</string>
+    <string name="enter_property_address">Address</string>
     <string name="create_room_title">Rooms</string>
     <string name="create_bathroom_title">Bathrooms</string>
     <string name="create_bedroom_title">Bedrooms</string>
@@ -17,6 +17,12 @@
     <string name="add_from_storage">Add pic from storage</string>
     <string name="add_from_camera">Take a pic</string>
     <string name="add_interest">Add interest</string>
+    <string name="add_price_helper">Enter property price</string>
+    <string name="enter_property_city">City</string>
+    <string name="enter_property_country">Country</string>
+    <string name="enter_property_apartment_number">Apt n.</string>
+    <string name="price">Price</string>
+    <string name="enter_property_postal_code">Postal</string>
 
     <string name="save_button">SAVE</string>
 
@@ -51,7 +57,6 @@
     <string name="details_city">Melun</string>
     <string name="details_post_code">NY 10021</string>
     <string name="details_country">Uganda</string>
-    <string name="details_price">Enter property price</string>
 
     <!-- ITEM DETAILS PICTURE -->
     <string name="item_for_details_picture">item for details picture</string>
