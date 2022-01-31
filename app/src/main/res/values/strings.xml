@@ -51,6 +51,7 @@
     <string name="details_city">Melun</string>
     <string name="details_post_code">NY 10021</string>
     <string name="details_country">Uganda</string>
+    <string name="details_price">Enter property price</string>
 
     <!-- ITEM DETAILS PICTURE -->
     <string name="item_for_details_picture">item for details picture</string>
@@ -59,8 +60,11 @@
     <string name="map_item">Map</string>
     <string name="logout_item">Logout</string>
 
+    <!-- TYPE DROPDOWN -->
+    <string name="dropdown_item_text">Sample text</string>
+
     <!-- TOKEN GOOGLE SIGNING -->
-    <string name="default_web_client_id">282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com</string>
+    <string name="web_client_id">282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com</string>
 
     <string name="logging_in">Logging In</string>
 
