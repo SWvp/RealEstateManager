@@ -10,6 +10,9 @@
     <dimen name="details_recycler_height">120dp</dimen>
     <dimen name="details_description_text">12sp</dimen>
 
+    <!-- CREATE ACTIVITY-->
+    <dimen name="add_pic_storage">10sp</dimen>
+
 
 
 </resources>

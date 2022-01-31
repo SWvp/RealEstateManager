@@ -64,135 +64,168 @@
             tools:listitem="@layout/item_details_picture" />
 
         <Button
-            android:id="@+id/add_picture_button"
+            android:id="@+id/add_storage_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
             android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/add_from_storage"
+            android:textSize="@dimen/add_pic_storage"
             app:cornerRadius="20dp"
-            android:text="Add picture"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/picture_property_recycler_view" />
 
-        <TextView
-            android:id="@+id/create_property_description"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/add_camera_picture_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/enter_description"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/add_from_camera"
+            android:textSize="@dimen/add_pic_storage"
+            app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_picture_button" />
+            app:layout_constraintStart_toEndOf="@+id/add_storage_picture_button"
+            app:layout_constraintTop_toTopOf="@+id/add_storage_picture_button" />
 
         <EditText
             android:id="@+id/type_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
             android:layout_marginEnd="8dp"
             android:background="@color/white"
+            android:hint="@string/enter_description"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_property_description" />
+            app:layout_constraintTop_toBottomOf="@+id/add_storage_picture_button" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/surface_menu"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="64dp"
-            app:endIconMode="dropdown_menu"
             app:helperTextEnabled="true"
             app:helperText="@string/details_surface_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/type_description"
             app:startIconDrawable="@drawable/surface">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surface_choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"/>
+                android:background="@color/white"
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/room_menu"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="64dp"
-            app:endIconMode="dropdown_menu"
             app:helperText="@string/create_room_title"
             app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/surface_menu"
             app:startIconDrawable="@drawable/number_of_room">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/room_choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bedroom_menu"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:endIconMode="dropdown_menu"
             app:helperText="@string/create_bedroom_title"
             app:helperTextEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/surface_menu"
             app:layout_constraintStart_toStartOf="@+id/surface_menu"
             app:layout_constraintTop_toBottomOf="@+id/surface_menu"
             app:startIconDrawable="@drawable/bedroom">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/bedroom_choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bathroom_menu"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:endIconMode="dropdown_menu"
             app:helperText="@string/create_bathroom_title"
             app:helperTextEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/room_menu"
             app:layout_constraintStart_toStartOf="@+id/room_menu"
             app:layout_constraintTop_toBottomOf="@+id/surface_menu"
             app:startIconDrawable="@drawable/bathroom">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/bathroom_choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/create_interests"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
-            android:text="@string/interests"
+            app:startIconDrawable="@drawable/interests"
+            android:hint="@string/interests"
+            app:helperText="Enter interest"
+            app:helperTextEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bedroom_menu" />
+            app:layout_constraintTop_toBottomOf="@+id/bedroom_menu">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_interest_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/add_interest"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="@dimen/add_pic_storage"
+            app:cornerRadius="20dp"
+            app:layout_constraintTop_toBottomOf="@id/create_interests"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/add_interest_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:singleSelection="true"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/property_address"
@@ -206,15 +239,13 @@
             android:hint="@string/enter_property_address"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline"
-            app:counterEnabled="true"
-            app:counterMaxLength="80"
             app:endIconMode="clear_text"
             app:helperText="Enter address"
             app:helperTextEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_interests"
+            app:layout_constraintTop_toBottomOf="@id/chip_group"
             app:startIconDrawable="@drawable/location">
 
             <com.google.android.material.textfield.TextInputEditText

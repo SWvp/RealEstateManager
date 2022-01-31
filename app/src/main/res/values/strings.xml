@@ -7,13 +7,16 @@
     <string name="tab_item_map">Map</string>
 
     <!-- ACTIVITY CREATE PROPERTY -->
-    <string name="enter_description">Enter property description:</string>
+    <string name="enter_description">Enter property description here:</string>
     <string name="enter_property_address">Property Address</string>
     <string name="create_room_title">Rooms</string>
     <string name="create_bathroom_title">Bathrooms</string>
     <string name="create_bedroom_title">Bedrooms</string>
     <string name="chose_type">Property type</string>
     <string name="interests">Interests</string>
+    <string name="add_from_storage">Add pic from storage</string>
+    <string name="add_from_camera">Take a pic</string>
+    <string name="add_interest">Add interest</string>
 
     <string name="save_button">SAVE</string>
 
@@ -51,5 +54,14 @@
 
     <!-- ITEM DETAILS PICTURE -->
     <string name="item_for_details_picture">item for details picture</string>
+
+    <!-- TOOLBAR MAIN ACTIVITY -->
+    <string name="map_item">Map</string>
+    <string name="logout_item">Logout</string>
+
+    <!-- TOKEN GOOGLE SIGNING -->
+    <string name="default_web_client_id">282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com</string>
+
+    <string name="logging_in">Logging In</string>
 
 </resources>

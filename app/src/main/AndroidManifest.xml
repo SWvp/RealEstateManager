@@ -27,7 +27,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyASyYHcFc_BTB-omhZGviy4d3QonaBmcq8"/>
 
-        <activity android:name="com.kardabel.realestatemanager.ui.main.MainActivity"
+        <activity android:name=".ui.authentication.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.details.DetailsActivity" />
         <activity android:name=".ui.map.MapActivity" />
         <activity android:name=".ui.create.CreatePropertyActivity" />

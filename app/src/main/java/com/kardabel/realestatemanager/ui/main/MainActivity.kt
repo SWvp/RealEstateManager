@@ -5,13 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
+import com.kardabel.realestatemanager.ui.authentication.AuthActivity
 import com.kardabel.realestatemanager.ui.create.CreatePropertyActivity
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
 import com.kardabel.realestatemanager.ui.map.MapActivity
@@ -22,6 +27,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_CODE = 100
+
+    lateinit var googleSignInClient: GoogleSignInClient
+
+    private val auth by lazy {
+        FirebaseAuth.getInstance()
+    }
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -40,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-
         if (binding.propertyDetailsContainer != null &&
             supportFragmentManager.findFragmentById(binding.propertyDetailsContainer.id) == null
         ) {
@@ -52,8 +62,8 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        viewModel.actionSingleLiveEvent.observe(this){
-            when(it){
+        viewModel.actionSingleLiveEvent.observe(this) {
+            when (it) {
                 PermissionViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
                     this@MainActivity,
                     arrayOf(permission.ACCESS_FINE_LOCATION),
@@ -67,6 +77,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // call requestIdToken
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
 
         binding.fab.setOnClickListener {
             val intent = Intent(
@@ -87,6 +105,15 @@ class MainActivity : AppCompatActivity() {
             R.id.map_item -> {
                 val intent = Intent(this, MapActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.logout_item -> {
+                googleSignInClient.signOut().addOnCompleteListener {
+                    val intent = Intent(this, AuthActivity::class.java)
+                    Toast.makeText(this, "Logging Out", Toast.LENGTH_SHORT).show()
+                    startActivity(intent)
+                    finish()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
