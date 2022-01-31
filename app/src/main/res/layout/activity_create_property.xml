@@ -25,7 +25,7 @@
             app:titleTextColor="@color/white" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/property_type_dropdown_menu"
+            android:id="@+id/dropdown_menu"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,6 +42,7 @@
             app:startIconDrawable="@drawable/type">
 
             <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/property_type_dropdown_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white" />
@@ -60,7 +61,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/property_type_dropdown_menu"
+            app:layout_constraintTop_toBottomOf="@id/dropdown_menu"
             tools:listitem="@layout/item_details_picture" />
 
         <Button
@@ -120,7 +121,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:hint="surface"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -242,7 +244,6 @@
             app:endIconMode="clear_text"
             app:helperText="Enter address"
             app:helperTextEnabled="true"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chip_group"
@@ -254,5 +255,28 @@
                 android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:helperText="@string/details_price"
+            app:helperTextEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/property_address"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:startIconDrawable="@drawable/price">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/price_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
