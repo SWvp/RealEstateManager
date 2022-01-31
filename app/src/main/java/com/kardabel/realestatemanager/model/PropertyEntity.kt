@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.model
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -18,11 +19,11 @@ data class PropertyEntity constructor(
     @ColumnInfo(name = "room") var room: Int,
     @ColumnInfo(name = "bedroom") var bedroom: Int,
     @ColumnInfo(name = "bathroom") var bathroom: Int,
-    @ColumnInfo(name = "interest") var interestEntity: List<InterestEntity>,
     @ColumnInfo(name = "user_id") var Uid: String,
     @ColumnInfo(name = "create_date") var createDate: String,
     @ColumnInfo(name = "sale_status") var saleStatus: Boolean,
     @ColumnInfo(name = "purchase_date") var purchase: String,
+    @ColumnInfo(name = "interest") var interest: Int,
     @PrimaryKey(autoGenerate = true) val propertyId: Int = 0
 
 )

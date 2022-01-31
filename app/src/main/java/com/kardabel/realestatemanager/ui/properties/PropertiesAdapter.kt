@@ -27,12 +27,12 @@ class PropertiesAdapter(
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val type: TextView = itemView.findViewById(R.id.property_type)
-        private val place: TextView = itemView.findViewById(R.id.property_place)
+        private val address: TextView = itemView.findViewById(R.id.property_place)
         private val price: TextView = itemView.findViewById(R.id.property_price)
 
         fun bind(property: PropertyViewState, listener: (PropertyViewState) -> Unit ) {
             type.text = property.type
-            place.text = property.place
+            address.text = property.address
             price.text = property.price
 
             itemView.setOnClickListener {

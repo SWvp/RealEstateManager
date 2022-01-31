@@ -20,4 +20,17 @@ class Converters {
     fun toBitmap(byteArray: ByteArray): Bitmap{
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
+
+    // Convert string to list of strings
+    @TypeConverter
+    fun toListOfStrings(flatStringList: String): List<String> {
+        return flatStringList.split(",")
+    }
+
+    // Convert list of strings
+    @TypeConverter
+    fun fromListOfStrings(listOfString: List<String>): String {
+        return listOfString.joinToString(",")
+    }
+
 }

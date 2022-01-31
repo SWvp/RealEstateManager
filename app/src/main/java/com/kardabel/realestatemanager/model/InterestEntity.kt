@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "interest")
 data class InterestEntity(
-    @ColumnInfo(name = "interest") var interest: String,
+    @ColumnInfo(name = "interest") var interest: List<String>,
     @PrimaryKey(autoGenerate = true) val interestId: Int = 0,
 )

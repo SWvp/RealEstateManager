@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.kardabel.realestatemanager.ApplicationDispatchers
-import com.kardabel.realestatemanager.model.PropertyEntity
+import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class PropertiesViewModel @Inject constructor(
     applicationDispatchers: ApplicationDispatchers
 ) : ViewModel() {
 
-    private val propertiesLiveData: LiveData<List<PropertyEntity>> =
+    private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
         propertiesRepository
             .getProperties()
             .asLiveData(applicationDispatchers.ioDispatcher)
@@ -29,7 +29,7 @@ class PropertiesViewModel @Inject constructor(
 
     val viewStateLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
 
-    private fun combine(propertyEntities: List<PropertyEntity>?) {
+    private fun combine(propertyEntities: List<PropertyWithPhoto>) {
         propertyEntities ?: return
 
         propertiesMediatorLiveData.value = propertyEntities.map {
@@ -37,11 +37,11 @@ class PropertiesViewModel @Inject constructor(
         }
     }
 
-    private fun toViewState(propertyEntity: PropertyEntity) = PropertyViewState(
-        id = propertyEntity.id,
-        type = propertyEntity.type,
-        place = propertyEntity.place,
-        price = propertyEntity.price.toString()
+    private fun toViewState(property: PropertyWithPhoto) = PropertyViewState(
+       id = property.propertyEntity.propertyId,
+       type = property.propertyEntity.type,
+       address = property.propertyEntity.address,
+       price = property.propertyEntity.price.toString()
     )
 
     fun onPropertyClicked(propertyViewState: PropertyViewState) {
