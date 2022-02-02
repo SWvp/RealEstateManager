@@ -46,7 +46,7 @@ class LocationRepository @Inject constructor(
                         ),
                     ZOOM_FOCUS
                 )
-                trySend(userLocation).isSuccess
+                trySend(userLocation)
             }
         }
 
