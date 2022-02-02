@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="property_price_color">#FF4081</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="grey">#F6F6F6</color>
 
 </resources>
