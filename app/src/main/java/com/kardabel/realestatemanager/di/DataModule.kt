@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.database.PropertiesRoomDatabase
 import dagger.Module
@@ -33,4 +35,14 @@ object DataModule {
     @Singleton
     fun provideFusedLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore =
+        FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth =
+        FirebaseAuth.getInstance()
 }
