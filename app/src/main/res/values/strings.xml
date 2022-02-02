@@ -73,4 +73,8 @@
 
     <string name="logging_in">Logging In</string>
 
+
+    <string name="popup_title_permission_files_access">Access</string>
+
+
 </resources>
