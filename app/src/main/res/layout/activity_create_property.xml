@@ -90,7 +90,7 @@
             app:layout_constraintTop_toTopOf="@+id/add_storage_picture_button" />
 
         <EditText
-            android:id="@+id/type_description"
+            android:id="@+id/input_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -113,11 +113,11 @@
             app:helperTextEnabled="true"
             app:helperText="@string/details_surface_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/type_description"
+            app:layout_constraintTop_toBottomOf="@+id/input_description"
             app:startIconDrawable="@drawable/surface">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/surface_choice"
+                android:id="@+id/input_surface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -138,7 +138,7 @@
             app:startIconDrawable="@drawable/number_of_room">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/room_choice"
+                android:id="@+id/input_room"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -158,7 +158,7 @@
             app:startIconDrawable="@drawable/bedroom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bedroom_choice"
+                android:id="@+id/input_bedroom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -178,7 +178,7 @@
             app:startIconDrawable="@drawable/bathroom">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bathroom_choice"
+                android:id="@+id/input_bathroom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -200,6 +200,7 @@
             app:layout_constraintTop_toBottomOf="@+id/bedroom_menu">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_interest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"/>
@@ -356,7 +357,7 @@
             app:startIconDrawable="@drawable/price">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/price_input"
+                android:id="@+id/input_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
