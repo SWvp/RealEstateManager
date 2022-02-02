@@ -1,6 +1,7 @@
 package com.kardabel.realestatemanager.repository
 
 import com.kardabel.realestatemanager.database.PropertiesDao
+import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,10 @@ class PropertiesRepository @Inject constructor(
 
     suspend fun deletePropertyById(id: Int) {
         propertiesDao.deletePropertyById(id)
+    }
+
+    suspend fun insertPhoto(photo: PhotoEntity) {
+        propertiesDao.insertPhoto(photo)
     }
 
 }

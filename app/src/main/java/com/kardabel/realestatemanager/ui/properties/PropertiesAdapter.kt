@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.R
+import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
+import com.kardabel.realestatemanager.databinding.ItemDetailsPictureBinding
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.*
 
 class PropertiesAdapter(
     private val listener : (PropertyViewState) -> Unit
 ) : ListAdapter<PropertyViewState, ViewHolder>(ListComparator) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.create(parent)
