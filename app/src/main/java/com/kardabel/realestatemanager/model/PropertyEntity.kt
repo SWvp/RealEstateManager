@@ -20,10 +20,11 @@ data class PropertyEntity constructor(
     @ColumnInfo(name = "bedroom") var bedroom: Int?,
     @ColumnInfo(name = "bathroom") var bathroom: Int?,
     @ColumnInfo(name = "user_id") var uid: String,
-    @ColumnInfo(name = "create_date") var createDate: String?,
+    @ColumnInfo(name = "create_local_date_time") var createLocalDateTime: String?,
+    @ColumnInfo(name = "create_date_to_format") var createDateToFormat: String?,
     @ColumnInfo(name = "sale_status") var saleStatus: Boolean,
     @ColumnInfo(name = "purchase_date") var purchaseDate: String?,
     @ColumnInfo(name = "interest") var interest: List<String>?,
-    @PrimaryKey(autoGenerate = true) val propertyId: Int = 0
+    @PrimaryKey(autoGenerate = true) val propertyId: Long = 0
 
 )

@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class PhotoEntity(
     @ColumnInfo(name = "photo_list") val photo: Bitmap,
     @ColumnInfo(name = "photo_description") val photoDescription: String,
-    @ColumnInfo(name = "property_owner_id") val propertyOwnerId: Int?,
+    @ColumnInfo(name = "property_owner_id") var propertyOwnerId: Long?,
     @PrimaryKey(autoGenerate = true) val photoId: Int = 0,
 
     )

@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
-    propertiesRepository: PropertiesRepository,
-    applicationDispatchers: ApplicationDispatchers
+    private val propertiesRepository: PropertiesRepository,
+    private val applicationDispatchers: ApplicationDispatchers
 ) : ViewModel() {
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =

@@ -1,10 +1,13 @@
 package com.kardabel.realestatemanager.repository
 
+import androidx.annotation.WorkerThread
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -16,7 +19,8 @@ class PropertiesRepository @Inject constructor(
 
     fun getPropertyById(id: Int): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
 
-    suspend fun insertProperty(property: PropertyEntity) {
+    @WorkerThread
+    suspend fun insertProperty(property: PropertyEntity)= withContext(Dispatchers.IO)  {
         propertiesDao.insertProperty(property)
     }
 

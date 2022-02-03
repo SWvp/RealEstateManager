@@ -2,10 +2,7 @@ package com.kardabel.realestatemanager.ui.create
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.PhotoEntity
@@ -16,6 +13,10 @@ import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -25,20 +26,25 @@ class CreatePropertyViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
     private val firebaseAuth: FirebaseAuth,
     private val photoRepository: PhotoRepository,
+    private val clock: Clock,
     @ApplicationContext context: Context,
 
     ) : ViewModel() {
 
+    val propertyIdResponseLiveData: MutableLiveData<Long> by lazy {
+        MutableLiveData<Long>()
+    }
+
 
     private val interests = mutableListOf<String>()
-    private var photoList = mutableListOf<PhotoEntity>()
-    var propertyId by Delegates.notNull<Int>()
+    private var photoEntities = mutableListOf<PhotoEntity>()
+    var propertyId by Delegates.notNull<Long>()
 
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
         photoRepository.getPhotoLiveData().map {
             it.map { photoEntity ->
-                photoList = it as MutableList<PhotoEntity>
+                photoEntities = it as MutableList<PhotoEntity>
                 CreatePropertyPhotoViewState(
                     photoEntity.photo,
                     photoEntity.photoDescription,
@@ -55,15 +61,6 @@ class CreatePropertyViewModel @Inject constructor(
     //         )
     //     }
     // }.asLiveData(applicationDispatchers.ioDispatcher)
-
-
-    //  private fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
-    //      val bytes = ByteArrayOutputStream()
-    //      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-    //      val path =
-    //          MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
-    //      return Uri.parse(path.toString())
-    //  }
 
 
     fun addInterest(interest: String) {
@@ -86,13 +83,15 @@ class CreatePropertyViewModel @Inject constructor(
         bathroom: String?,
     ) {
 
-        val priceToFloat = price?.toFloat()
-        val surfaceToDouble = surface?.toDouble()
-        val roomToInt = room?.toInt()
-        val bedroomToInt = bedroom?.toInt()
-        val bathroomToInt = bathroom?.toInt()
+
+        val priceToFloat = price?.toFloatOrNull()
+        val surfaceToDouble = surface?.toDoubleOrNull()
+        val roomToInt = room?.toIntOrNull()
+        val bedroomToInt = bedroom?.toIntOrNull()
+        val bathroomToInt = bathroom?.toIntOrNull()
         val uid = firebaseAuth.currentUser!!.uid
         val createDateToFormat = Utils.getTodayDate()
+        val localDateTime = LocalDateTime.now(clock).toString()
 
 
         val property = PropertyEntity(
@@ -109,28 +108,36 @@ class CreatePropertyViewModel @Inject constructor(
             bedroom = bedroomToInt,
             bathroom = bathroomToInt,
             uid = uid,
-            createDate = createDateToFormat,
+            createLocalDateTime = localDateTime,
+            createDateToFormat = createDateToFormat,
             saleStatus = true,
             purchaseDate = null,
             interest = interests,
         )
 
-        propertyId = property.propertyId
-        //createPhotoListForProperty(photoList,propertyId)
+        //createPhotoEntityWithPropertyId(propertyId)
         insertProperty(property)
+        createPhotoEntityWithPropertyId()
+
+
+
+
     }
 
-// fun addPhoto(photo: Bitmap,
-//                         photoDescription: String,) =
-//     viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-//         photoRepository.addPhoto(
-//             PhotoEntity(
-//                 photo,
-//                 photoDescription,
-//                 null,
-//             )
-//         )
-//     }
+    private fun createPhotoEntityWithPropertyId() {
+        val photoListWithPropertyId = mutableListOf<PhotoEntity>()
+        for (photoEntity in photoEntities){
+            photoEntity.propertyOwnerId = propertyIdResponseLiveData.value
+            photoListWithPropertyId.add(photoEntity)
+        }
+        sendPhotoToDataBase(photoListWithPropertyId)
+    }
+
+    private fun sendPhotoToDataBase(photoEntities: MutableList<PhotoEntity>) {
+        for(photoEntity in photoEntities){
+            insertPhoto(photoEntity)
+        }
+    }
 
     fun addPhoto(photo: Bitmap, photoDescription: String) {
         photoRepository.addPhoto(
@@ -142,14 +149,9 @@ class CreatePropertyViewModel @Inject constructor(
         )
     }
 
-    private fun createPhotoListForProperty(
-        photoList: MutableList<PhotoEntity> = mutableListOf()
-    ) {
-    }
-
     private fun insertProperty(property: PropertyEntity) =
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertiesRepository.insertProperty(property)
+            propertyIdResponseLiveData.value = propertiesRepository.insertProperty(property)
         }
 
     private fun insertPhoto(photo: PhotoEntity) =

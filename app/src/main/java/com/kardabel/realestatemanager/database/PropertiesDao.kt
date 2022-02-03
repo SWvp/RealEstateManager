@@ -17,7 +17,7 @@ interface PropertiesDao {
     fun getPropertyById(id : Int): Flow<PropertyWithPhoto>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertProperty(property: PropertyEntity)
+    suspend fun insertProperty(property: PropertyEntity): Long
 
     @Query("DELETE FROM property WHERE user_id = :id")
     suspend fun deletePropertyById(id: Int)
