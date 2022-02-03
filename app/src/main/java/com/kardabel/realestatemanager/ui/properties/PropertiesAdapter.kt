@@ -3,13 +3,13 @@ package com.kardabel.realestatemanager.ui.properties
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
-import com.kardabel.realestatemanager.databinding.ItemDetailsPictureBinding
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.*
 
 class PropertiesAdapter(
@@ -27,17 +27,19 @@ class PropertiesAdapter(
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        private val type: TextView = itemView.findViewById(R.id.property_type)
-        private val address: TextView = itemView.findViewById(R.id.property_place)
-        private val price: TextView = itemView.findViewById(R.id.property_price)
+        private val type: TextView = itemView.findViewById(R.id.item_property_type)
+        private val county: TextView = itemView.findViewById(R.id.item_property_county)
+        private val price: TextView = itemView.findViewById(R.id.item_property_price)
+        private val photo: ImageView = itemView.findViewById(R.id.item_property_photo)
 
-        fun bind(property: PropertyViewState, listener: (PropertyViewState) -> Unit ) {
-            type.text = property.type
-            address.text = property.address
-            price.text = property.price
+        fun bind(propertyViewState: PropertyViewState, listener: (PropertyViewState) -> Unit ) {
+            type.text = propertyViewState.type
+            county.text = propertyViewState.county
+            price.text = propertyViewState.price
+           // Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
 
             itemView.setOnClickListener {
-                listener.invoke(property)
+                listener.invoke(propertyViewState)
             }
         }
 

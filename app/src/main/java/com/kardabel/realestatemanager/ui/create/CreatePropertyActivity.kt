@@ -279,7 +279,7 @@ class CreatePropertyActivity : AppCompatActivity() {
             binding.inputPropertyAddress.text.toString(),
             binding.inputApartmentNumber.text.toString(),
             binding.inputPropertyCity.text.toString(),
-            binding.inputPropertyPostalCode.text.toString(),
+            binding.inputPropertyZipCode.text.toString(),
             binding.inputPropertyCountry.text.toString(),
             binding.inputDescription.text.toString(),
             propertyType.toString(),

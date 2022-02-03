@@ -302,7 +302,30 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/property_postal_code"
+            android:id="@+id/property_county"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:hint="@string/enter_property_county"
+            app:boxBackgroundColor="@color/white"
+            app:endIconMode="clear_text"
+            app:helperText="Enter county"
+            app:helperTextEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/property_city">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_property_county"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/property_zip_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -311,11 +334,11 @@
             app:endIconMode="clear_text"
             app:helperText="Enter city"
             app:helperTextEnabled="true"
-            app:layout_constraintStart_toStartOf="@+id/property_city"
-            app:layout_constraintTop_toBottomOf="@id/property_city">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/property_county">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_property_postal_code"
+                android:id="@+id/input_property_zip_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal" />
@@ -332,8 +355,8 @@
             app:endIconMode="clear_text"
             app:helperText="Enter city"
             app:helperTextEnabled="true"
-            app:layout_constraintStart_toStartOf="@+id/property_postal_code"
-            app:layout_constraintTop_toBottomOf="@+id/property_postal_code">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/property_zip_code">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_property_country"

@@ -19,6 +19,7 @@
     <string name="add_interest">Add interest</string>
     <string name="add_price_helper">Enter property price</string>
     <string name="enter_property_city">City</string>
+    <string name="enter_property_county">County</string>
     <string name="enter_property_country">Country</string>
     <string name="enter_property_apartment_number">Apt n.</string>
     <string name="price">Price</string>

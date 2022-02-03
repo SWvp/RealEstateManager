@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.databinding.FragmentPropertiesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +40,9 @@ class PropertiesFragment : Fragment() {
             viewModel.onPropertyClicked(it)
         }
         recyclerView.adapter = adapter
+
+        binding.recyclerViewProperties.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewProperties.adapter = adapter
 
         viewModel.viewStateLiveData.observe(this){
             adapter.submitList(it)

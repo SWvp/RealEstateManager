@@ -38,10 +38,11 @@ class PropertiesViewModel @Inject constructor(
     }
 
     private fun toViewState(property: PropertyWithPhoto) = PropertyViewState(
-       id = property.propertyEntity.propertyId,
-       type = property.propertyEntity.type,
-       address = property.propertyEntity.address,
-       price = property.propertyEntity.price.toString()
+        id = property.propertyEntity.propertyId,
+        type = property.propertyEntity.type,
+        county = property.propertyEntity.address,
+        price = property.propertyEntity.price.toString(),
+        //photoBitmap = property.photo[0].photo
     )
 
     fun onPropertyClicked(propertyViewState: PropertyViewState) {
