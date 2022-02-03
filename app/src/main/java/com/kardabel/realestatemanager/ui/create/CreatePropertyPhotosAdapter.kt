@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kardabel.realestatemanager.R
 
-class CreatePropertyAdapter(
+class CreatePropertyPhotosAdapter(
     private val listener : (CreatePropertyPhotoViewState) -> Unit
-) : ListAdapter<CreatePropertyPhotoViewState, CreatePropertyAdapter.ViewHolder>(ListComparator) {
+) : ListAdapter<CreatePropertyPhotoViewState, CreatePropertyPhotosAdapter.ViewHolder>(ListComparator) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -8,7 +8,13 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
 
 
     <application
@@ -19,6 +25,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+
+            </meta-data>
+        </provider>
+
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -41,11 +60,7 @@
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.details.DetailsActivity" />
         <activity android:name=".ui.map.MapActivity" />
-        <activity android:name=".ui.create.CreatePropertyActivity" >
-
-
-
-        </activity>
+        <activity android:name=".ui.create.CreatePropertyActivity" />
 
     </application>
 
