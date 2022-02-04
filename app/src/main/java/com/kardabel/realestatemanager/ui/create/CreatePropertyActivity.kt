@@ -50,7 +50,7 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     private lateinit var photosAdapter: CreatePropertyPhotosAdapter
 
-    private val permission: String = Manifest.permission.READ_EXTERNAL_STORAGE
+    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
     lateinit var currentPhotoPath: String
     private var uriImageSelected: Uri? = null
@@ -101,6 +101,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         }
 
         // Set the adapter to retrieve photo recently added,
+        // and the observer
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = CreatePropertyPhotosAdapter {
 
@@ -134,12 +135,12 @@ class CreatePropertyActivity : AppCompatActivity() {
     private fun addPhotoFromStorage() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
-        if (!EasyPermissions.hasPermissions(this, permission)) {
+        if (!EasyPermissions.hasPermissions(this, PERMS)) {
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.popup_title_permission_files_access),
                 RC_IMAGE_PERMS,
-                permission
+                PERMS
             )
             return
         }
@@ -149,30 +150,41 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     private fun capturePhoto() {
 
+        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val photoFile: File = createImageFile()
 
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
+        uriImageSelected = FileProvider.getUriForFile(
+            this,
+            "com.kardabel.realestatemanager.fileprovider",
+            photoFile
+        )
 
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    uriImageSelected = FileProvider.getUriForFile(
-                        this,
-                        "com.kardabel.realestatemanager.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                }
-            }
-        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
+
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    // Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+    //     // Ensure that there's a camera activity to handle the intent
+    //     takePictureIntent.resolveActivity(packageManager)?.also {
+    //         // Create the File where the photo should go
+    //       val photoFile: File? = try {
+    //           createImageFile()
+    //         } catch (ex: IOException) {
+    //             // Error occurred while creating the File
+
+    //             null
+    //         }
+             // Continue only if the File was successfully created
+    //        photoFile?.also {
+    //            uriImageSelected = FileProvider.getUriForFile(
+    //                this,
+    //                "com.kardabel.realestatemanager.fileprovider",
+    //                it
+    //            )
+    //             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
+    //             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+    //         }
+    //     }
+     //}
     }
 
     // When photo is created, we need to create an image file
@@ -200,7 +212,6 @@ class CreatePropertyActivity : AppCompatActivity() {
     private fun handleResponse(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                // uri will be non null if we take a photo
                 if(uriImageSelected == null){
                     uriImageSelected = data!!.data
                 }
@@ -213,6 +224,7 @@ class CreatePropertyActivity : AppCompatActivity() {
             }
         }
     }
+
 
     // Create an alert dialog to ask user type a photo description,
     // then, when validate, send whole photo object to a repo via VM
@@ -278,6 +290,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         viewModel.createProperty(
             binding.inputPropertyAddress.text.toString(),
             binding.inputApartmentNumber.text.toString(),
+            binding.inputPropertyCounty.text.toString(),
             binding.inputPropertyCity.text.toString(),
             binding.inputPropertyZipCode.text.toString(),
             binding.inputPropertyCountry.text.toString(),

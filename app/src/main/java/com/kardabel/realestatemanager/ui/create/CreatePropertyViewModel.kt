@@ -31,7 +31,7 @@ class CreatePropertyViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    val propertyIdResponseLiveData: MutableLiveData<Long> by lazy {
+    private val propertyIdResponseLiveData: MutableLiveData<Long> by lazy {
         MutableLiveData<Long>()
     }
 
@@ -67,11 +67,22 @@ class CreatePropertyViewModel @Inject constructor(
         interests.add(interest)
 
     }
+    fun addPhoto(photo: Bitmap, photoDescription: String) {
+        photoRepository.addPhoto(
+            PhotoEntity(
+                photo,
+                photoDescription,
+                null,
+            )
+        )
+    }
+
 
     fun createProperty(
         address: String?,
         apartmentNumber: String?,
         city: String?,
+        county: String?,
         postalCode: String?,
         country: String?,
         propertyDescription: String?,
@@ -93,12 +104,12 @@ class CreatePropertyViewModel @Inject constructor(
         val createDateToFormat = Utils.getTodayDate()
         val localDateTime = LocalDateTime.now(clock).toString()
 
-
         val property = PropertyEntity(
             address = address,
             apartmentNumber = apartmentNumber,
             city = city,
-            postalCode = postalCode,
+            zipcode = postalCode,
+            county = county,
             country = country,
             propertyDescription = propertyDescription,
             type = type,
@@ -119,9 +130,14 @@ class CreatePropertyViewModel @Inject constructor(
         insertProperty(property)
         createPhotoEntityWithPropertyId()
 
+    }
 
-
-
+    private fun thisCantShowNull(it: Any?): Any {
+        var item: Any? = null
+        if(it == null){
+            item = ""
+        }
+        return item!!
     }
 
     private fun createPhotoEntityWithPropertyId() {
@@ -139,19 +155,9 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    fun addPhoto(photo: Bitmap, photoDescription: String) {
-        photoRepository.addPhoto(
-            PhotoEntity(
-                photo,
-                photoDescription,
-                null,
-            )
-        )
-    }
-
     private fun insertProperty(property: PropertyEntity) =
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertyIdResponseLiveData.value = propertiesRepository.insertProperty(property)
+            propertyIdResponseLiveData.postValue(propertiesRepository.insertProperty(property))
         }
 
     private fun insertPhoto(photo: PhotoEntity) =

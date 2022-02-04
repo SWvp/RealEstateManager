@@ -3,7 +3,7 @@ package com.kardabel.realestatemanager.ui.properties
 import android.graphics.Bitmap
 
 data class PropertyViewState(
-    val id: Long,
+    val propertyId: Long,
     val type: String?,
     val county: String?,
     val price: String?,

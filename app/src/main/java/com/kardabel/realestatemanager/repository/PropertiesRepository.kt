@@ -17,7 +17,7 @@ class PropertiesRepository @Inject constructor(
 
     fun getProperties(): Flow<List<PropertyWithPhoto>> = propertiesDao.getProperties()
 
-    fun getPropertyById(id: Int): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
+    fun getPropertyById(id: Long): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
 
     @WorkerThread
     suspend fun insertProperty(property: PropertyEntity)= withContext(Dispatchers.IO)  {
