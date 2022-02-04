@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/media_title"
+            android:text="@string/photo_title"
             android:textSize="@dimen/details_media_size"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,8 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_media_title" />
+            app:layout_constraintTop_toBottomOf="@id/details_media_title"
+            tools:listitem="@layout/item_details_picture"/>
 
         <TextView
             android:id="@+id/detail_description_title"
@@ -218,6 +219,17 @@
                 app:layout_constraintStart_toEndOf="@id/interests_icon"
                 app:layout_constraintTop_toTopOf="@+id/interests_icon" />
 
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toBottomOf="@id/interests_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:singleSelection="true"/>
+
             <ImageView
                 android:id="@+id/location_icon"
                 android:layout_width="0dp"
@@ -276,16 +288,28 @@
                 app:layout_constraintTop_toBottomOf="@id/apartment" />
 
             <TextView
-                android:id="@+id/post_code"
+                android:id="@+id/county"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/details_county"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/location_title"
+                app:layout_constraintTop_toBottomOf="@id/city" />
+
+            <TextView
+                android:id="@+id/zip_code"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/details_post_code"
+                android:text="@string/details_zip_code"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
-                app:layout_constraintTop_toBottomOf="@id/city" />
+                app:layout_constraintTop_toBottomOf="@id/county" />
 
             <TextView
                 android:id="@+id/country"
@@ -297,10 +321,11 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
-                app:layout_constraintTop_toBottomOf="@id/post_code" />
+                app:layout_constraintTop_toBottomOf="@id/zip_code" />
 
 
             <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="16dp"

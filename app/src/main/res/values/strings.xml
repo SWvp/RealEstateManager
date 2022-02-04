@@ -23,7 +23,7 @@
     <string name="enter_property_country">Country</string>
     <string name="enter_property_apartment_number">Apt n.</string>
     <string name="price">Price</string>
-    <string name="enter_property_postal_code">Postal</string>
+    <string name="enter_property_postal_code">Zip Code</string>
 
     <string name="save_button">SAVE</string>
 
@@ -33,7 +33,7 @@
     <string name="property_price">$17,870,000</string>
 
     <!-- PROPERTY DETAILS -->
-    <string name="media_title">Media</string>
+    <string name="photo_title">Photos</string>
     <string name="description_title">Description</string>
     <string name="description_text">One-of-one. A trophy unlike any other in the world. Never before on the market. All furniture and art will be included in the sale.</string>
     <string name="details_surface_title">Surface</string>
@@ -56,7 +56,8 @@
     <string name="details_street">10 avenue de la corniche</string>
     <string name="details_apartment">apt 6B</string>
     <string name="details_city">Melun</string>
-    <string name="details_post_code">NY 10021</string>
+    <string name="details_county">Bronx</string>
+    <string name="details_zip_code">10021</string>
     <string name="details_country">Uganda</string>
 
     <!-- ITEM DETAILS PICTURE -->

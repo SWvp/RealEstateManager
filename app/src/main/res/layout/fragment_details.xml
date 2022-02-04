@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/media_title"
+            android:text="@string/photo_title"
             android:textSize="@dimen/details_media_size"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -136,45 +136,13 @@
                 app:layout_constraintTop_toBottomOf="@id/room_title" />
 
             <ImageView
-                android:id="@+id/bathroom_icon"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:src="@drawable/bathroom"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/room_number"
-                android:contentDescription="@string/details_bathroom_description" />
-
-            <TextView
-                android:id="@+id/bathroom_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:textStyle="bold"
-                android:text="@string/details_bathroom_title"
-                android:textSize="@dimen/details_description_text"
-                app:layout_constraintBottom_toBottomOf="@+id/bathroom_icon"
-                app:layout_constraintStart_toEndOf="@id/room_icon"
-                app:layout_constraintTop_toTopOf="@+id/bathroom_icon" />
-
-            <TextView
-                android:id="@+id/bathroom_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/details_bathroom_value"
-                android:textSize="@dimen/details_description_text"
-                app:layout_constraintStart_toEndOf="@id/bathroom_icon"
-                app:layout_constraintTop_toBottomOf="@id/bathroom_title" />
-
-            <ImageView
                 android:id="@+id/bedroom_icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:src="@drawable/bedroom"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bathroom_number"
+                app:layout_constraintTop_toBottomOf="@id/room_number"
                 android:contentDescription="@string/details_bedroom_description" />
 
             <TextView
@@ -199,13 +167,45 @@
                 app:layout_constraintTop_toBottomOf="@id/bedroom_title" />
 
             <ImageView
+                android:id="@+id/bathroom_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/bathroom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bedroom_number"
+                android:contentDescription="@string/details_bathroom_description" />
+
+            <TextView
+                android:id="@+id/bathroom_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textStyle="bold"
+                android:text="@string/details_bathroom_title"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintBottom_toBottomOf="@+id/bathroom_icon"
+                app:layout_constraintStart_toEndOf="@id/bedroom_icon"
+                app:layout_constraintTop_toTopOf="@+id/bathroom_icon" />
+
+            <TextView
+                android:id="@+id/bathroom_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/details_bathroom_value"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintStart_toEndOf="@id/bathroom_icon"
+                app:layout_constraintTop_toBottomOf="@id/bathroom_title" />
+
+            <ImageView
                 android:id="@+id/interests_icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:src="@drawable/interests"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bedroom_number"
+                app:layout_constraintTop_toBottomOf="@id/bathroom_number"
                 android:contentDescription="@string/details_bedroom_description" />
 
             <TextView
@@ -219,16 +219,16 @@
                 app:layout_constraintStart_toEndOf="@id/interests_icon"
                 app:layout_constraintTop_toTopOf="@+id/interests_icon" />
 
-            <TextView
-                android:id="@+id/interests_list"
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/details_interests_description"
-                android:textSize="@dimen/details_description_text"
+                android:layout_margin="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toEndOf="@id/interests_icon"
-                app:layout_constraintTop_toBottomOf="@id/interests_title" />
+                app:layout_constraintTop_toBottomOf="@id/interests_title"
+                app:singleSelection="true"/>
 
             <TextView
                 android:id="@+id/start_sale_date"
@@ -240,9 +240,9 @@
                 android:textStyle="italic"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/interests_list"
-                app:layout_constraintStart_toStartOf="@+id/interests_list"
-                app:layout_constraintTop_toBottomOf="@id/interests_list" />
+                app:layout_constraintEnd_toEndOf="@+id/chip_group"
+                app:layout_constraintStart_toStartOf="@+id/chip_group"
+                app:layout_constraintTop_toBottomOf="@id/chip_group" />
 
 
 
@@ -304,16 +304,28 @@
                 app:layout_constraintTop_toBottomOf="@id/apartment" />
 
             <TextView
-                android:id="@+id/post_code"
+                android:id="@+id/county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/details_post_code"
+                android:text="@string/details_county"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/location_title"
                 app:layout_constraintTop_toBottomOf="@id/city" />
+
+            <TextView
+                android:id="@+id/zip_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/details_zip_code"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/location_title"
+                app:layout_constraintTop_toBottomOf="@id/county" />
 
             <TextView
                 android:id="@+id/country"
@@ -325,7 +337,7 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/location_title"
-                app:layout_constraintTop_toBottomOf="@id/post_code" />
+                app:layout_constraintTop_toBottomOf="@id/zip_code" />
 
 
             <com.google.android.gms.maps.MapView
