@@ -29,7 +29,7 @@ class DetailsViewModel @Inject constructor(
                     room = nullBecomeReadable(it.propertyEntity.room.toString()),
                     bathroom = nullBecomeReadable(it.propertyEntity.bathroom.toString()),
                     bedroom = nullBecomeReadable(it.propertyEntity.bedroom.toString()),
-                    poi = it.propertyEntity.interest,
+                    interest = it.propertyEntity.interest,
                     address = nullBecomeReadable(it.propertyEntity.address),
                     apartment = nullBecomeReadable(it.propertyEntity.apartmentNumber),
                     city = nullBecomeReadable(it.propertyEntity.city),

@@ -11,7 +11,7 @@ data class DetailsViewState(
     val room: String,
     val bathroom: String,
     val bedroom: String,
-    val poi: List<String>?,
+    val interest: List<String>?,
     val address: String,
     val apartment: String,
     val city: String,
