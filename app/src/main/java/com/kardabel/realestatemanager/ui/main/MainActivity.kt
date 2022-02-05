@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.main
 
-import android.Manifest.permission
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -12,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
@@ -64,17 +62,23 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.actionSingleLiveEvent.observe(this) {
             when (it) {
-                PermissionViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
+
+                //                PermissionViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
+                //                    this@MainActivity,
+                //                    arrayOf(permission.ACCESS_FINE_LOCATION),
+                //                    LOCATION_PERMISSION_CODE
+                //                )
+                //                else -> {
+                //                    val alertDialogBuilder = MaterialAlertDialogBuilder(this@MainActivity)
+                //                    alertDialogBuilder.setTitle("R.string.title_alert")
+                //                    alertDialogBuilder.setMessage("rational")
+                //                    alertDialogBuilder.show()
+                //                }
+                is PermissionViewAction.AskPermission -> ActivityCompat.requestPermissions(
                     this@MainActivity,
-                    arrayOf(permission.ACCESS_FINE_LOCATION),
+                    arrayOf(it.permission),
                     LOCATION_PERMISSION_CODE
                 )
-                else -> {
-                    val alertDialogBuilder = MaterialAlertDialogBuilder(this@MainActivity)
-                    alertDialogBuilder.setTitle("R.string.title_alert")
-                    alertDialogBuilder.setMessage("rational")
-                    alertDialogBuilder.show()
-                }
             }
         }
 

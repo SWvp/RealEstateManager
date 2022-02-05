@@ -19,6 +19,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
 import kotlin.properties.Delegates
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class CreatePropertyViewModel @Inject constructor(
@@ -31,14 +32,9 @@ class CreatePropertyViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    private val propertyIdResponseLiveData: MutableLiveData<Long> by lazy {
-        MutableLiveData<Long>()
-    }
-
-
     private val interests = mutableListOf<String>()
+    // TODO Faire un Repo partagé entre ce VM et le VM de la DialogFragment
     private var photoEntities = mutableListOf<PhotoEntity>()
-    var propertyId by Delegates.notNull<Long>()
 
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
@@ -126,9 +122,13 @@ class CreatePropertyViewModel @Inject constructor(
             interest = interests,
         )
 
+        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+            val newPropertyId = insertProperty(property)
+
+            createPhotoEntityWithPropertyId(newPropertyId)
+        }
         //createPhotoEntityWithPropertyId(propertyId)
-        insertProperty(property)
-        createPhotoEntityWithPropertyId()
+
 
     }
 
@@ -140,13 +140,18 @@ class CreatePropertyViewModel @Inject constructor(
         return item!!
     }
 
-    private fun createPhotoEntityWithPropertyId() {
+    private suspend fun createPhotoEntityWithPropertyId(newPropertyId : Long) {
+        // TODO Stephane
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
         for (photoEntity in photoEntities){
             photoEntity.propertyOwnerId = propertyIdResponseLiveData.value
             photoListWithPropertyId.add(photoEntity)
         }
         sendPhotoToDataBase(photoListWithPropertyId)
+
+        withContext(applicationDispatchers.mainDispatcher) {
+            finishActivityLiveEvent.fire()
+        }
     }
 
     private fun sendPhotoToDataBase(photoEntities: MutableList<PhotoEntity>) {
@@ -155,13 +160,11 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    private fun insertProperty(property: PropertyEntity) =
-        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertyIdResponseLiveData.postValue(propertiesRepository.insertProperty(property))
-        }
+    private suspend fun insertProperty(property: PropertyEntity) : Long {
+        return propertiesRepository.insertProperty(property)
 
-    private fun insertPhoto(photo: PhotoEntity) =
-        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertiesRepository.insertPhoto(photo)
-        }
+        // TODO Stephane still usefull ? propertyIdResponseLiveData.postValue()
+    }
+
+    private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
 }

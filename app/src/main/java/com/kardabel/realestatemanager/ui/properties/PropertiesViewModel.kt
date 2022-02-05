@@ -5,37 +5,27 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.data.CurrentSearchRepo
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
+    private val currentSearchRepo: CurrentSearchRepo,
     private val applicationDispatchers: ApplicationDispatchers
 ) : ViewModel() {
 
-    private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
-        propertiesRepository
-            .getProperties()
-            .asLiveData(applicationDispatchers.ioDispatcher)
-
-    private val propertiesMediatorLiveData = MediatorLiveData<List<PropertyViewState>>().apply {
-        addSource(propertiesLiveData) {
-            combine(it)
-        }
-    }
-
-    val viewStateLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
-
-    private fun combine(propertyEntities: List<PropertyWithPhoto>) {
-        propertyEntities ?: return
-
-        propertiesMediatorLiveData.value = propertyEntities.map {
-            toViewState(it)
-        }
-    }
+    val viewStateLiveData: LiveData<List<PropertyViewState>> =
+        combine(propertiesRepository.getProperties(), currentSearchRepo.mySearchParamsFlow) { properties, searchParams ->
+            properties.map { propertyWithPhoto ->
+                toViewState(propertyWithPhoto)
+            }
+        }.asLiveData(applicationDispatchers.ioDispatcher)
 
     private fun toViewState(property: PropertyWithPhoto) = PropertyViewState(
         propertyId = property.propertyEntity.propertyId,

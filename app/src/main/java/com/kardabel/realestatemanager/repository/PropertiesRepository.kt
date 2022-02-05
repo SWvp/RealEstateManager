@@ -1,6 +1,7 @@
 package com.kardabel.realestatemanager.repository
 
 import androidx.annotation.WorkerThread
+import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -12,15 +13,15 @@ import javax.inject.Inject
 
 
 class PropertiesRepository @Inject constructor(
-    private val propertiesDao: PropertiesDao
+    private val propertiesDao: PropertiesDao,
+    private val applicationDispatchers: ApplicationDispatchers,
 ) {
 
     fun getProperties(): Flow<List<PropertyWithPhoto>> = propertiesDao.getProperties()
 
     fun getPropertyById(id: Long): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
 
-    @WorkerThread
-    suspend fun insertProperty(property: PropertyEntity)= withContext(Dispatchers.IO)  {
+    suspend fun insertProperty(property: PropertyEntity): Long = withContext(applicationDispatchers.ioDispatcher)  {
         propertiesDao.insertProperty(property)
     }
 
