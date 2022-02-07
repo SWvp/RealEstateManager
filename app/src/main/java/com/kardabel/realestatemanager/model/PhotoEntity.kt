@@ -6,9 +6,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "photo")
-data class PhotoEntity(
+data class PhotoEntity constructor(
     @ColumnInfo(name = "photo_list") val photo: Bitmap,
-    @ColumnInfo(name = "photo_description") val photoDescription: String,
+    @ColumnInfo(name = "photo_description") val photoDescription: String?,
     @ColumnInfo(name = "property_owner_id") var propertyOwnerId: Long?,
     @PrimaryKey(autoGenerate = true) val photoId: Int = 0,
 
