@@ -1,24 +1,25 @@
 package com.kardabel.realestatemanager.ui.create
 
-import android.content.Context
 import android.graphics.Bitmap
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.PhotoRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
+import kotlinx.coroutines.withContext
 import java.time.Clock
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class CreatePropertyViewModel @Inject constructor(
@@ -27,24 +28,22 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val photoRepository: PhotoRepository,
     private val clock: Clock,
-    @ApplicationContext context: Context,
+   // @ApplicationContext context: Context,
 
     ) : ViewModel() {
 
-    private val propertyIdResponseLiveData: MutableLiveData<Long> by lazy {
-        MutableLiveData<Long>()
-    }
-
+    private val actionSingleLiveEvent: SingleLiveEvent<CreateActivityViewAction> = SingleLiveEvent()
 
     private val interests = mutableListOf<String>()
-    private var photoEntities = mutableListOf<PhotoEntity>()
-    var propertyId by Delegates.notNull<Long>()
+
+    // TODO Faire un Repo partagé entre ce VM et le VM de la DialogFragment
+    private var photoMutableList = mutableListOf<Photo>()
 
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
         photoRepository.getPhotoLiveData().map {
             it.map { photoEntity ->
-                photoEntities = it as MutableList<PhotoEntity>
+                photoMutableList = it as MutableList<Photo>
                 CreatePropertyPhotoViewState(
                     photoEntity.photo,
                     photoEntity.photoDescription,
@@ -52,32 +51,24 @@ class CreatePropertyViewModel @Inject constructor(
             }
         }
 
-    // val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> = photoRepository.getPhoto().map {
-    //     it.map { photoEntity ->
-    //         photoList = it as MutableList<PhotoEntity>
-    //         CreatePropertyPhotoViewState(
-    //             photoEntity.photo,
-    //             photoEntity.photoDescription,
-    //         )
-    //     }
-    // }.asLiveData(applicationDispatchers.ioDispatcher)
-
-
+    // Poi are stored here
     fun addInterest(interest: String) {
         interests.add(interest)
 
     }
+
+    // When user create a photo with a description, create this as a photo, not entity
     fun addPhoto(photo: Bitmap, photoDescription: String) {
         photoRepository.addPhoto(
-            PhotoEntity(
+            Photo(
                 photo,
                 photoDescription,
-                null,
-            )
+
+                )
         )
     }
 
-
+    // When property is ready
     fun createProperty(
         address: String?,
         apartmentNumber: String?,
@@ -94,74 +85,77 @@ class CreatePropertyViewModel @Inject constructor(
         bathroom: String?,
     ) {
 
+        // Must contain at least one photo
+        if (photoMutableList.isNotEmpty()) {
 
-        val priceToFloat = price?.toFloatOrNull()
-        val surfaceToDouble = surface?.toDoubleOrNull()
-        val roomToInt = room?.toIntOrNull()
-        val bedroomToInt = bedroom?.toIntOrNull()
-        val bathroomToInt = bathroom?.toIntOrNull()
-        val uid = firebaseAuth.currentUser!!.uid
-        val createDateToFormat = Utils.getTodayDate()
-        val localDateTime = LocalDateTime.now(clock).toString()
+            // Get value to entity format, string is for the view, we don't trust anything else
+            val priceToFloat = price?.toFloatOrNull()
+            val surfaceToDouble = surface?.toDoubleOrNull()
+            val roomToInt = room?.toIntOrNull()
+            val bedroomToInt = bedroom?.toIntOrNull()
+            val bathroomToInt = bathroom?.toIntOrNull()
+            val uid = firebaseAuth.currentUser!!.uid
+            val createDateToFormat = Utils.getTodayDate()
+            val localDateTime = LocalDateTime.now(clock).toString()
 
-        val property = PropertyEntity(
-            address = address,
-            apartmentNumber = apartmentNumber,
-            city = city,
-            zipcode = postalCode,
-            county = county,
-            country = country,
-            propertyDescription = propertyDescription,
-            type = type,
-            price = priceToFloat,
-            surface = surfaceToDouble,
-            room = roomToInt,
-            bedroom = bedroomToInt,
-            bathroom = bathroomToInt,
-            uid = uid,
-            createLocalDateTime = localDateTime,
-            createDateToFormat = createDateToFormat,
-            saleStatus = true,
-            purchaseDate = null,
-            interest = interests,
-        )
+            val property = PropertyEntity(
+                address = address,
+                apartmentNumber = apartmentNumber,
+                city = city,
+                zipcode = postalCode,
+                county = county,
+                country = country,
+                propertyDescription = propertyDescription,
+                type = type,
+                price = priceToFloat,
+                surface = surfaceToDouble,
+                room = roomToInt,
+                bedroom = bedroomToInt,
+                bathroom = bathroomToInt,
+                uid = uid,
+                createLocalDateTime = localDateTime,
+                createDateToFormat = createDateToFormat,
+                saleStatus = true,
+                purchaseDate = null,
+                interest = interests,
+            )
 
-        //createPhotoEntityWithPropertyId(propertyId)
-        insertProperty(property)
-        createPhotoEntityWithPropertyId()
-
-    }
-
-    private fun thisCantShowNull(it: Any?): Any {
-        var item: Any? = null
-        if(it == null){
-            item = ""
+            // Get the property id to update photoEntity
+            viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+                val newPropertyId = insertProperty(property)
+                createPhotoEntityWithPropertyId(newPropertyId)
+            }
+        } else {
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.PHOTO_ERROR)
         }
-        return item!!
     }
 
-    private fun createPhotoEntityWithPropertyId() {
+    private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
-        for (photoEntity in photoEntities){
-            photoEntity.propertyOwnerId = propertyIdResponseLiveData.value
+        for (photo in photoMutableList) {
+            val photoEntity = PhotoEntity(
+                photo.photo,
+                photo.photoDescription,
+                newPropertyId,
+            )
             photoListWithPropertyId.add(photoEntity)
         }
-        sendPhotoToDataBase(photoListWithPropertyId)
+        sendPhotosToDataBase(photoListWithPropertyId)
+
+        withContext(applicationDispatchers.mainDispatcher) {
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
+        }
     }
 
-    private fun sendPhotoToDataBase(photoEntities: MutableList<PhotoEntity>) {
-        for(photoEntity in photoEntities){
+    private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
+        for (photoEntity in photoEntities) {
             insertPhoto(photoEntity)
         }
     }
 
-    private fun insertProperty(property: PropertyEntity) =
-        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertyIdResponseLiveData.postValue(propertiesRepository.insertProperty(property))
-        }
+    private suspend fun insertProperty(property: PropertyEntity): Long {
+        return propertiesRepository.insertProperty(property)
+    }
 
-    private fun insertPhoto(photo: PhotoEntity) =
-        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertiesRepository.insertPhoto(photo)
-        }
+    private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
 }
