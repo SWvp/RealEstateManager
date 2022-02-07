@@ -24,32 +24,19 @@ class DetailsViewModel @Inject constructor(
                 DetailsViewState(
                     propertyId = it.propertyEntity.propertyId,
                     //photos = it.photo.,
-                    description = nullBecomeReadable(it.propertyEntity.propertyDescription),
-                    surface = nullBecomeReadable(it.propertyEntity.surface.toString()),
-                    room = nullBecomeReadable(it.propertyEntity.room.toString()),
-                    bathroom = nullBecomeReadable(it.propertyEntity.bathroom.toString()),
-                    bedroom = nullBecomeReadable(it.propertyEntity.bedroom.toString()),
+                    description = it.propertyEntity.propertyDescription,
+                    surface = it.propertyEntity.surface?.toString(),
+                    room = it.propertyEntity.room?.toString(),
+                    bathroom = it.propertyEntity.bathroom?.toString(),
+                    bedroom = it.propertyEntity.bedroom?.toString(),
                     interest = it.propertyEntity.interest,
-                    address = nullBecomeReadable(it.propertyEntity.address),
-                    apartment = nullBecomeReadable(it.propertyEntity.apartmentNumber),
-                    city = nullBecomeReadable(it.propertyEntity.city),
-                    county = nullBecomeReadable(it.propertyEntity.county),
-                    zipcode = nullBecomeReadable(it.propertyEntity.zipcode),
-                    country = nullBecomeReadable(it.propertyEntity.country),
+                    address = it.propertyEntity.address,
+                    apartment = it.propertyEntity.apartmentNumber,
+                    city = it.propertyEntity.city,
+                    county = it.propertyEntity.county,
+                    zipcode = it.propertyEntity.zipcode,
+                    country = it.propertyEntity.country,
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
-
-
-    private fun nullBecomeReadable(value: String?): String {
-        var item: String? = null
-        if(value == null){
-            item = ""
-        }
-        else{
-            item = value
-        }
-        return item
-    }
-
 }
