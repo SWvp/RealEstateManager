@@ -2,6 +2,7 @@ package com.kardabel.realestatemanager.ui.main
 
 import android.Manifest.permission
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Application,
     private val locationRepository: LocationRepository
 ) : ViewModel() {
 
