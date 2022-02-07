@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
@@ -34,12 +33,12 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.detailsLiveData.observe(this){
-            binding.descriptionText?.text= it.description
+            binding.descriptionText.text= it.description
             binding.surfaceValue.text = it.surface
-            binding.roomValue?.text = it.room
-            binding.bedroomValue?.text = it.bedroom
-            binding.bathroomValue?.text = it.bathroom
-            binding.address?.text = it.address
+            binding.roomValue.text = it.room
+            binding.bedroomValue.text = it.bedroom
+            binding.bathroomValue.text = it.bathroom
+            binding.address.text = it.address
             binding.apartment.text = it.apartment
             binding.city.text = it.city
             binding.county.text = it.county
