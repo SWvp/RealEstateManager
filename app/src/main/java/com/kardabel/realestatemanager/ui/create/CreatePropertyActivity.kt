@@ -150,7 +150,7 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     private fun capturePhoto() {
 
-        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val photoFile: File = createImageFile()
 
         uriImageSelected = FileProvider.getUriForFile(
@@ -158,33 +158,8 @@ class CreatePropertyActivity : AppCompatActivity() {
             "com.kardabel.realestatemanager.fileprovider",
             photoFile
         )
-
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
-
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-    // Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-    //     // Ensure that there's a camera activity to handle the intent
-    //     takePictureIntent.resolveActivity(packageManager)?.also {
-    //         // Create the File where the photo should go
-    //       val photoFile: File? = try {
-    //           createImageFile()
-    //         } catch (ex: IOException) {
-    //             // Error occurred while creating the File
-
-    //             null
-    //         }
-             // Continue only if the File was successfully created
-    //        photoFile?.also {
-    //            uriImageSelected = FileProvider.getUriForFile(
-    //                this,
-    //                "com.kardabel.realestatemanager.fileprovider",
-    //                it
-    //            )
-    //             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
-    //             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-    //         }
-    //     }
-     //}
     }
 
     // When photo is created, we need to create an image file
@@ -212,42 +187,25 @@ class CreatePropertyActivity : AppCompatActivity() {
     private fun handleResponse(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if(uriImageSelected == null){
+                if (uriImageSelected == null) {
                     uriImageSelected = data!!.data
                 }
 
                 val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
 
                 if (bitmap != null) {
-                    alertDialogResponse(bitmap)
+                    confirmDialogFragment(bitmap)
                 }
             }
         }
     }
 
-
     // Create an alert dialog to ask user type a photo description,
     // then, when validate, send whole photo object to a repo via VM
-    private fun alertDialogResponse(bitmap: Bitmap) {
-        var description: String
-        val editText = EditText(this)
-        editText.setTextColor(
-            AppCompatResources.getColorStateList(
-                this,
-                R.color.black
-            )
-        )
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Enter description")
-            .setView(editText)
-            .setPositiveButton("Validate") { dialog, _ ->
-                if (!editText.text.isNullOrEmpty()) {
-                    description = editText.text.toString()
-                    viewModel.addPhoto(bitmap, description)
-                    dialog.dismiss()
-                }
-            }
-            .show()
+    private fun confirmDialogFragment(bitmap: Bitmap) {
+        val confirmFragment = PhotoConfirmationFragment.newInstance(bitmap)
+        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+
     }
 
     // Converter to get bitmap from Uri
