@@ -15,7 +15,7 @@ data class PropertyEntity constructor(
     @ColumnInfo(name = "country") val country: String?,
     @ColumnInfo(name = "property_description") val propertyDescription: String?,
     @ColumnInfo(name = "type") val type: String?,
-    @ColumnInfo(name = "price") val price: Float?,
+    @ColumnInfo(name = "price") val price: Int?,
     @ColumnInfo(name = "surface") val surface: Double?,
     @ColumnInfo(name = "room") val room: Int?,
     @ColumnInfo(name = "bedroom") val bedroom: Int?,

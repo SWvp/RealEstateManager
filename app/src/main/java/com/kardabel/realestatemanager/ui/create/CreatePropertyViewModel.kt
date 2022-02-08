@@ -75,7 +75,7 @@ class CreatePropertyViewModel @Inject constructor(
         if (photoMutableList.isNotEmpty()) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
-            val priceToFloat = price?.toFloatOrNull()
+            val priceToInt = price?.toIntOrNull()
             val surfaceToDouble = surface?.toDoubleOrNull()
             val roomToInt = room?.toIntOrNull()
             val bedroomToInt = bedroom?.toIntOrNull()
@@ -93,7 +93,7 @@ class CreatePropertyViewModel @Inject constructor(
                 country = country,
                 propertyDescription = propertyDescription,
                 type = type,
-                price = priceToFloat,
+                price = priceToInt,
                 surface = surfaceToDouble,
                 room = roomToInt,
                 bedroom = bedroomToInt,

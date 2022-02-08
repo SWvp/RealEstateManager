@@ -45,7 +45,7 @@ class PropertiesViewModel @Inject constructor(
         propertyId = property.propertyEntity.propertyId,
         type = property.propertyEntity.type,
         county = property.propertyEntity.county,
-        price = property.propertyEntity.price.toString(),
+        price = "$" + property.propertyEntity.price.toString(),
         photoBitmap = property.photo[0].photo
     )
 
