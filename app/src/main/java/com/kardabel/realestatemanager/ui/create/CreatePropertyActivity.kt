@@ -100,14 +100,14 @@ class CreatePropertyActivity : AppCompatActivity() {
             capturePhoto()
         }
 
-        // Set the adapter to retrieve photo recently added,
-        // and the observer
+        // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = CreatePropertyPhotosAdapter {
 
         }
         recyclerView.adapter = photosAdapter
 
+        // and set the observer
         viewModel.getPhoto.observe(this) {
             photosAdapter.submitList(it)
         }

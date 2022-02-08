@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.*
+import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.ViewHolder
 
 class PropertiesAdapter(
-    private val listener : (PropertyViewState) -> Unit
+    private val listener: (propertyId: Long) -> Unit
 ) : ListAdapter<PropertyViewState, ViewHolder>(ListComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,20 +26,20 @@ class PropertiesAdapter(
         holder.bind(current, listener)
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val type: TextView = itemView.findViewById(R.id.item_property_type)
         private val county: TextView = itemView.findViewById(R.id.item_property_county)
         private val price: TextView = itemView.findViewById(R.id.item_property_price)
         private val photo: ImageView = itemView.findViewById(R.id.item_property_photo)
 
-        fun bind(propertyViewState: PropertyViewState, listener: (PropertyViewState) -> Unit ) {
+        fun bind(propertyViewState: PropertyViewState, listener: (Long) -> Unit) {
             type.text = propertyViewState.type
             county.text = propertyViewState.county
             price.text = propertyViewState.price
-           // Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
+            Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
 
             itemView.setOnClickListener {
-                listener.invoke(propertyViewState)
+                listener.invoke(propertyViewState.propertyId)
             }
         }
 
@@ -52,10 +52,16 @@ class PropertiesAdapter(
         }
     }
 
-    object ListComparator: DiffUtil.ItemCallback<PropertyViewState>() {
-        override fun areItemsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean = oldItem === newItem
+    object ListComparator : DiffUtil.ItemCallback<PropertyViewState>() {
+        override fun areItemsTheSame(
+            oldItem: PropertyViewState,
+            newItem: PropertyViewState
+        ): Boolean = oldItem === newItem
 
-        override fun areContentsTheSame(oldItem: PropertyViewState, newItem: PropertyViewState): Boolean = oldItem == newItem
+        override fun areContentsTheSame(
+            oldItem: PropertyViewState,
+            newItem: PropertyViewState
+        ): Boolean = oldItem == newItem
     }
 
 }

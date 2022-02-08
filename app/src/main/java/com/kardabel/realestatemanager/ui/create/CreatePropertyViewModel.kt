@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.create
 
-import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -28,15 +27,13 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val photoRepository: PhotoRepository,
     private val clock: Clock,
-   // @ApplicationContext context: Context,
+    // @ApplicationContext context: Context,
 
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val actionSingleLiveEvent: SingleLiveEvent<CreateActivityViewAction> = SingleLiveEvent()
 
     private val interests = mutableListOf<String>()
-
-    // TODO Faire un Repo partagé entre ce VM et le VM de la DialogFragment
     private var photoMutableList = mutableListOf<Photo>()
 
 
@@ -57,23 +54,12 @@ class CreatePropertyViewModel @Inject constructor(
 
     }
 
-    // When user create a photo with a description, create this as a photo, not entity
-    fun addPhoto(photo: Bitmap, photoDescription: String) {
-        photoRepository.addPhoto(
-            Photo(
-                photo,
-                photoDescription,
-
-                )
-        )
-    }
-
     // When property is ready
     fun createProperty(
         address: String?,
         apartmentNumber: String?,
-        city: String?,
         county: String?,
+        city: String?,
         postalCode: String?,
         country: String?,
         propertyDescription: String?,
