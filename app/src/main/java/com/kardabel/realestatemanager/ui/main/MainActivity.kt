@@ -18,6 +18,7 @@ import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
 import com.kardabel.realestatemanager.ui.authentication.AuthActivity
 import com.kardabel.realestatemanager.ui.create.CreatePropertyActivity
+import com.kardabel.realestatemanager.ui.details.DetailsActivity
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
+        // Permission work is doing by viewModel
         viewModel.actionSingleLiveEvent.observe(this) {
             when (it) {
                 PermissionViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
@@ -78,12 +80,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // call requestIdToken
+        // call requestIdToken for the Auth work
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        // This single live event is trigger when the device is not in tablet mode
+        viewModel.navigationSingleLiveEvent.observe(this) {
+            when (it) {
+                NavigateViewAction.NavigateToDetailActivity -> startActivity(Intent(this, DetailsActivity::class.java))
+            }
+        }
 
 
         binding.fab.setOnClickListener {
@@ -95,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Toolbar menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
@@ -123,5 +133,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.checkPermission(this)
+        viewModel.onConfigurationChanged(resources.getBoolean(R.bool.isTablet))
     }
 }
