@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
+import com.kardabel.realestatemanager.ui.create.CreatePropertyPhotosAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,6 +16,8 @@ class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var photosAdapter: DetailsAdapter
 
     private val viewModel by viewModels<DetailsViewModel>()
 
@@ -32,6 +36,15 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set the adapter to retrieve photo recently added
+        val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
+        photosAdapter = DetailsAdapter {
+
+        }
+
+        recyclerView.adapter = photosAdapter
+
+        // and set the observer
         viewModel.detailsLiveData.observe(this){
             binding.descriptionText.text= it.description
             binding.surfaceValue.text = it.surface
@@ -44,6 +57,7 @@ class DetailsFragment : Fragment() {
             binding.county.text = it.county
             binding.zipCode.text = it.zipcode
             binding.country.text = it.country
+            photosAdapter.submitList(it.photos)
         }
     }
 
