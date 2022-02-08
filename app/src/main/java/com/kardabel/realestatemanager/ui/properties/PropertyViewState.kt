@@ -7,5 +7,5 @@ data class PropertyViewState(
     val type: String?,
     val county: String?,
     val price: String?,
-    //val photoBitmap: Bitmap
+    val photoBitmap: Bitmap
 )

@@ -1,10 +1,12 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,12 @@ class DetailsViewModel @Inject constructor(
             propertiesRepository.getPropertyById(id).map {
                 DetailsViewState(
                     propertyId = it.propertyEntity.propertyId,
-                    //photos = it.photo.,
+                    photos = it.photo.map { photoEntity ->
+                        DetailsPhotoViewState(
+                            photoEntity.photo,
+                            photoEntity.photoDescription,
+                        )
+                    },
                     description = it.propertyEntity.propertyDescription,
                     surface = it.propertyEntity.surface?.toString(),
                     room = it.propertyEntity.room?.toString(),
