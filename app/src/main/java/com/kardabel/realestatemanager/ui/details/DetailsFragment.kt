@@ -39,14 +39,12 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        // Set toolbar with back button
-        // This single live event is trigger when the device is not in tablet mode
-
+        // This observer notify the view about master details status,
+        // if true, the toolbar gone
         viewModel.masterDetailsStatusLiveData.observe(this) { isMasterDetails ->
             when (isMasterDetails) {
                 false -> setupToolbar()
-                true -> binding.toolbar?.visibility = View.GONE
+                true -> binding.toolbar.visibility = View.GONE
 
             }
         }
@@ -113,9 +111,9 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar?.setNavigationIcon(R.drawable.back_arrow)
-        binding.toolbar?.title = "Details"
-        binding.toolbar?.setNavigationOnClickListener {
+        binding.toolbar.setNavigationIcon(R.drawable.back_arrow)
+        binding.toolbar.title = "Details"
+        binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
     }
