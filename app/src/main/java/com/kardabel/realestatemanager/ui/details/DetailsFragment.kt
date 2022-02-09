@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
@@ -86,6 +87,8 @@ class DetailsFragment : Fragment() {
             binding.zipCode.text = it.zipcode
             binding.country.text = it.country
             binding.startSaleDate.text = it.startSale
+
+            Glide.with(binding.map.context).load(it.staticMap).into(binding.map)
 
             photosAdapter.submitList(it.photos)
 

@@ -121,13 +121,25 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
+    // Create an url to retrieve a miniature of the map with property marker
     private fun staticMapUrl(address: String, zipcode: String, city: String): String {
-        var staticMap: String? = null
+
         val key: String = BuildConfig.GOOGLE_PLACES_KEY
 
+        val addressWithComas = address.replace(" ", ",")
+        val cityWithoutSpace = address.replace(" ", "")
+
+        var staticMap: String? = "https://maps.googleapis.com/maps/api/staticmap?center=" +
+                addressWithComas + "," +
+                zipcode + "," +
+                cityWithoutSpace +
+                "&zoom=13&size=400x400&" +
+                "markers=color:blue|label:P|" +
+                addressWithComas +
+                "&key=" +
+                key
 
         return staticMap!!
-
     }
 
     private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
