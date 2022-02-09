@@ -19,7 +19,9 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
+            tools:visibility="visible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_portrait_recycler_view"
@@ -43,14 +45,16 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_portrait_recycler_view" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_portrait_recycler_view"
+            android:visibility="invisible"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/description_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="@string/description_text"
+            tools:text="@string/description_text"
             android:textSize="@dimen/details_description_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +88,9 @@
                 android:src="@drawable/surface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/details_surface_description" />
+                android:contentDescription="@string/details_surface_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/surface_title"
@@ -95,14 +101,16 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/surface_icon"
                 app:layout_constraintStart_toEndOf="@id/surface_icon"
-                app:layout_constraintTop_toTopOf="@+id/surface_icon" />
+                app:layout_constraintTop_toTopOf="@+id/surface_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/surface_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="@string/details_surface_value"
+                tools:text="@string/details_surface_value"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toStartOf="@+id/surface_title"
                 app:layout_constraintTop_toBottomOf="@+id/surface_title" />
@@ -115,7 +123,9 @@
                 android:src="@drawable/number_of_room"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/surface_value"
-                android:contentDescription="@string/details_room_description" />
+                android:contentDescription="@string/details_room_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/room_title"
@@ -126,14 +136,16 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/room_icon"
                 app:layout_constraintStart_toEndOf="@id/room_icon"
-                app:layout_constraintTop_toTopOf="@+id/room_icon" />
+                app:layout_constraintTop_toTopOf="@+id/room_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/room_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="@string/details_room_value"
+                tools:text="@string/details_room_value"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/room_icon"
                 app:layout_constraintTop_toBottomOf="@id/room_title" />
@@ -146,7 +158,9 @@
                 android:src="@drawable/bathroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/room_value"
-                android:contentDescription="@string/details_bathroom_description" />
+                android:contentDescription="@string/details_bathroom_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/bathroom_title"
@@ -157,14 +171,16 @@
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintBottom_toBottomOf="@+id/bathroom_icon"
                 app:layout_constraintStart_toEndOf="@id/room_icon"
-                app:layout_constraintTop_toTopOf="@+id/bathroom_icon" />
+                app:layout_constraintTop_toTopOf="@+id/bathroom_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/bathroom_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="@string/details_bathroom_value"
+                tools:text="@string/details_bathroom_value"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/bathroom_icon"
                 app:layout_constraintTop_toBottomOf="@id/bathroom_title" />
@@ -177,7 +193,9 @@
                 android:src="@drawable/bedroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bathroom_value"
-                android:contentDescription="@string/details_bedroom_description" />
+                android:contentDescription="@string/details_bedroom_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/bedroom_title"
@@ -187,14 +205,16 @@
                 android:text="@string/details_bedroom_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/bedroom_icon"
-                app:layout_constraintTop_toTopOf="@+id/bedroom_icon" />
+                app:layout_constraintTop_toTopOf="@+id/bedroom_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/bedroom_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="@string/details_bedroom_value"
+                tools:text="@string/details_bedroom_value"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/bedroom_icon"
                 app:layout_constraintTop_toBottomOf="@id/bedroom_title" />
@@ -207,7 +227,9 @@
                 android:src="@drawable/interests"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bedroom_value"
-                android:contentDescription="@string/details_bedroom_description" />
+                android:contentDescription="@string/details_bedroom_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/interests_title"
@@ -217,7 +239,9 @@
                 android:text="@string/details_interests_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/interests_icon"
-                app:layout_constraintTop_toTopOf="@+id/interests_icon" />
+                app:layout_constraintTop_toTopOf="@+id/interests_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
@@ -228,7 +252,25 @@
                 app:layout_constraintStart_toEndOf="@id/interests_icon"
                 app:layout_constraintTop_toBottomOf="@id/interests_title"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:singleSelection="true"/>
+                app:singleSelection="true"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/start_sale_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                tools:text="@string/details_start_sale"
+                android:textStyle="italic"
+                android:textSize="@dimen/details_description_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/chip_group"
+                app:layout_constraintStart_toStartOf="@+id/chip_group"
+                app:layout_constraintTop_toBottomOf="@id/chip_group"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <ImageView
                 android:id="@+id/location_icon"
@@ -238,7 +280,9 @@
                 android:src="@drawable/location"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/details_location_description" />
+                android:contentDescription="@string/details_location_description"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/location_title"
@@ -248,7 +292,9 @@
                 android:text="@string/details_location_title"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintStart_toEndOf="@id/location_icon"
-                app:layout_constraintTop_toTopOf="@+id/location_icon" />
+                app:layout_constraintTop_toTopOf="@+id/location_icon"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/address"
@@ -257,7 +303,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:maxLines="3"
-                android:text="@string/details_street"
+                tools:text="@string/details_street"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -269,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/details_apartment"
+                tools:text="@string/details_apartment"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -281,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/details_city"
+                tools:text="@string/details_city"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -293,7 +339,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/details_county"
+                tools:text="@string/details_county"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -305,7 +351,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/details_zip_code"
+                tools:text="@string/details_zip_code"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -317,7 +363,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/details_country"
+                tools:text="@string/details_country"
                 android:textSize="@dimen/details_description_text"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/location_title"
@@ -325,14 +371,16 @@
 
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
+                android:id="@+id/map"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

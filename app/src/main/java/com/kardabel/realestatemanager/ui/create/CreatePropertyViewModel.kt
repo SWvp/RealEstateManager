@@ -60,7 +60,7 @@ class CreatePropertyViewModel @Inject constructor(
         apartmentNumber: String?,
         county: String?,
         city: String?,
-        postalCode: String?,
+        zipcode: String?,
         country: String?,
         propertyDescription: String?,
         type: String?,
@@ -71,16 +71,17 @@ class CreatePropertyViewModel @Inject constructor(
         bathroom: String?,
     ) {
 
-        // Must contain at least one photo
-        if (photoMutableList.isNotEmpty()) {
+        // Must contain at least one photo and an address (street, zip, city)
+        if (photoMutableList.isNotEmpty() && address != null && city != null && zipcode != null) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
             val priceToInt = price?.toIntOrNull()
-            val surfaceToDouble = surface?.toDoubleOrNull()
+            val surfaceToInt = surface?.toIntOrNull()
             val roomToInt = room?.toIntOrNull()
             val bedroomToInt = bedroom?.toIntOrNull()
             val bathroomToInt = bathroom?.toIntOrNull()
             val uid = firebaseAuth.currentUser!!.uid
+            val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
             val localDateTime = LocalDateTime.now(clock).toString()
 
@@ -88,23 +89,26 @@ class CreatePropertyViewModel @Inject constructor(
                 address = address,
                 apartmentNumber = apartmentNumber,
                 city = city,
-                zipcode = postalCode,
+                zipcode = zipcode,
                 county = county,
                 country = country,
                 propertyDescription = propertyDescription,
                 type = type,
                 price = priceToInt,
-                surface = surfaceToDouble,
+                surface = surfaceToInt,
                 room = roomToInt,
                 bedroom = bedroomToInt,
                 bathroom = bathroomToInt,
                 uid = uid,
+                vendor = vendor,
                 createLocalDateTime = localDateTime,
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
                 interest = interests,
+                staticMap = staticMapUrl(address, zipcode, city)
             )
+
 
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
@@ -114,6 +118,16 @@ class CreatePropertyViewModel @Inject constructor(
         } else {
             actionSingleLiveEvent.setValue(CreateActivityViewAction.PHOTO_ERROR)
         }
+    }
+
+    private fun staticMapUrl(address: String, zipcode: String, city: String): String {
+        var staticMap: String? = null
+
+
+
+
+        return staticMap!!
+
     }
 
     private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {

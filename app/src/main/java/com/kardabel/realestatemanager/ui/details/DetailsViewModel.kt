@@ -32,7 +32,7 @@ class DetailsViewModel @Inject constructor(
                         )
                     },
                     description = it.propertyEntity.propertyDescription,
-                    surface = it.propertyEntity.surface?.toString(),
+                    surface = it.propertyEntity.surface?.toString() + "m²",
                     room = it.propertyEntity.room?.toString(),
                     bathroom = it.propertyEntity.bathroom?.toString(),
                     bedroom = it.propertyEntity.bedroom?.toString(),
@@ -43,6 +43,10 @@ class DetailsViewModel @Inject constructor(
                     county = it.propertyEntity.county,
                     zipcode = it.propertyEntity.zipcode,
                     country = it.propertyEntity.country,
+                    startSale = it.propertyEntity.createDateToFormat,
+                    vendor = it.propertyEntity.vendor,
+                    visibility = true,
+                    staticMap = it.propertyEntity.staticMap
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }

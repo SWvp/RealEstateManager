@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
-import com.kardabel.realestatemanager.ui.create.CreatePropertyPhotosAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +21,7 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var photosAdapter: DetailsAdapter
+    private lateinit var interestChipGroup: ChipGroup
 
     private val viewModel by viewModels<DetailsViewModel>()
 
@@ -36,6 +40,9 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set chip group binding
+        interestChipGroup = binding.chipGroup
+
         // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
         photosAdapter = DetailsAdapter {
@@ -45,8 +52,29 @@ class DetailsFragment : Fragment() {
         recyclerView.adapter = photosAdapter
 
         // and set the observer
-        viewModel.detailsLiveData.observe(this){
-            binding.descriptionText.text= it.description
+        viewModel.detailsLiveData.observe(this) {
+            // set visibility first
+            binding.detailDescriptionTitle.isVisible = it.visibility
+            binding.detailsMediaTitle.isVisible = it.visibility
+            binding.surfaceIcon.isVisible = it.visibility
+            binding.surfaceTitle.isVisible = it.visibility
+            binding.roomIcon.isVisible = it.visibility
+            binding.roomTitle.isVisible = it.visibility
+            binding.bedroomIcon.isVisible = it.visibility
+            binding.bedroomTitle.isVisible = it.visibility
+            binding.bathroomIcon.isVisible = it.visibility
+            binding.bathroomTitle.isVisible = it.visibility
+            binding.interestsIcon.isVisible = it.visibility
+            binding.interestsTitle.isVisible = it.visibility
+            binding.chipGroup.isVisible = it.visibility
+            binding.startSaleDate.isVisible = it.visibility
+            binding.locationIcon.isVisible = it.visibility
+            binding.locationTitle.isVisible = it.visibility
+            binding.startSaleDate.isVisible = it.visibility
+            binding.map.isVisible = it.visibility
+
+            // Set text
+            binding.descriptionText.text = it.description
             binding.surfaceValue.text = it.surface
             binding.roomValue.text = it.room
             binding.bedroomValue.text = it.bedroom
@@ -57,7 +85,24 @@ class DetailsFragment : Fragment() {
             binding.county.text = it.county
             binding.zipCode.text = it.zipcode
             binding.country.text = it.country
+            binding.startSaleDate.text = it.startSale
+
             photosAdapter.submitList(it.photos)
+
+            displayInterestAsChip(it.interest)
+        }
+    }
+
+    // Interest are display trough chip group
+    private fun displayInterestAsChip(interests: List<String>?) {
+        val inflater = LayoutInflater.from(requireContext())
+         if (interests != null) {
+            for (interest in interests) {
+                val chip: Chip =
+                    inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
+                chip.text = interest
+                interestChipGroup.addView(chip)
+            }
         }
     }
 

@@ -29,8 +29,10 @@
 
     <!-- ITEM PROPERTY -->
     <string name="property_type">Property type</string>
-    <string name="property_place">Property place</string>
+    <string name="property_county">Property county</string>
     <string name="property_price">$17,870,000</string>
+    <string name="property_vendor">Vendor</string>
+    <string name="property_sale_status">On sale</string>
 
     <!-- PROPERTY DETAILS -->
     <string name="photo_title">Photos</string>

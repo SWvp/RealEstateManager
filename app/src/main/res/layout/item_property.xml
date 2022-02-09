@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_property"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -16,11 +16,38 @@
             android:layout_width="@dimen/property_image_size"
             android:layout_height="@dimen/property_image_size"
             android:layout_margin="4dp"
-            android:src="@drawable/property_sample"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/property_sample"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/item_property_sale_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:maxLines="1"
+            android:textSize="@dimen/property_type_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_property_photo"
+            app:layout_constraintStart_toStartOf="@+id/item_property_photo"
+            app:layout_constraintTop_toBottomOf="@id/item_property_photo"
+            tools:text="@string/property_sale_status" />
+
+        <TextView
+            android:id="@+id/item_property_vendor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:maxLines="1"
+            android:textSize="@dimen/property_type_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_property_photo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/property_vendor"
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/item_property_type"
@@ -28,12 +55,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:maxLines="1"
+            android:text="@string/property_type"
             android:textSize="@dimen/property_type_size"
             android:textStyle="bold"
-            android:text="@string/property_type"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/item_property_vendor" />
 
         <TextView
             android:id="@+id/item_property_county"
@@ -41,8 +68,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:maxLines="1"
+            android:text="@string/property_county"
             android:textSize="@dimen/property_place_size"
-            android:text="@string/property_place"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
             app:layout_constraintTop_toBottomOf="@+id/item_property_type" />
@@ -51,11 +78,14 @@
             android:id="@+id/item_property_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:maxLines="1"
-            android:textSize="@dimen/property_price_size"
             android:text="@string/property_price"
             android:textColor="@color/property_price_color"
+            android:textSize="@dimen/property_price_size"
+            app:layout_constraintBottom_toBottomOf="@+id/item_property_sale_status"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
             app:layout_constraintTop_toBottomOf="@+id/item_property_county" />
