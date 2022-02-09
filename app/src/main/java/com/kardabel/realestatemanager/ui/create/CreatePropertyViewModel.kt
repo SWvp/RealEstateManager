@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -122,8 +123,7 @@ class CreatePropertyViewModel @Inject constructor(
 
     private fun staticMapUrl(address: String, zipcode: String, city: String): String {
         var staticMap: String? = null
-
-
+        val key: String = BuildConfig.GOOGLE_PLACES_KEY
 
 
         return staticMap!!

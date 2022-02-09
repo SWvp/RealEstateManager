@@ -47,7 +47,7 @@
         <!--GOOGLE MAP API-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyASyYHcFc_BTB-omhZGviy4d3QonaBmcq8"/>
+            android:value="@string/google_map_key"/>
 
         <activity android:name=".ui.authentication.AuthActivity"
             android:exported="true">
