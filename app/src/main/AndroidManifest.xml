@@ -62,6 +62,7 @@
         <activity android:name=".ui.details.DetailsActivity" />
         <activity android:name=".ui.map.MapActivity" />
         <activity android:name=".ui.create.CreatePropertyActivity" />
+        <activity android:name=".ui.edit.EditPropertyActivity" />
 
     </application>
 

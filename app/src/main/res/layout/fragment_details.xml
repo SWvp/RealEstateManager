@@ -20,7 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/toolbar_details"
             app:title="Add a property"
             app:titleTextColor="@color/white" />
 
@@ -389,13 +388,23 @@
                 android:id="@+id/map"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_margin="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/country"
                 app:layout_constraintTop_toBottomOf="@id/country"
-                android:visibility="invisible"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:src="@drawable/edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

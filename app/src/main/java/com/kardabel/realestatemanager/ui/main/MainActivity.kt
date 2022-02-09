@@ -22,6 +22,7 @@ import com.kardabel.realestatemanager.ui.details.DetailsActivity
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
+import com.kardabel.realestatemanager.utils.NavigateViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,15 +47,19 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
+        // Master details is not enable
         if (savedInstanceState == null) {
+            viewModel.masterDetailsStatus(false)
             supportFragmentManager.beginTransaction()
                 .replace(binding.propertiesListContainer.id, PropertiesFragment())
                 .commitNow()
         }
 
+        // Master details is enable
         if (binding.propertyDetailsContainer != null &&
             supportFragmentManager.findFragmentById(binding.propertyDetailsContainer.id) == null
         ) {
+            viewModel.masterDetailsStatus(true)
             supportFragmentManager.beginTransaction()
                 .add(
                     binding.propertyDetailsContainer.id,
@@ -87,10 +92,10 @@ class MainActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // This single live event is trigger when the device is not in tablet mode
+        // When this livedata is trigger, check if we are on landscape or portrait to chose the correct view to display
         viewModel.navigationSingleLiveEvent.observe(this) {
             when (it) {
-                NavigateViewAction.NavigateToDetailActivity -> startActivity(Intent(this, DetailsActivity::class.java))
+                NavigateViewAction.IsLandscapeMode -> startActivity(Intent(this, DetailsActivity::class.java))
             }
         }
 

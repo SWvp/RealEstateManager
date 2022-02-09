@@ -1,13 +1,12 @@
 package com.kardabel.realestatemanager.ui.details
 
-import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.kardabel.realestatemanager.ApplicationDispatchers
-import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
+import com.kardabel.realestatemanager.repository.MasterDetailsStatusRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -16,9 +15,17 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     currentPropertyIdRepository: CurrentPropertyIdRepository,
+    masterDetailsStatusRepository: MasterDetailsStatusRepository,
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
+
+    //private var isTablet: Boolean = false
+
+   // val navigationSingleLiveEvent : SingleLiveEvent<NavigateViewAction> = SingleLiveEvent()
+
+    val masterDetailsStatusLiveData: LiveData<Boolean> =
+        masterDetailsStatusRepository.getCurrentMasterDetailsStatusLiveData
 
     val detailsLiveData: LiveData<DetailsViewState> =
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
@@ -50,4 +57,16 @@ class DetailsViewModel @Inject constructor(
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
+
+ // init {
+ //     navigationSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
+ //         if (!isTablet) {
+ //             navigationSingleLiveEvent.setValue(NavigateViewAction.IsLandscapeMode)
+ //         }
+ //     }
+ // }
+
+ // fun onConfigurationChanged(isTablet: Boolean) {
+ //     this.isTablet = isTablet
+ // }
 }

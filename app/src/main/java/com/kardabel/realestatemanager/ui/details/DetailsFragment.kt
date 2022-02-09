@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
+import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,24 +29,26 @@ class DetailsFragment : Fragment() {
     private val viewModel by viewModels<DetailsViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDetailsBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         // Set toolbar with back button
-        binding.toolbar?.setNavigationIcon(R.drawable.back_arrow)
-        binding.toolbar?.setNavigationOnClickListener {
-            activity?.onBackPressed()
+        // This single live event is trigger when the device is not in tablet mode
+
+        viewModel.masterDetailsStatusLiveData.observe(this) { isMasterDetails ->
+            when (isMasterDetails) {
+                false -> setupToolbar()
+                true -> binding.toolbar?.visibility = View.GONE
+
+            }
         }
 
         // Set chip group binding
@@ -61,6 +65,7 @@ class DetailsFragment : Fragment() {
         // and set the observer
         viewModel.detailsLiveData.observe(this) {
             // set visibility first
+            // cause we don't want to see anything before user click on a property item
             binding.detailDescriptionTitle.isVisible = it.visibility
             binding.detailsMediaTitle.isVisible = it.visibility
             binding.surfaceIcon.isVisible = it.visibility
@@ -100,20 +105,44 @@ class DetailsFragment : Fragment() {
 
             displayInterestAsChip(it.interest)
         }
+
+        // Go to edit activity
+        binding.button?.setOnClickListener {
+            editProperty()
+        }
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar?.setNavigationIcon(R.drawable.back_arrow)
+        binding.toolbar?.title = "Details"
+        binding.toolbar?.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     // Interest are display trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
         val inflater = LayoutInflater.from(requireContext())
-         if (interests != null) {
+        if (interests != null) {
             for (interest in interests) {
                 val chip: Chip =
-                    inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
+                    inflater.inflate(
+                        R.layout.item_interest_chip,
+                        this.interestChipGroup,
+                        false
+                    ) as Chip
                 chip.text = interest
                 interestChipGroup.addView(chip)
             }
         }
     }
+
+    // Go to edit activity
+    private fun editProperty() {
+        val intent = Intent(activity, EditPropertyActivity::class.java)
+        startActivity(intent)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

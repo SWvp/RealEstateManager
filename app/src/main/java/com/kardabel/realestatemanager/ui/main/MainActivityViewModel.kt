@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
+import com.kardabel.realestatemanager.repository.MasterDetailsStatusRepository
+import com.kardabel.realestatemanager.utils.NavigateViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val context: Application,
+    private val masterDetailsStatusRepository: MasterDetailsStatusRepository,
     private val locationRepository: LocationRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
@@ -49,12 +52,16 @@ class MainActivityViewModel @Inject constructor(
     init {
         navigationSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
             if (!isTablet) {
-                navigationSingleLiveEvent.setValue(NavigateViewAction.NavigateToDetailActivity)
+                navigationSingleLiveEvent.setValue(NavigateViewAction.IsLandscapeMode)
             }
         }
     }
 
     fun onConfigurationChanged(isTablet: Boolean) {
         this.isTablet = isTablet
+    }
+
+    fun masterDetailsStatus(value: Boolean){
+        masterDetailsStatusRepository.setMasterDetailsStatus(value)
     }
 }
