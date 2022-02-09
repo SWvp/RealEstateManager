@@ -15,15 +15,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,22 +77,29 @@ class CreatePropertyActivity : AppCompatActivity() {
         val dropDownAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             this, R.layout.activity_create_property_type_dropdown, items
         )
+
         binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
 
+        // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
                 propertyType = parent.getItemAtPosition(position).toString()
             }
+
+        // Manage interest
         binding.addInterestButton.setOnClickListener {
             val interest = binding.inputInterest.text.toString()
             viewModel.addInterest(interest)
             addNewChipInterest(interest)
+            binding.inputInterest.text?.clear()
         }
 
+        // Manage photos from storage
         binding.addStoragePictureButton.setOnClickListener {
             addPhotoFromStorage()
         }
 
+        // Manage camera to capture a pic
         binding.addCameraPictureButton.setOnClickListener {
             capturePhoto()
         }
@@ -113,12 +117,14 @@ class CreatePropertyActivity : AppCompatActivity() {
         }
     }
 
+    // When user type something in interest field, create a chip to display
     private fun addNewChipInterest(interest: String) {
         val inflater = LayoutInflater.from(this)
         val chip: Chip =
             inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
         chip.text = interest
         interestChipGroup.addView(chip)
+
     }
 
     override fun onRequestPermissionsResult(
@@ -225,6 +231,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         return getBitmap!!
     }
 
+    // Toolbar menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_create, menu)
         return true
