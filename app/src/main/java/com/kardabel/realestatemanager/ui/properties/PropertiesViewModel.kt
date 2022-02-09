@@ -46,8 +46,18 @@ class PropertiesViewModel @Inject constructor(
         type = property.propertyEntity.type,
         county = property.propertyEntity.county,
         price = "$" + property.propertyEntity.price.toString(),
+        saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+        vendor = property.propertyEntity.vendor,
         photoBitmap = property.photo[0].photo
     )
+
+    private fun saleStatusToString(saleStatus: Boolean): String {
+        return when(saleStatus){
+            true -> "On sale"
+            false -> "Sold !"
+
+        }
+    }
 
     fun onPropertyClicked(propertyId: Long) {
         currentPropertyIdRepository.setCurrentPropertyId(propertyId)

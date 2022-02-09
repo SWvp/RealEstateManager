@@ -30,12 +30,17 @@ class PropertiesAdapter(
         private val type: TextView = itemView.findViewById(R.id.item_property_type)
         private val county: TextView = itemView.findViewById(R.id.item_property_county)
         private val price: TextView = itemView.findViewById(R.id.item_property_price)
+        private val saleStatus: TextView = itemView.findViewById(R.id.item_property_sale_status)
+        private val vendor: TextView = itemView.findViewById(R.id.item_property_vendor)
         private val photo: ImageView = itemView.findViewById(R.id.item_property_photo)
+
 
         fun bind(propertyViewState: PropertyViewState, listener: (Long) -> Unit) {
             type.text = propertyViewState.type
             county.text = propertyViewState.county
             price.text = propertyViewState.price
+            saleStatus.text = propertyViewState.saleStatus
+            vendor.text = propertyViewState.vendor
             Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
 
             itemView.setOnClickListener {
