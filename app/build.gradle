@@ -69,6 +69,12 @@ dependencies {
     // TO GET CURRENT LOCATION
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // Converter for Retrofit (GSON)
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
     //EASY PERMISSIONS
     implementation 'pub.devrel:easypermissions:3.0.0'
 
