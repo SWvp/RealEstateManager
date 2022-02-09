@@ -41,6 +41,12 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set toolbar with back button
+        binding.toolbar?.setNavigationIcon(R.drawable.back_arrow)
+        binding.toolbar?.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         // Set chip group binding
         interestChipGroup = binding.chipGroup
 
