@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val context: Application,
-    private val masterDetailsStatusRepository: MasterDetailsStatusRepository,
     private val locationRepository: LocationRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
@@ -59,9 +58,5 @@ class MainActivityViewModel @Inject constructor(
 
     fun onConfigurationChanged(isTablet: Boolean) {
         this.isTablet = isTablet
-    }
-
-    fun masterDetailsStatus(value: Boolean){
-        masterDetailsStatusRepository.setMasterDetailsStatus(value)
     }
 }

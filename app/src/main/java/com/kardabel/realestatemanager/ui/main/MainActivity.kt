@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         // Master details is not enable
         if (savedInstanceState == null) {
-            viewModel.masterDetailsStatus(false)
+            //viewModel.masterDetailsStatus(false)
             supportFragmentManager.beginTransaction()
                 .replace(binding.propertiesListContainer.id, PropertiesFragment())
                 .commitNow()
@@ -59,13 +59,15 @@ class MainActivity : AppCompatActivity() {
         if (binding.propertyDetailsContainer != null &&
             supportFragmentManager.findFragmentById(binding.propertyDetailsContainer.id) == null
         ) {
-            viewModel.masterDetailsStatus(true)
+           // viewModel.masterDetailsStatus(true)
             supportFragmentManager.beginTransaction()
                 .add(
                     binding.propertyDetailsContainer.id,
                     DetailsFragment()
                 )
                 .commitNow()
+        }else {
+           // viewModel.masterDetailsStatus(false)
         }
 
         // Permission work is doing by viewModel

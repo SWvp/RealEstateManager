@@ -39,16 +39,6 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // This observer notify the view about master details status,
-        // if true, the toolbar gone
-        viewModel.masterDetailsStatusLiveData.observe(this) { isMasterDetails ->
-            when (isMasterDetails) {
-                false -> setupToolbar()
-                true -> binding.toolbar.visibility = View.GONE
-
-            }
-        }
-
         // Set chip group binding
         interestChipGroup = binding.chipGroup
 
@@ -110,14 +100,6 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationIcon(R.drawable.back_arrow)
-        binding.toolbar.title = "Details"
-        binding.toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
-    }
-
     // Interest are display trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
         val inflater = LayoutInflater.from(requireContext())
@@ -140,7 +122,6 @@ class DetailsFragment : Fragment() {
         val intent = Intent(activity, EditPropertyActivity::class.java)
         startActivity(intent)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
