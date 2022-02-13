@@ -386,16 +386,7 @@
                 app:layout_constraintTop_toBottomOf="@id/country"
                 tools:visibility="visible" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:src="@drawable/edit"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/map" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
