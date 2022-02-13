@@ -18,11 +18,6 @@ class DetailsViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
-    //private var isTablet: Boolean = false
-
-   // val navigationSingleLiveEvent : SingleLiveEvent<NavigateViewAction> = SingleLiveEvent()
-
-
     val detailsLiveData: LiveData<DetailsViewState> =
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
             propertiesRepository.getPropertyById(id).map {
@@ -35,7 +30,7 @@ class DetailsViewModel @Inject constructor(
                         )
                     },
                     description = it.propertyEntity.propertyDescription,
-                    surface = it.propertyEntity.surface?.toString() + "m²",
+                    surface = readableSurface(it.propertyEntity.surface?.toString()),
                     room = it.propertyEntity.room?.toString(),
                     bathroom = it.propertyEntity.bathroom?.toString(),
                     bedroom = it.propertyEntity.bedroom?.toString(),
@@ -54,15 +49,11 @@ class DetailsViewModel @Inject constructor(
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
 
- // init {
- //     navigationSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
- //         if (!isTablet) {
- //             navigationSingleLiveEvent.setValue(NavigateViewAction.IsLandscapeMode)
- //         }
- //     }
- // }
-
- // fun onConfigurationChanged(isTablet: Boolean) {
- //     this.isTablet = isTablet
- // }
+    private fun readableSurface(value: String?): String {
+        return if (value != null) {
+            value + "m²"
+        } else {
+            ""
+        }
+    }
 }
