@@ -19,4 +19,8 @@ class PhotoRepository @Inject constructor() {
     }
 
     fun getPhotoLiveData(): LiveData<List<Photo>> = photoToCreateLiveData
+
+    fun emptyPhotoList() {
+        photoList.clear()
+    }
 }
