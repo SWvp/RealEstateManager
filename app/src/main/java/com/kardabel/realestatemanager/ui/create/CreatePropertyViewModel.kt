@@ -32,7 +32,7 @@ class CreatePropertyViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val actionSingleLiveEvent: SingleLiveEvent<CreateActivityViewAction> = SingleLiveEvent()
+     val actionSingleLiveEvent=  SingleLiveEvent<CreateActivityViewAction>()
 
     private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
@@ -117,7 +117,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createPhotoEntityWithPropertyId(newPropertyId)
             }
         } else {
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.PHOTO_ERROR)
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
         }
     }
 
@@ -127,9 +127,9 @@ class CreatePropertyViewModel @Inject constructor(
         val key: String = BuildConfig.GOOGLE_PLACES_KEY
 
         val addressWithComas = address.replace(" ", ",")
-        val cityWithoutSpace = address.replace(" ", "")
+        val cityWithoutSpace = city.replace(" ", "")
 
-        var staticMap: String? = "https://maps.googleapis.com/maps/api/staticmap?center=" +
+        val staticMap: String = "https://maps.googleapis.com/maps/api/staticmap?center=" +
                 addressWithComas + "," +
                 zipcode + "," +
                 cityWithoutSpace +
@@ -139,7 +139,7 @@ class CreatePropertyViewModel @Inject constructor(
                 "&key=" +
                 key
 
-        return staticMap!!
+        return staticMap
     }
 
     private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
@@ -163,6 +163,7 @@ class CreatePropertyViewModel @Inject constructor(
         for (photoEntity in photoEntities) {
             insertPhoto(photoEntity)
         }
+        emptyPhotoRepository()
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
@@ -170,4 +171,20 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
+
+    // Clear the photoRepo for the next use
+    private fun emptyPhotoRepository(){
+        photoRepository.emptyPhotoList()
+    }
+
+
+
+  // init {
+  //     actionSingleLiveEvent.addSource(createOrEditRepository.currentStatusLiveData) {
+  //         when (it) {
+  //             CreateOrEdit.EDIT_PROPERTY -> actionSingleLiveEvent.setValue(CreateActivityViewAction.START_EDIT_PROPERTY)
+  //             CreateOrEdit.CREATE_PROPERTY -> actionSingleLiveEvent.setValue(CreateActivityViewAction.START_CREATE_PROPERTY)
+  //         }
+  //     }
+  // }
 }
