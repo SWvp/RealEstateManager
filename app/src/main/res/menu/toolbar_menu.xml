@@ -12,13 +12,26 @@
     </item>
 
     <item
+        android:title="@string/converter_item"
+        android:id="@+id/converter_item"
+        android:icon="@drawable/dollar_converter"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+    <item
+        android:title="@string/edit_item"
+        android:id="@+id/edit_item"
+        android:icon="@drawable/edit"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+    <item
         android:title="@string/logout_item"
         android:id="@+id/logout_item"
         android:icon="@drawable/logout"
         app:showAsAction="ifRoom">
 
     </item>
-
-
-
 </menu>
