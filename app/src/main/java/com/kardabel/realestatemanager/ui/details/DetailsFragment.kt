@@ -40,10 +40,6 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set chip group binding
-
-
-
         // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
         photosAdapter = DetailsAdapter {
@@ -102,7 +98,9 @@ class DetailsFragment : Fragment() {
 
         val inflater = LayoutInflater.from(requireContext())
 
+        // Set chip group binding
         interestChipGroup = binding.chipGroup
+        // Remove previous selection (for master-details)
         interestChipGroup.removeAllViews()
 
         if (interests != null) {
