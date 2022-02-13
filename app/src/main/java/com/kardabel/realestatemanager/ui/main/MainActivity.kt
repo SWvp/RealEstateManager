@@ -20,6 +20,7 @@ import com.kardabel.realestatemanager.ui.authentication.AuthActivity
 import com.kardabel.realestatemanager.ui.create.CreatePropertyActivity
 import com.kardabel.realestatemanager.ui.details.DetailsActivity
 import com.kardabel.realestatemanager.ui.details.DetailsFragment
+import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
 import com.kardabel.realestatemanager.utils.NavigateViewAction
@@ -49,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 
         // Master details is not enable
         if (savedInstanceState == null) {
-            //viewModel.masterDetailsStatus(false)
             supportFragmentManager.beginTransaction()
                 .replace(binding.propertiesListContainer.id, PropertiesFragment())
                 .commitNow()
@@ -59,15 +59,12 @@ class MainActivity : AppCompatActivity() {
         if (binding.propertyDetailsContainer != null &&
             supportFragmentManager.findFragmentById(binding.propertyDetailsContainer.id) == null
         ) {
-           // viewModel.masterDetailsStatus(true)
             supportFragmentManager.beginTransaction()
                 .add(
                     binding.propertyDetailsContainer.id,
                     DetailsFragment()
                 )
                 .commitNow()
-        }else {
-           // viewModel.masterDetailsStatus(false)
         }
 
         // Permission work is doing by viewModel
@@ -101,8 +98,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+   //  viewModel.StartEditActivitySingleLiveEvent.observe(this){
+   //      when (it){
+   //          CreateOrEdit.EDIT_PROPERTY-> startEditProperyActivity()
+   //      }
+   //  }
+
 
         binding.fab.setOnClickListener {
+           // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
             val intent = Intent(
                 this@MainActivity,
                 CreatePropertyActivity::class.java
@@ -124,6 +128,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+            R.id.edit_item -> {
+             //   viewModel.notifyThisEdit(CreateOrEdit.EDIT_PROPERTY)
+                val intent = Intent(this, EditPropertyActivity::class.java)
+                startActivity(intent)
+                true
+            }
             R.id.logout_item -> {
                 googleSignInClient.signOut().addOnCompleteListener {
                     val intent = Intent(this, AuthActivity::class.java)
@@ -136,6 +146,11 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+ //  private fun startEditProperyActivity(){
+ //      val intent = Intent(this, EditPropertyActivity::class.java)
+ //      startActivity(intent)
+ //  }
 
     override fun onResume() {
         super.onResume()
