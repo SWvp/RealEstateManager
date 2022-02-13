@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
+import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,12 +25,16 @@ class PropertiesRepository @Inject constructor(
         propertiesDao.insertProperty(property)
     }
 
-    suspend fun deletePropertyById(id: Int) {
-        propertiesDao.deletePropertyById(id)
-    }
-
     suspend fun insertPhoto(photo: PhotoEntity) {
         propertiesDao.insertPhoto(photo)
+    }
+
+    suspend fun updateProperty(property: PropertyUpdate){
+        propertiesDao.updateProperty(property)
+    }
+
+    suspend fun updatePhoto(photo: PhotoEntity){
+        propertiesDao.updatePhoto(photo)
     }
 
 }
