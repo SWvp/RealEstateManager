@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -67,15 +68,6 @@ class CreatePropertyActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
 
-
-    //  viewModel.actionSingleLiveEvent.observe(this){
-    //      when(it){
-    //          CreateActivityViewAction.START_EDIT_PROPERTY -> binding.toolbar.title = "Edit property"
-    //          CreateActivityViewAction.START_CREATE_PROPERTY -> binding.toolbar.title = "Add property"
-    //      }
-    //  }
-
-
         // Set chip group binding
         interestChipGroup = binding.chipGroup
 
@@ -124,6 +116,15 @@ class CreatePropertyActivity : AppCompatActivity() {
         // and set the observer
         viewModel.getPhoto.observe(this) {
             photosAdapter.submitList(it)
+        }
+
+        viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
+            when(viewAction){
+                CreateActivityViewAction.FIELDS_ERROR ->
+                    Toast.makeText(applicationContext, "Plus de data", Toast.LENGTH_SHORT).show()
+
+                CreateActivityViewAction.FINISH_ACTIVITY -> onBackPressed()
+            }
         }
     }
 

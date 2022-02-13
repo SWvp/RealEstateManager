@@ -57,30 +57,30 @@ class CreatePropertyViewModel @Inject constructor(
 
     // When property is ready
     fun createProperty(
-        address: String?,
-        apartmentNumber: String?,
-        county: String?,
-        city: String?,
-        zipcode: String?,
-        country: String?,
-        propertyDescription: String?,
-        type: String?,
-        price: String?,
-        surface: String?,
-        room: String?,
-        bedroom: String?,
-        bathroom: String?,
+        address: String,
+        apartmentNumber: String,
+        county: String,
+        city: String,
+        zipcode: String,
+        country: String,
+        propertyDescription: String,
+        type: String,
+        price: String,
+        surface: String,
+        room: String,
+        bedroom: String,
+        bathroom: String,
     ) {
 
         // Must contain at least one photo and an address (street, zip, city)
-        if (photoMutableList.isNotEmpty() && address != null && city != null && zipcode != null) {
+        if (photoMutableList.isNotEmpty() && address.isNotEmpty()  && city.isNotEmpty() && zipcode.isNotEmpty() ) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
-            val priceToInt = price?.toIntOrNull()
-            val surfaceToInt = surface?.toIntOrNull()
-            val roomToInt = room?.toIntOrNull()
-            val bedroomToInt = bedroom?.toIntOrNull()
-            val bathroomToInt = bathroom?.toIntOrNull()
+            val priceToInt = price.toIntOrNull()
+            val surfaceToInt = surface.toIntOrNull()
+            val roomToInt = room.toIntOrNull()
+            val bedroomToInt = bedroom.toIntOrNull()
+            val bathroomToInt = bathroom.toIntOrNull()
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
@@ -106,7 +106,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
-                interest = interests,
+                interest = returnInterestListOrNull(interests),
                 staticMap = staticMapUrl(address, zipcode, city)
             )
 
@@ -118,6 +118,14 @@ class CreatePropertyViewModel @Inject constructor(
             }
         } else {
             actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
+        }
+    }
+
+    private fun returnInterestListOrNull(interests: MutableList<String>): List<String>? {
+        return if(interests.isEmpty()){
+            null
+        } else{
+            interests
         }
     }
 
@@ -153,7 +161,7 @@ class CreatePropertyViewModel @Inject constructor(
         sendPhotosToDataBase(photoListWithPropertyId)
 
         withContext(applicationDispatchers.mainDispatcher) {
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
+            actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
         }
     }
 
@@ -174,15 +182,4 @@ class CreatePropertyViewModel @Inject constructor(
     private fun emptyPhotoRepository(){
         photoRepository.emptyPhotoList()
     }
-
-
-
-  // init {
-  //     actionSingleLiveEvent.addSource(createOrEditRepository.currentStatusLiveData) {
-  //         when (it) {
-  //             CreateOrEdit.EDIT_PROPERTY -> actionSingleLiveEvent.setValue(CreateActivityViewAction.START_EDIT_PROPERTY)
-  //             CreateOrEdit.CREATE_PROPERTY -> actionSingleLiveEvent.setValue(CreateActivityViewAction.START_CREATE_PROPERTY)
-  //         }
-  //     }
-  // }
 }
