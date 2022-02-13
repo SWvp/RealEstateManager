@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,7 +41,8 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set chip group binding
-        interestChipGroup = binding.chipGroup
+
+
 
         // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
@@ -97,25 +99,26 @@ class DetailsFragment : Fragment() {
 
     // Interests are display trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
+
         val inflater = LayoutInflater.from(requireContext())
+
+        interestChipGroup = binding.chipGroup
+        interestChipGroup.removeAllViews()
+
         if (interests != null) {
-            for (interest in interests) {
-                val chip: Chip =
-                    inflater.inflate(
-                        R.layout.item_interest_chip,
-                        this.interestChipGroup,
-                        false
-                    ) as Chip
-                chip.text = interest
-                interestChipGroup.addView(chip)
+            if (interests.isNotEmpty()) {
+                for (interest in interests) {
+                    val chip: Chip =
+                        inflater.inflate(
+                            R.layout.item_interest_chip,
+                            this.interestChipGroup,
+                            false
+                        ) as Chip
+                    chip.text = interest
+                    interestChipGroup.addView(chip)
+                }
             }
         }
-    }
-
-    // Go to edit activity
-    private fun editProperty() {
-        val intent = Intent(activity, EditPropertyActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onDestroyView() {
