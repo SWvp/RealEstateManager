@@ -93,14 +93,9 @@ class DetailsFragment : Fragment() {
 
             displayInterestAsChip(it.interest)
         }
-
-        // Go to edit activity
-        binding.button?.setOnClickListener {
-            editProperty()
-        }
     }
 
-    // Interest are display trough chip group
+    // Interests are display trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
         val inflater = LayoutInflater.from(requireContext())
         if (interests != null) {
