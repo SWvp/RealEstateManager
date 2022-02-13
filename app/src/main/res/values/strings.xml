@@ -67,7 +67,12 @@
 
     <!-- TOOLBAR MAIN ACTIVITY -->
     <string name="map_item">Map</string>
+    <string name="edit_item">Edit property</string>
+    <string name="converter_item">Converter</string>
     <string name="logout_item">Logout</string>
+
+    <!-- TOOLBAR DETAILS ACTIVITY -->
+    <string name="details_edit_item">Edit</string>
 
     <!-- TYPE DROPDOWN -->
     <string name="dropdown_item_text">Sample text</string>
