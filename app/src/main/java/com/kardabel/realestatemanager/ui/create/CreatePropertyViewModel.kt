@@ -129,7 +129,7 @@ class CreatePropertyViewModel @Inject constructor(
         val addressWithComas = address.replace(" ", ",")
         val cityWithoutSpace = city.replace(" ", "")
 
-        val staticMap: String = "https://maps.googleapis.com/maps/api/staticmap?center=" +
+        return "https://maps.googleapis.com/maps/api/staticmap?center=" +
                 addressWithComas + "," +
                 zipcode + "," +
                 cityWithoutSpace +
@@ -138,8 +138,6 @@ class CreatePropertyViewModel @Inject constructor(
                 addressWithComas +
                 "&key=" +
                 key
-
-        return staticMap
     }
 
     private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
