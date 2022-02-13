@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
-import com.kardabel.realestatemanager.repository.MasterDetailsStatusRepository
 import com.kardabel.realestatemanager.utils.NavigateViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +25,7 @@ class MainActivityViewModel @Inject constructor(
 
     val actionSingleLiveEvent: SingleLiveEvent<PermissionViewAction> = SingleLiveEvent()
     val navigationSingleLiveEvent : SingleLiveEvent<NavigateViewAction> = SingleLiveEvent()
+   // val StartEditActivitySingleLiveEvent : SingleLiveEvent<CreateOrEdit> = SingleLiveEvent()
 
     // CHECK PERMISSIONS WITH MVVM PATTERN
     fun checkPermission(activity: Activity) {
@@ -56,7 +56,19 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
+ //  init {
+ //      StartEditActivitySingleLiveEvent.addSource(createOrEditRepository.currentStatusLiveData) {
+ //          if (it == CreateOrEdit.EDIT_PROPERTY) {
+ //              StartEditActivitySingleLiveEvent.setValue(CreateOrEdit.EDIT_PROPERTY)
+ //          }
+ //      }
+ //  }
+
     fun onConfigurationChanged(isTablet: Boolean) {
         this.isTablet = isTablet
     }
+
+ // fun notifyThisEdit(status: CreateOrEdit) {
+ //     createOrEditRepository.notifyRepo(status)
+ // }
 }

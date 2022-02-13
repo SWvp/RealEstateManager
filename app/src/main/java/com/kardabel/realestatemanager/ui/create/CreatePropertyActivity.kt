@@ -61,10 +61,20 @@ class CreatePropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
+
+
+    //  viewModel.actionSingleLiveEvent.observe(this){
+    //      when(it){
+    //          CreateActivityViewAction.START_EDIT_PROPERTY -> binding.toolbar.title = "Edit property"
+    //          CreateActivityViewAction.START_CREATE_PROPERTY -> binding.toolbar.title = "Add property"
+    //      }
+    //  }
+
 
         // Set chip group binding
         interestChipGroup = binding.chipGroup
