@@ -5,6 +5,6 @@ enum class CreateActivityViewAction  {
 
     // SINGLE LIVE EVENT MESSAGE FOR CREATE ACTIVITY
 
-    PHOTO_ERROR,
+    FIELDS_ERROR,
     FINISH_ACTIVITY,
 }
