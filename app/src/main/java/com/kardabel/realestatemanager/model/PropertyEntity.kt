@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "property")
 data class PropertyEntity constructor(
     @ColumnInfo(name = "address") val address: String,
-    @ColumnInfo(name = "apartment_number") val apartmentNumber: String?,
+    @ColumnInfo(name = "apartment_number") val apartmentNumber: String,
     @ColumnInfo(name = "city") val city: String,
     @ColumnInfo(name = "zipcode") val zipcode: String,
-    @ColumnInfo(name = "county") val county: String?,
-    @ColumnInfo(name = "country") val country: String?,
-    @ColumnInfo(name = "property_description") val propertyDescription: String?,
-    @ColumnInfo(name = "type") val type: String?,
+    @ColumnInfo(name = "county") val county: String,
+    @ColumnInfo(name = "country") val country: String,
+    @ColumnInfo(name = "property_description") val propertyDescription: String,
+    @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "price") val price: Int?,
     @ColumnInfo(name = "surface") val surface: Int?,
     @ColumnInfo(name = "room") val room: Int?,
