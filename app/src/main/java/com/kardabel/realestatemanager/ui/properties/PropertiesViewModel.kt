@@ -43,16 +43,32 @@ class PropertiesViewModel @Inject constructor(
 
     private fun toViewState(property: PropertyWithPhoto) = PropertyViewState(
         propertyId = property.propertyEntity.propertyId,
-        type = property.propertyEntity.type,
+        type = readableType(property.propertyEntity.type),
         county = property.propertyEntity.county,
-        price = "$" + property.propertyEntity.price.toString(),
+        price = readablePrice(property.propertyEntity.price.toString()),
         saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
         photoBitmap = property.photo[0].photo
     )
 
+    private fun readableType(type: String): String {
+        return if(type != "null"){
+            type
+        }else{
+            ""
+        }
+    }
+
+    private fun readablePrice(price: String?): String {
+        return if (price != "null") {
+            "$$price"
+        } else {
+            "Price N/C"
+        }
+    }
+
     private fun saleStatusToString(saleStatus: Boolean): String {
-        return when(saleStatus){
+        return when (saleStatus) {
             true -> "On sale"
             false -> "Sold !"
 
