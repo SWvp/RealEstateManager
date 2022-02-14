@@ -94,19 +94,17 @@ class MainActivity : AppCompatActivity() {
         // When this livedata is trigger, check if we are on landscape or portrait to chose the correct view to display
         viewModel.navigationSingleLiveEvent.observe(this) {
             when (it) {
-                NavigateViewAction.IsLandscapeMode -> startActivity(Intent(this, DetailsActivity::class.java))
+                NavigateViewAction.IsLandscapeMode -> startActivity(
+                    Intent(
+                        this,
+                        DetailsActivity::class.java
+                    )
+                )
             }
         }
 
-   //  viewModel.StartEditActivitySingleLiveEvent.observe(this){
-   //      when (it){
-   //          CreateOrEdit.EDIT_PROPERTY-> startEditProperyActivity()
-   //      }
-   //  }
-
-
         binding.fab.setOnClickListener {
-           // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
+            // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
             val intent = Intent(
                 this@MainActivity,
                 CreatePropertyActivity::class.java
@@ -129,9 +127,12 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.edit_item -> {
-             //   viewModel.notifyThisEdit(CreateOrEdit.EDIT_PROPERTY)
                 val intent = Intent(this, EditPropertyActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.converter_item -> {
+                viewModel.convertPrice()
                 true
             }
             R.id.logout_item -> {
@@ -146,11 +147,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
- //  private fun startEditProperyActivity(){
- //      val intent = Intent(this, EditPropertyActivity::class.java)
- //      startActivity(intent)
- //  }
 
     override fun onResume() {
         super.onResume()

@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
+import com.kardabel.realestatemanager.repository.PriceConverterRepository
 import com.kardabel.realestatemanager.utils.NavigateViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val context: Application,
+    private val priceConverterRepository: PriceConverterRepository,
     private val locationRepository: LocationRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
@@ -68,7 +70,11 @@ class MainActivityViewModel @Inject constructor(
         this.isTablet = isTablet
     }
 
- // fun notifyThisEdit(status: CreateOrEdit) {
+    fun convertPrice() {
+        priceConverterRepository.convertPricePlease()
+    }
+
+    // fun notifyThisEdit(status: CreateOrEdit) {
  //     createOrEditRepository.notifyRepo(status)
  // }
 }

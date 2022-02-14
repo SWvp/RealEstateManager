@@ -8,7 +8,9 @@ import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.CurrentSearchRepository
+import com.kardabel.realestatemanager.repository.PriceConverterRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class PropertiesViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val priceConverterRepository: PriceConverterRepository,
     private val currentSearchRepository: CurrentSearchRepository,
     private val applicationDispatchers: ApplicationDispatchers
 ) : ViewModel() {
@@ -25,18 +28,33 @@ class PropertiesViewModel @Inject constructor(
             .getProperties()
             .asLiveData(applicationDispatchers.ioDispatcher)
 
+    private val currentCurrencyLiveData: LiveData<Boolean> =
+        priceConverterRepository
+            .getCurrentCurrencyLiveData
+
     private val propertiesMediatorLiveData = MediatorLiveData<List<PropertyViewState>>().apply {
-        addSource(propertiesLiveData) {
-            combine(it)
+        addSource(propertiesLiveData) { propertyWithPhoto ->
+            combine(propertyWithPhoto, currentCurrencyLiveData.value)
+        }
+        addSource(currentCurrencyLiveData) { currencyStatus ->
+            combine(propertiesLiveData.value, currencyStatus)
         }
     }
 
     val viewStateLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
 
-    private fun combine(propertyEntities: List<PropertyWithPhoto>) {
-        propertyEntities ?: return
 
-        propertiesMediatorLiveData.value = propertyEntities.map {
+    private fun combine(propertyWithPhoto: List<PropertyWithPhoto>?, currencyStatus: Boolean?) {
+        propertyWithPhoto ?: return
+
+        if (currencyStatus != null) {
+            propertiesMediatorLiveData.postValue(propertyWithPhoto.map { propertyWithPhoto ->
+                toViewStateWithCurrencyStatus(propertyWithPhoto, currencyStatus)
+            })
+
+        }
+
+        propertiesMediatorLiveData.value = propertyWithPhoto.map {
             toViewState(it)
         }
     }
@@ -51,10 +69,41 @@ class PropertiesViewModel @Inject constructor(
         photoBitmap = property.photo[0].photo
     )
 
+    private fun toViewStateWithCurrencyStatus(
+        property: PropertyWithPhoto,
+        currencyStatus: Boolean
+    ) =
+        PropertyViewState(
+            propertyId = property.propertyEntity.propertyId,
+            type = readableType(property.propertyEntity.type),
+            county = property.propertyEntity.county,
+            price = currencyConverter(property.propertyEntity.price, currencyStatus),
+            saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+            vendor = property.propertyEntity.vendor,
+            photoBitmap = property.photo[0].photo
+        )
+
+    private fun currencyConverter(
+        price: Int?,
+        currencyStatus: Boolean
+    ): String {
+        return if (price != null) {
+            return if (currencyStatus) {
+                val priceConverted: String = Utils.convertEuroToDollar(price).toString()
+                "$$priceConverted"
+            } else {
+                val priceConverted: String = Utils.convertDollarToEuro(price).toString()
+                "€$priceConverted"
+            }
+        } else {
+            "Price N/C"
+        }
+    }
+
     private fun readableType(type: String): String {
-        return if(type != "null"){
+        return if (type != "null") {
             type
-        }else{
+        } else {
             ""
         }
     }
