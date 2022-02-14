@@ -109,6 +109,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = CreatePropertyPhotosAdapter {
+            //TODO delete or edit title
 
         }
         recyclerView.adapter = photosAdapter
