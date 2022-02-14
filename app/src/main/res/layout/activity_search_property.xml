@@ -38,7 +38,7 @@
         android:layout_margin="8dp"
         android:valueFrom="0.0"
         android:valueTo="10000000.0"
-        android:stepSize="5.0"
+        android:stepSize="1000.0"
         app:values="@array/price_slider_values"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +90,7 @@
             android:id="@+id/property_type_dropdown_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
             android:background="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
