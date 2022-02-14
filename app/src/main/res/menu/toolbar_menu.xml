@@ -28,6 +28,14 @@
     </item>
 
     <item
+        android:title="@string/search_item"
+        android:id="@+id/search_item"
+        android:icon="@drawable/search"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+    <item
         android:title="@string/logout_item"
         android:id="@+id/logout_item"
         android:icon="@drawable/logout"

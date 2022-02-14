@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Search property"
+        app:navigationIcon="@drawable/back_arrow"
+        android:clickable="true"
+        android:focusable="true"
+        app:titleTextColor="@color/white" />
+
+
+    <TextView
+        android:id="@+id/price_range_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="20sp"
+        android:text="@string/price_range"
+        android:textSize="@dimen/details_media_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/price_range_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:valueFrom="0.0"
+        android:valueTo="10000000.0"
+        android:stepSize="5.0"
+        app:values="@array/price_slider_values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_range_tv" />
+
+    <TextView
+        android:id="@+id/surface_range_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="20sp"
+        android:text="@string/surface_range"
+        android:textSize="@dimen/details_media_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_range_slider"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/surface_range_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:valueFrom="0.0"
+        android:valueTo="1000.0"
+        android:stepSize="5.0"
+        app:values="@array/surface_slider_values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/surface_range_tv" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

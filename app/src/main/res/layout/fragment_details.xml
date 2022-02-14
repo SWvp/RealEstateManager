@@ -386,11 +386,7 @@
                 app:layout_constraintTop_toBottomOf="@id/country"
                 tools:visibility="visible" />
 
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

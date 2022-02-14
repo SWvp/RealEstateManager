@@ -68,7 +68,12 @@
     <string name="map_item">Map</string>
     <string name="edit_item">Edit property</string>
     <string name="converter_item">Converter</string>
+    <string name="search_item">Search property</string>
     <string name="logout_item">Logout</string>
+
+    <!-- SEARCH PROPERTY LAYOUT -->
+    <string name="price_range">Choose a price range:</string>
+    <string name="surface_range">Choose a surface range:</string>
 
     <!-- TOOLBAR DETAILS ACTIVITY LAYOUT -->
     <string name="details_edit_item">Edit</string>

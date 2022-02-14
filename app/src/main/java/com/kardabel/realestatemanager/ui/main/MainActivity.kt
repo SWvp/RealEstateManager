@@ -23,6 +23,7 @@ import com.kardabel.realestatemanager.ui.details.DetailsFragment
 import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
+import com.kardabel.realestatemanager.ui.search.SearchPropertyActivity
 import com.kardabel.realestatemanager.utils.NavigateViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -133,6 +134,11 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.converter_item -> {
                 viewModel.convertPrice()
+                true
+            }
+            R.id.search_item -> {
+                val intent = Intent(this, SearchPropertyActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.logout_item -> {
