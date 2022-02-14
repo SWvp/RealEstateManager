@@ -32,7 +32,7 @@ class CreatePropertyViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-     val actionSingleLiveEvent=  SingleLiveEvent<CreateActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
     private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
@@ -73,7 +73,7 @@ class CreatePropertyViewModel @Inject constructor(
     ) {
 
         // Must contain at least one photo and an address (street, zip, city)
-        if (photoMutableList.isNotEmpty() && address.isNotEmpty()  && city.isNotEmpty() && zipcode.isNotEmpty() ) {
+        if (photoMutableList.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && zipcode.isNotEmpty()) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
             val priceToInt = price.toIntOrNull()
@@ -121,12 +121,15 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
+    // List is always not empty, even when string is empty. Fun to return null if empty
     private fun returnInterestListOrNull(interests: MutableList<String>): List<String>? {
-        return if(interests.isEmpty()){
-            null
-        } else{
-            interests
+        val interestList: MutableList<String>? = null
+        for (interest in interests) {
+            if (interest.isNotEmpty()) {
+                interestList?.add(interest)
+            }
         }
+        return interestList
     }
 
     // Create an url to retrieve a miniature of the map with property marker
@@ -179,7 +182,7 @@ class CreatePropertyViewModel @Inject constructor(
     private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
 
     // Clear the photoRepo for the next use
-    private fun emptyPhotoRepository(){
+    private fun emptyPhotoRepository() {
         photoRepository.emptyPhotoList()
     }
 }
