@@ -56,4 +56,15 @@ class DetailsViewModel @Inject constructor(
             ""
         }
     }
+
+  // // List is always not empty, even when string is empty. Fun to return null if empty
+  // private fun returnInterestListOrNull(interests: List<String>?): List<String>? {
+  //     val interestList: MutableList<String>? = null
+  //     if (interests != null) {
+  //         for (interest in interests) {
+  //                 interestList?.add(interest)
+  //         }
+  //     }
+  //     return interestList
+  // }
 }

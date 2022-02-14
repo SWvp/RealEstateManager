@@ -1,5 +1,7 @@
 package com.kardabel.realestatemanager.ui.create
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -7,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -15,6 +18,7 @@ import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Clock
@@ -28,15 +32,14 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val photoRepository: PhotoRepository,
     private val clock: Clock,
-    // @ApplicationContext context: Context,
+   private val context: Application,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
     private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
-
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
         photoRepository.getPhotoLiveData().map {
@@ -51,8 +54,9 @@ class CreatePropertyViewModel @Inject constructor(
 
     // Poi are stored here
     fun addInterest(interest: String) {
-        interests.add(interest)
-
+        if(interest.isNotEmpty()){
+            interests.add(interest)
+        }
     }
 
     // When property is ready
@@ -106,7 +110,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
-                interest = returnInterestListOrNull(interests),
+                interest = interests,
                 staticMap = staticMapUrl(address, zipcode, city)
             )
 
@@ -121,33 +125,24 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    // List is always not empty, even when string is empty. Fun to return null if empty
-    private fun returnInterestListOrNull(interests: MutableList<String>): List<String>? {
-        val interestList: MutableList<String>? = null
-        for (interest in interests) {
-            if (interest.isNotEmpty()) {
-                interestList?.add(interest)
-            }
-        }
-        return interestList
-    }
-
     // Create an url to retrieve a miniature of the map with property marker
     private fun staticMapUrl(address: String, zipcode: String, city: String): String {
 
         val key: String = BuildConfig.GOOGLE_PLACES_KEY
 
-        val addressWithComas = address.replace(" ", ",")
+        val addressWithComas = address.replace(" ", context.getString(R.string.coma))
         val cityWithoutSpace = city.replace(" ", "")
 
-        return "https://maps.googleapis.com/maps/api/staticmap?center=" +
-                addressWithComas + "," +
-                zipcode + "," +
-                cityWithoutSpace +
-                "&zoom=13&size=400x400&" +
-                "markers=color:blue|label:P|" +
+        return context.getString(R.string.url_map_static) +
                 addressWithComas +
-                "&key=" +
+                context.getString(R.string.coma) +
+                zipcode +
+                context.getString(R.string.coma) +
+                cityWithoutSpace +
+                context.getString(R.string.zoom_size) +
+                context.getString(R.string.marker)  +
+                addressWithComas +
+                context.getString(R.string.key) +
                 key
     }
 
@@ -162,6 +157,7 @@ class CreatePropertyViewModel @Inject constructor(
             photoListWithPropertyId.add(photoEntity)
         }
         sendPhotosToDataBase(photoListWithPropertyId)
+        emptyPhotoRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
@@ -172,7 +168,6 @@ class CreatePropertyViewModel @Inject constructor(
         for (photoEntity in photoEntities) {
             insertPhoto(photoEntity)
         }
-        emptyPhotoRepository()
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
@@ -182,7 +177,7 @@ class CreatePropertyViewModel @Inject constructor(
     private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
 
     // Clear the photoRepo for the next use
-    private fun emptyPhotoRepository() {
+    fun emptyPhotoRepository() {
         photoRepository.emptyPhotoList()
     }
 }

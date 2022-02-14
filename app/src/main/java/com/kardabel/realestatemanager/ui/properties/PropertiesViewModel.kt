@@ -89,8 +89,7 @@ class PropertiesViewModel @Inject constructor(
     ): String {
         return if (price != null) {
             return if (currencyStatus) {
-                val priceConverted: String = Utils.convertEuroToDollar(price).toString()
-                "$$priceConverted"
+                "$$price"
             } else {
                 val priceConverted: String = Utils.convertDollarToEuro(price).toString()
                 "€$priceConverted"
