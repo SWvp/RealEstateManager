@@ -26,11 +26,6 @@ public class Utils {
         return (int) Math.round(dollars * 0.812);
     }
 
-    public static int convertEuroToDollar(int euros) {
-
-        return (int) Math.round(euros / 0.812);
-    }
-
     /**
      * Conversion de la date d'aujourd'hui en un format plus approprié
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
@@ -50,7 +45,7 @@ public class Utils {
      * @return
      */
     public static Boolean isInternetAvailable(Context context) {
-        WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
     }
 }
