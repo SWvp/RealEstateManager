@@ -69,6 +69,133 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/surface_range_tv" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dropdown_menu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        app:endIconMode="dropdown_menu"
+        app:helperText="Choose a type of property"
+        app:helperTextEnabled="true"
+        android:hint="@string/chose_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surface_range_slider"
+        app:startIconDrawable="@drawable/type">
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/property_type_dropdown_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/create_interests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:startIconDrawable="@drawable/interests"
+        android:hint="@string/interests"
+        app:helperText="Choose interest"
+        app:helperTextEnabled="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropdown_menu">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_interest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/add_interest_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/add_interest"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="@dimen/add_pic_storage"
+        app:cornerRadius="20dp"
+        app:layout_constraintTop_toBottomOf="@id/create_interests"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/add_interest_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:singleSelection="true"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/property_county"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:hint="@string/enter_property_county"
+        app:boxBackgroundColor="@color/white"
+        app:endIconMode="clear_text"
+        app:helperText="Choose county"
+        app:helperTextEnabled="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chip_group">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_property_county"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/number_of_photo"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:helperText="Photo"
+        app:helperTextEnabled="true"
+        app:layout_constraintStart_toStartOf="@+id/property_county"
+        app:layout_constraintTop_toBottomOf="@+id/property_county"
+        app:startIconDrawable="@drawable/photo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_number_of_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:inputType="numberDecimal"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:text="@string/search"
+        app:layout_constraintBottom_toBottomOf="@+id/number_of_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/number_of_photo"
+        app:layout_constraintTop_toTopOf="@+id/number_of_photo" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

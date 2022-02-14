@@ -74,6 +74,8 @@
     <!-- SEARCH PROPERTY LAYOUT -->
     <string name="price_range">Choose a price range:</string>
     <string name="surface_range">Choose a surface range:</string>
+    <string name="choose_property_type">Choose a property type:</string>
+    <string name="search">Search</string>
 
     <!-- TOOLBAR DETAILS ACTIVITY LAYOUT -->
     <string name="details_edit_item">Edit</string>
@@ -94,6 +96,13 @@
 
     <!-- CREATE PROPERTY ACTIVITY -->
     <string name="fields_error">At least 1 photo, address, city and zipcode</string>
+    <string name="url_map_static">https://maps.googleapis.com/maps/api/staticmap?center=</string>
+    <string name="coma">,</string>
+    <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>
+    <string name="marker">markers=color:blue|label:P|</string>
+    <string name="key">&amp;key=</string>
+
+
 
 
 </resources>
