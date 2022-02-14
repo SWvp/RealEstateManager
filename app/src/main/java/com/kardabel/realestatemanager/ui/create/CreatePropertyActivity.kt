@@ -121,7 +121,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
             when(viewAction){
                 CreateActivityViewAction.FIELDS_ERROR ->
-                    Toast.makeText(applicationContext, "Plus de data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, getString(R.string.fields_error), Toast.LENGTH_SHORT).show()
 
                 CreateActivityViewAction.FINISH_ACTIVITY -> onBackPressed()
             }

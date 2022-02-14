@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
 
-    <!-- ACTIVITY MAIN -->
+    <!-- ACTIVITY MAIN LAYOUT -->
     <string name="it_s_a_fab">it is a FAB</string>
     <string name="tab_item_properties">Properties</string>
     <string name="tab_item_map">Map</string>
 
-    <!-- ACTIVITY CREATE PROPERTY -->
+    <!-- ACTIVITY CREATE PROPERTY LAYOUT -->
     <string name="enter_description">Enter property description here:</string>
     <string name="enter_property_address">Address</string>
     <string name="create_room_title">Rooms</string>
@@ -24,7 +24,6 @@
     <string name="enter_property_apartment_number">Apt n.</string>
     <string name="price">Price</string>
     <string name="enter_property_postal_code">Zip Code</string>
-
     <string name="save_button">SAVE</string>
 
     <!-- ITEM PROPERTY -->
@@ -34,7 +33,7 @@
     <string name="property_vendor">Vendor</string>
     <string name="property_sale_status">On sale</string>
 
-    <!-- PROPERTY DETAILS -->
+    <!-- PROPERTY DETAILS LAYOUT-->
     <string name="photo_title">Photos</string>
     <string name="description_title">Description</string>
     <string name="description_text">One-of-one. A trophy unlike any other in the world. Never before on the market. All furniture and art will be included in the sale.</string>
@@ -62,19 +61,19 @@
     <string name="details_zip_code">10021</string>
     <string name="details_country">Uganda</string>
 
-    <!-- ITEM DETAILS PICTURE -->
+    <!-- ITEM DETAILS PICTURE LAYOUT -->
     <string name="item_for_details_picture">item for details picture</string>
 
-    <!-- TOOLBAR MAIN ACTIVITY -->
+    <!-- TOOLBAR MAIN ACTIVITY LAYOUT -->
     <string name="map_item">Map</string>
     <string name="edit_item">Edit property</string>
     <string name="converter_item">Converter</string>
     <string name="logout_item">Logout</string>
 
-    <!-- TOOLBAR DETAILS ACTIVITY -->
+    <!-- TOOLBAR DETAILS ACTIVITY LAYOUT -->
     <string name="details_edit_item">Edit</string>
 
-    <!-- TYPE DROPDOWN -->
+    <!-- TYPE DROPDOWN LAYOUT -->
     <string name="dropdown_item_text">Sample text</string>
 
     <!-- TOKEN GOOGLE SIGNING -->
@@ -84,6 +83,12 @@
 
 
     <string name="popup_title_permission_files_access">Access</string>
+
+
+
+
+    <!-- CREATE PROPERTY ACTIVITY -->
+    <string name="fields_error">At least 1 photo, address, city and zipcode</string>
 
 
 </resources>
