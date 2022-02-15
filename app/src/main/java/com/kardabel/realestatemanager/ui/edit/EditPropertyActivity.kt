@@ -156,11 +156,16 @@ class EditPropertyActivity : AppCompatActivity() {
         binding.inputPropertyZipCode.setText(property.zipcode)
         binding.inputPrice.setText(property.price)
 
-        displayInterestAsChip(property.interest)
+        viewModel.getInterest.observe(this){ interestList ->
+            displayInterestAsChip(interestList)
+        }
+
+        //displayInterestAsChip(property.interest)
     }
 
     // Interests are display trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
+        interestChipGroup.clearCheck()
         val inflater = LayoutInflater.from(this)
         if (interests != null) {
             for (interest in interests) {

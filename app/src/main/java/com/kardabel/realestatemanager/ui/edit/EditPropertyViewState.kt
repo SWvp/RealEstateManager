@@ -11,7 +11,7 @@ data class EditPropertyViewState(
     val room: String?,
     val bathroom: String?,
     val bedroom: String?,
-    val interest: List<String>?,
+    //val interest: List<String>?,
     val address: String,
     val apartment: String?,
     val city: String,

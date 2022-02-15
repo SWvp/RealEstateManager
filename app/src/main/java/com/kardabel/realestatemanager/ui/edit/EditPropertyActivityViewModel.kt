@@ -10,6 +10,7 @@ import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
+import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.repository.PhotoRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
@@ -27,6 +28,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
     private val photoRepository: PhotoRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val interestRepository: InterestRepository,
     private val context: Application,
 ) : ViewModel() {
 
@@ -38,23 +40,32 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     var propertyId by Delegates.notNull<Long>()
 
+
     val getPhoto: LiveData<List<EditPropertyPhotoViewState>> =
-        photoRepository.getPhotoLiveData().map {
-            it.map { photoEntity ->
-                photoMutableList = it as MutableList<Photo>
+        photoRepository.getPhotoLiveData().map { photoList ->
+            photoMutableList = photoList as MutableList<Photo>
+            photoList.map { photo ->
                 EditPropertyPhotoViewState(
-                    photoEntity.photo,
-                    photoEntity.photoDescription,
+                    photo.photo,
+                    photo.photoDescription,
                 )
             }
         }
 
+    val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
+
     val getDetailsLiveData: LiveData<EditPropertyViewState> =
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
             propertiesRepository.getPropertyById(id).map {
+
+                emptyInterestRepository()
+
                 propertyId = it.propertyEntity.propertyId
+
                 addOldInterests(it.propertyEntity.interest)
+
                 retrieveOldPhotos(it.photo)
+
                 EditPropertyViewState(
                     propertyId = it.propertyEntity.propertyId,
                     type = it.propertyEntity.type,
@@ -63,7 +74,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     room = it.propertyEntity.room?.toString(),
                     bathroom = it.propertyEntity.bathroom?.toString(),
                     bedroom = it.propertyEntity.bedroom?.toString(),
-                    interest = it.propertyEntity.interest,
+                    //interest = it.propertyEntity.interest,
                     address = it.propertyEntity.address,
                     apartment = it.propertyEntity.apartmentNumber,
                     city = it.propertyEntity.city,
@@ -105,13 +116,14 @@ class EditPropertyActivityViewModel @Inject constructor(
     private fun addOldInterests(oldInterests: List<String>?) {
         if (oldInterests != null) {
             for (interest in oldInterests) {
-                interests.add(interest)
+                interestRepository.addInterest(interest)
             }
         }
     }
 
     fun addInterest(interest: String) {
-        interests.add(interest)
+        interestRepository.addInterest(interest)
+        //interests.add(interest)
     }
 
     fun createProperty(
@@ -130,44 +142,45 @@ class EditPropertyActivityViewModel @Inject constructor(
         bathroom: String?,
     ) {
         // Must contain at least one photo and an address (street, zip, city)
-        if (photoMutableList.isNotEmpty() && address != null && city != null && zipcode != null) {
+        if (photoMutableList.isNotEmpty() || oldPhotoMutableList.isNotEmpty()) {
+            if (address != null && city != null && zipcode != null) {
 
-            // Get value to entity format, string is for the view
-            val priceToInt = price?.toIntOrNull()
-            val surfaceToInt = surface?.toIntOrNull()
-            val roomToInt = room?.toIntOrNull()
-            val bedroomToInt = bedroom?.toIntOrNull()
-            val bathroomToInt = bathroom?.toIntOrNull()
+                // Get value to entity format, string is for the view
+                val priceToInt = price?.toIntOrNull()
+                val surfaceToInt = surface?.toIntOrNull()
+                val roomToInt = room?.toIntOrNull()
+                val bedroomToInt = bedroom?.toIntOrNull()
+                val bathroomToInt = bathroom?.toIntOrNull()
 
-            val property = PropertyUpdate(
-                address = address,
-                apartmentNumber = apartmentNumber,
-                city = city,
-                zipcode = zipcode,
-                county = county,
-                country = country,
-                propertyDescription = propertyDescription,
-                type = type,
-                price = priceToInt,
-                surface = surfaceToInt,
-                room = roomToInt,
-                bedroom = bedroomToInt,
-                bathroom = bathroomToInt,
-                saleStatus = true,
-                purchaseDate = null,
-                interest = interestCanBeNull(interests),
-                propertyId = propertyId,
-                staticMap = staticMapUrl(address, zipcode, city),
-            )
+                val property = PropertyUpdate(
+                    address = address,
+                    apartmentNumber = apartmentNumber,
+                    city = city,
+                    zipcode = zipcode,
+                    county = county,
+                    country = country,
+                    propertyDescription = propertyDescription,
+                    type = type,
+                    price = priceToInt,
+                    surface = surfaceToInt,
+                    room = roomToInt,
+                    bedroom = bedroomToInt,
+                    bathroom = bathroomToInt,
+                    saleStatus = true,
+                    purchaseDate = null,
+                    interest = interestCanBeNull(interestRepository.getInterest()),
+                    propertyId = propertyId,
+                    staticMap = staticMapUrl(address, zipcode, city),
+                )
 
-            // Get the property id to update photoEntity
-            viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-                updateProperty(property)
-                createPhotoEntity()
+                // Get the property id to update photoEntity
+                viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+                    updateProperty(property)
+                    createPhotoEntity()
+                }
+                actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
+
             }
-
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
-
         } else {
             actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
         }
@@ -244,6 +257,10 @@ class EditPropertyActivityViewModel @Inject constructor(
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
         photoRepository.emptyPhotoList()
+    }
+
+    fun emptyInterestRepository() {
+        interestRepository.emptyInterestList()
     }
 
 

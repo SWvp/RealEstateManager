@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.repository
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
@@ -13,7 +14,17 @@ class InterestRepository @Inject constructor() {
 
     fun getInterestLiveData(): LiveData<List<String>> = interestLiveData
 
-    fun emptyPhotoList() {
+    @MainThread
+    fun addInterest(interest: String){
+        interestList.add(interest)
+        interestLiveData.postValue(interestList)
+    }
+
+    fun getInterest(): MutableList<String> {
+        return interestList
+    }
+
+    fun emptyInterestList() {
         interestList.clear()
     }
 }
