@@ -1,8 +1,11 @@
 package com.kardabel.realestatemanager.ui.edit
 
+import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.BuildConfig
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
@@ -24,6 +27,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
     private val photoRepository: PhotoRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val context: Application,
 ) : ViewModel() {
 
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
@@ -144,6 +148,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 purchaseDate = null,
                 interest = interestCanBeNull(interests),
                 propertyId = propertyId,
+                staticMap = staticMapUrl(address, zipcode, city),
             )
 
             // Get the property id to update photoEntity
@@ -165,6 +170,27 @@ class EditPropertyActivityViewModel @Inject constructor(
         } else {
             interests
         }
+    }
+
+    // Create an url to retrieve a miniature of the map with property marker
+    private fun staticMapUrl(address: String, zipcode: String, city: String): String {
+
+        val key: String = BuildConfig.GOOGLE_PLACES_KEY
+
+        val addressWithComas = address.replace(" ", context.getString(R.string.coma))
+        val cityWithoutSpace = city.replace(" ", "")
+
+        return context.getString(R.string.url_map_static) +
+                addressWithComas +
+                context.getString(R.string.coma) +
+                zipcode +
+                context.getString(R.string.coma) +
+                cityWithoutSpace +
+                context.getString(R.string.zoom_size) +
+                context.getString(R.string.marker)  +
+                addressWithComas +
+                context.getString(R.string.key) +
+                key
     }
 
     // Compare old photo list to new, if differences appear, create new photo in database
