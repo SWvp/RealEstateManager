@@ -190,7 +190,7 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     // Clear the photoRepo for the next use
-    fun emptyPhotoRepository() {
+    private fun emptyPhotoRepository() {
         photoRepository.emptyPhotoList()
     }
 }
