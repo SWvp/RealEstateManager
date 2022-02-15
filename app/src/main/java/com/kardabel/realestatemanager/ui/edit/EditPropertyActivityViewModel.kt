@@ -3,7 +3,9 @@ package com.kardabel.realestatemanager.ui.edit
 import android.net.Uri
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
-import com.kardabel.realestatemanager.model.*
+import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.model.PhotoEntity
+import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.PhotoRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
@@ -18,10 +20,10 @@ import kotlin.properties.Delegates
 
 @HiltViewModel
 class EditPropertyActivityViewModel @Inject constructor(
-    currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
     private val photoRepository: PhotoRepository,
+    private val currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
 
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
@@ -95,12 +97,6 @@ class EditPropertyActivityViewModel @Inject constructor(
         }
     }
 
-
-    // Clear the photoRepo for the next use
-    fun emptyPhotoRepository() {
-        photoRepository.emptyPhotoList()
-    }
-
     fun addInterest(interest: String) {
         interests.add(interest)
     }
@@ -146,24 +142,34 @@ class EditPropertyActivityViewModel @Inject constructor(
                 bathroom = bathroomToInt,
                 saleStatus = true,
                 purchaseDate = null,
-                interest = interests,
+                interest = interestCanBeNull(interests),
                 propertyId = propertyId,
             )
 
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                 updateProperty(property)
-                createPhotoEntity(propertyId)
+                createPhotoEntity()
             }
+
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
 
         }
 
-     // else {
-     //     actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
-     // }
+        // else {
+        //     actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
+        // }
     }
 
-    private suspend fun createPhotoEntity(propertyId: Long){
+    private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
+        return if (interests.size == 0) {
+            null
+        } else {
+            interests
+        }
+    }
+
+    private suspend fun createPhotoEntity() {
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
@@ -174,16 +180,18 @@ class EditPropertyActivityViewModel @Inject constructor(
             )
             photoListWithPropertyId.add(photoEntity)
         }
-        sendPhotosToDataBase(photoListWithPropertyId)
+        emptyPhotoRepository()
+        updatePhotosDataBase(photoListWithPropertyId)
 
-   //  withContext(applicationDispatchers.mainDispatcher) {
-   //      actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
-   //  }
+        withContext(applicationDispatchers.mainDispatcher) {
+            currentPropertyIdRepository.setCurrentPropertyId(propertyId)
+
+        }
 
     }
 
 
-    private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
+    private suspend fun updatePhotosDataBase(photoEntities: MutableList<PhotoEntity>) {
         for (photo in photoEntities) {
             updatePhoto(photo)
         }
@@ -195,6 +203,11 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private suspend fun updatePhoto(photo: PhotoEntity) =
         propertiesRepository.updatePhoto(photo)
+
+    // Clear the photoRepo for the next use
+    fun emptyPhotoRepository() {
+        photoRepository.emptyPhotoList()
+    }
 
 
 }
