@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
+import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -107,6 +109,16 @@ class EditPropertyActivity : AppCompatActivity() {
         // Manage camera to capture a pic
         binding.addCameraPictureButton.setOnClickListener {
             capturePhoto()
+        }
+
+        viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
+            when(viewAction){
+                CreateActivityViewAction.FIELDS_ERROR ->
+                    Toast.makeText(applicationContext, getString(R.string.fields_error), Toast.LENGTH_SHORT).show()
+
+                CreateActivityViewAction.FINISH_ACTIVITY ->
+                    onBackPressed()
+            }
         }
     }
 
