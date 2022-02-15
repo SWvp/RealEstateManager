@@ -30,6 +30,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
+    private var oldPhotoMutableList = mutableListOf<Photo>()
 
     var propertyId by Delegates.notNull<Long>()
 
@@ -77,9 +78,8 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     // Create a photo list with old photo
     private fun retrieveOldPhotos(photo: List<PhotoEntity>) {
-        val oldPhotoList = mutableListOf<Photo>()
         photo.map { photoEntity ->
-            oldPhotoList.add(
+            oldPhotoMutableList.add(
                 Photo(
                     photoEntity.photo,
                     photoEntity.photoDescription,
@@ -88,7 +88,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
             )
         }
-        sendPhotoToPhotoRepository(oldPhotoList)
+        sendPhotoToPhotoRepository(oldPhotoMutableList)
     }
 
     private fun sendPhotoToPhotoRepository(oldPhotoList: MutableList<Photo>) {
@@ -119,7 +119,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         // Must contain at least one photo and an address (street, zip, city)
         if (photoMutableList.isNotEmpty() && address != null && city != null && zipcode != null) {
 
-            // Get value to entity format, string is for the view, we don't trust anything else
+            // Get value to entity format, string is for the view
             val priceToInt = price?.toIntOrNull()
             val surfaceToInt = surface?.toIntOrNull()
             val roomToInt = room?.toIntOrNull()
@@ -154,11 +154,9 @@ class EditPropertyActivityViewModel @Inject constructor(
 
             actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
 
+        } else {
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
         }
-
-        // else {
-        //     actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
-        // }
     }
 
     private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
@@ -169,31 +167,35 @@ class EditPropertyActivityViewModel @Inject constructor(
         }
     }
 
+    // Compare old photo list to new, if differences appear, create new photo in database
     private suspend fun createPhotoEntity() {
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
-        for (photo in photoMutableList) {
-            val photoEntity = PhotoEntity(
-                photo.photo,
-                photo.photoUri.toString(),
-                photo.photoDescription,
-                propertyId,
-            )
-            photoListWithPropertyId.add(photoEntity)
+        if (photoMutableList != oldPhotoMutableList) {
+
+            val newPhoto = photoMutableList.filterNot { oldPhotoMutableList.contains(it) }
+
+            for (photo in newPhoto) {
+                val photoEntity = PhotoEntity(
+                    photo.photo,
+                    photo.photoUri.toString(),
+                    photo.photoDescription,
+                    propertyId,
+                )
+                photoListWithPropertyId.add(photoEntity)
+            }
+            updatePhotosDataBase(photoListWithPropertyId)
         }
         emptyPhotoRepository()
-        updatePhotosDataBase(photoListWithPropertyId)
 
         withContext(applicationDispatchers.mainDispatcher) {
             currentPropertyIdRepository.setCurrentPropertyId(propertyId)
-
         }
-
     }
 
 
     private suspend fun updatePhotosDataBase(photoEntities: MutableList<PhotoEntity>) {
         for (photo in photoEntities) {
-            updatePhoto(photo)
+            insertNewPhoto(photo)
         }
     }
 
@@ -201,8 +203,8 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.updateProperty(property)
 
 
-    private suspend fun updatePhoto(photo: PhotoEntity) =
-        propertiesRepository.updatePhoto(photo)
+    private suspend fun insertNewPhoto(photo: PhotoEntity) =
+        propertiesRepository.insertNewPhoto(photo)
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {

@@ -33,8 +33,8 @@ class PropertiesRepository @Inject constructor(
         propertiesDao.updateProperty(property)
     }
 
-    suspend fun updatePhoto(photo: PhotoEntity){
-        propertiesDao.updatePhoto(photo)
+    suspend fun insertNewPhoto(photo: PhotoEntity){
+        propertiesDao.insertPhoto(photo)
     }
 
 }
