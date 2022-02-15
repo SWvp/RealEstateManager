@@ -1,7 +1,6 @@
 package com.kardabel.realestatemanager.ui.create
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -18,7 +17,6 @@ import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Clock
@@ -151,6 +149,7 @@ class CreatePropertyViewModel @Inject constructor(
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
                 photo.photo,
+                photo.photoUri.toString(),
                 photo.photoDescription,
                 newPropertyId,
             )
@@ -166,7 +165,9 @@ class CreatePropertyViewModel @Inject constructor(
 
     private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
         for (photoEntity in photoEntities) {
-            insertPhoto(photoEntity)
+            insertPhotoDao(photoEntity)
+            insertPhotoFirebaseStorage(photoEntity)
+
         }
     }
 
@@ -174,7 +175,11 @@ class CreatePropertyViewModel @Inject constructor(
         return propertiesRepository.insertProperty(property)
     }
 
-    private suspend fun insertPhoto(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
+    private suspend fun insertPhotoDao(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
+
+    private fun insertPhotoFirebaseStorage(photoEntity: PhotoEntity) {
+        TODO("Not yet implemented")
+    }
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {

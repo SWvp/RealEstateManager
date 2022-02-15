@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
@@ -20,10 +21,12 @@ class PhotoConfirmationFragment : DialogFragment() {
     }
 
     var photoBitmap: Bitmap? = null
+    var photoUri: Uri? = null
 
     companion object {
-        fun newInstance(photo: Bitmap) = PhotoConfirmationFragment().apply {
+        fun newInstance(photo: Bitmap, uri: Uri) = PhotoConfirmationFragment().apply {
             photoBitmap = photo
+            photoUri = uri
         }
     }
 
@@ -41,7 +44,8 @@ class PhotoConfirmationFragment : DialogFragment() {
                 if (!editText.text.isNullOrEmpty()) {
                     val newPhoto = Photo(
                         photoBitmap!!,
-                        editText.text.toString()
+                        editText.text.toString(),
+                        photoUri!!,
                     )
                     confirmDialogViewModel.addPhoto(newPhoto)
                 }

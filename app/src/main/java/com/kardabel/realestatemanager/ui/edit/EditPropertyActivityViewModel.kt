@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.edit
 
+import android.net.Uri
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.*
@@ -80,6 +81,8 @@ class EditPropertyActivityViewModel @Inject constructor(
                 Photo(
                     photoEntity.photo,
                     photoEntity.photoDescription,
+                    Uri.parse(photoEntity.photoUri)
+
                 )
             )
         }
@@ -165,6 +168,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
                 photo.photo,
+                photo.photoUri.toString(),
                 photo.photoDescription,
                 propertyId,
             )
