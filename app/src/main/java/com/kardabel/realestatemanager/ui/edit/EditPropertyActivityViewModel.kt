@@ -53,6 +53,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
             propertiesRepository.getPropertyById(id).map {
                 propertyId = it.propertyEntity.propertyId
+                addOldInterests(it.propertyEntity.interest)
                 retrieveOldPhotos(it.photo)
                 EditPropertyViewState(
                     propertyId = it.propertyEntity.propertyId,
@@ -98,6 +99,14 @@ class EditPropertyActivityViewModel @Inject constructor(
     private fun sendPhotoToPhotoRepository(oldPhotoList: MutableList<Photo>) {
         for (oldPhoto in oldPhotoList) {
             photoRepository.addPhoto(oldPhoto)
+        }
+    }
+
+    private fun addOldInterests(oldInterests: List<String>?) {
+        if (oldInterests != null) {
+            for (interest in oldInterests) {
+                interests.add(interest)
+            }
         }
     }
 
@@ -187,7 +196,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 context.getString(R.string.coma) +
                 cityWithoutSpace +
                 context.getString(R.string.zoom_size) +
-                context.getString(R.string.marker)  +
+                context.getString(R.string.marker) +
                 addressWithComas +
                 context.getString(R.string.key) +
                 key

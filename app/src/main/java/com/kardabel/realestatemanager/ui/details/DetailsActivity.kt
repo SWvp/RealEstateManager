@@ -48,6 +48,7 @@ class DetailsActivity: AppCompatActivity() {
                 true
             }
             android.R.id.home -> {
+                finish()
                 onBackPressed()
                 true
             }

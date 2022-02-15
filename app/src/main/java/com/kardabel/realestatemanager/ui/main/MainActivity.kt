@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         // When this livedata is trigger, check if we are on landscape or portrait to chose the correct view to display
-        viewModel.mScreenPositionSingleLiveEvent.observe(this) {
+        viewModel.screenPositionSingleLiveEvent.observe(this) {
             when (it) {
                 ScreenPositionViewAction.IsLandscapeMode -> startActivity(
                     Intent(
@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity() {
         // Single live event trigger when edit item is clicked
         viewModel.startEditActivitySingleLiveEvent.observe(this) {
             when (it) {
+
                 NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
                     startActivity(
                         Intent(
@@ -115,10 +116,13 @@ class MainActivity : AppCompatActivity() {
                             EditPropertyActivity::class.java
                         )
                     )
+
                 NavigateToEditViewAction.NO_PROPERTY_SELECTED ->
                     Toast.makeText(applicationContext, getString(R.string.no_property_selected), Toast.LENGTH_SHORT).show()
             }
         }
+
+
         binding.fab.setOnClickListener {
             // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
             val intent = Intent(
@@ -145,6 +149,7 @@ class MainActivity : AppCompatActivity() {
             R.id.edit_item -> {
                 // If no property is selected, edit will not be called
                 viewModel.propertyIdRepositoryStatus()
+
                 true
             }
             R.id.converter_item -> {

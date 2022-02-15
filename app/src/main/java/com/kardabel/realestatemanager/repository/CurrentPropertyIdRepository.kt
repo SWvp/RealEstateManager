@@ -9,10 +9,16 @@ import javax.inject.Singleton
 @Singleton
 class CurrentPropertyIdRepository @Inject constructor(){
     private val currentPropertyIdMutableLiveData = MutableLiveData<Long>()
+    var isProperty: Boolean = false
     val currentPropertyIdLiveData: LiveData<Long> = currentPropertyIdMutableLiveData
 
     @MainThread
     fun setCurrentPropertyId(propertyId: Long){
         currentPropertyIdMutableLiveData.postValue(propertyId)
+        isProperty = true
+    }
+
+    fun isPropertyAvailable(): Boolean {
+        return isProperty
     }
 }

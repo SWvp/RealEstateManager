@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
@@ -27,10 +28,12 @@ class MainActivityViewModel @Inject constructor(
     private var isTablet: Boolean = false
 
     val actionSingleLiveEvent: SingleLiveEvent<PermissionViewAction> = SingleLiveEvent()
-    val mScreenPositionSingleLiveEvent: SingleLiveEvent<ScreenPositionViewAction> =
+    val screenPositionSingleLiveEvent: SingleLiveEvent<ScreenPositionViewAction> =
         SingleLiveEvent()
     val startEditActivitySingleLiveEvent: SingleLiveEvent<NavigateToEditViewAction> =
         SingleLiveEvent()
+
+    val getCurrentId: LiveData<Long> = currentPropertyIdRepository.currentPropertyIdLiveData
 
     // CHECK PERMISSIONS WITH MVVM PATTERN
     fun checkPermission(activity: Activity) {
@@ -54,9 +57,9 @@ class MainActivityViewModel @Inject constructor(
     }
 
     init {
-        mScreenPositionSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
+        screenPositionSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
             if (!isTablet) {
-                mScreenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsLandscapeMode)
+                screenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsLandscapeMode)
             }
         }
     }
@@ -72,9 +75,12 @@ class MainActivityViewModel @Inject constructor(
     // Check currentPropertyIdRepository to know if a property is selected
     // If not, edit will not be called
     fun propertyIdRepositoryStatus() {
-        if (currentPropertyIdRepository.currentPropertyIdLiveData.value != null) {
+        if(currentPropertyIdRepository.isProperty){
             startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.GO_TO_EDIT_PROPERTY)
+
+        }else{
+
+            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.NO_PROPERTY_SELECTED)
         }
-        startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.NO_PROPERTY_SELECTED)
     }
 }
