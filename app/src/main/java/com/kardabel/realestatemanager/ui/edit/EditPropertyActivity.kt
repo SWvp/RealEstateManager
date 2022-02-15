@@ -89,7 +89,7 @@ class EditPropertyActivity : AppCompatActivity() {
         }
 
 
-        //////// BINDS ////////////
+        //////// RETRIEVE DATA ////////////
 
         // Set dropdown menu for type of property
         val items = arrayOf(

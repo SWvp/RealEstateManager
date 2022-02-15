@@ -24,7 +24,8 @@ import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
 import com.kardabel.realestatemanager.ui.search.SearchPropertyActivity
-import com.kardabel.realestatemanager.utils.NavigateViewAction
+import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
+import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -93,9 +94,9 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         // When this livedata is trigger, check if we are on landscape or portrait to chose the correct view to display
-        viewModel.navigationSingleLiveEvent.observe(this) {
+        viewModel.mScreenPositionSingleLiveEvent.observe(this) {
             when (it) {
-                NavigateViewAction.IsLandscapeMode -> startActivity(
+                ScreenPositionViewAction.IsLandscapeMode -> startActivity(
                     Intent(
                         this,
                         DetailsActivity::class.java
@@ -104,6 +105,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Single live event trigger when edit item is clicked
+        viewModel.startEditActivitySingleLiveEvent.observe(this) {
+            when (it) {
+                NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
+                    startActivity(
+                        Intent(
+                            this,
+                            EditPropertyActivity::class.java
+                        )
+                    )
+                NavigateToEditViewAction.NO_PROPERTY_SELECTED ->
+                    Toast.makeText(applicationContext, getString(R.string.no_property_selected), Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.fab.setOnClickListener {
             // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
             val intent = Intent(
@@ -128,8 +143,8 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.edit_item -> {
-                val intent = Intent(this, EditPropertyActivity::class.java)
-                startActivity(intent)
+                // If no property is selected, edit will not be called
+                viewModel.propertyIdRepositoryStatus()
                 true
             }
             R.id.converter_item -> {

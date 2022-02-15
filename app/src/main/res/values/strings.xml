@@ -26,7 +26,7 @@
     <string name="enter_property_postal_code">Zip Code</string>
     <string name="save_button">SAVE</string>
 
-    <!-- ITEM PROPERTY -->
+    <!-- ITEM PROPERTY LAYOUT -->
     <string name="property_type">Property type</string>
     <string name="property_county">Property county</string>
     <string name="property_price">$17,870,000</string>
@@ -101,6 +101,9 @@
     <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>
     <string name="marker">markers=color:blue|label:P|</string>
     <string name="key">&amp;key=</string>
+
+    <!-- MAIN ACTIVITY -->
+    <string name="no_property_selected">Select a property please</string>
 
 
 

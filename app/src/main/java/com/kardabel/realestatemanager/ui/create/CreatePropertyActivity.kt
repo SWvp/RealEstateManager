@@ -119,6 +119,7 @@ class CreatePropertyActivity : AppCompatActivity() {
             photosAdapter.submitList(it)
         }
 
+        // Inform user if fields are missing
         viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
             when(viewAction){
                 CreateActivityViewAction.FIELDS_ERROR ->

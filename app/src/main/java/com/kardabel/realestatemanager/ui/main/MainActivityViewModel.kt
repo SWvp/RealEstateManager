@@ -10,7 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
 import com.kardabel.realestatemanager.repository.PriceConverterRepository
-import com.kardabel.realestatemanager.utils.NavigateViewAction
+import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
+import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,14 +21,16 @@ class MainActivityViewModel @Inject constructor(
     private val context: Application,
     private val priceConverterRepository: PriceConverterRepository,
     private val locationRepository: LocationRepository,
-    currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
 
     private var isTablet: Boolean = false
 
     val actionSingleLiveEvent: SingleLiveEvent<PermissionViewAction> = SingleLiveEvent()
-    val navigationSingleLiveEvent : SingleLiveEvent<NavigateViewAction> = SingleLiveEvent()
-   // val StartEditActivitySingleLiveEvent : SingleLiveEvent<CreateOrEdit> = SingleLiveEvent()
+    val mScreenPositionSingleLiveEvent: SingleLiveEvent<ScreenPositionViewAction> =
+        SingleLiveEvent()
+    val startEditActivitySingleLiveEvent: SingleLiveEvent<NavigateToEditViewAction> =
+        SingleLiveEvent()
 
     // CHECK PERMISSIONS WITH MVVM PATTERN
     fun checkPermission(activity: Activity) {
@@ -51,20 +54,12 @@ class MainActivityViewModel @Inject constructor(
     }
 
     init {
-        navigationSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
+        mScreenPositionSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
             if (!isTablet) {
-                navigationSingleLiveEvent.setValue(NavigateViewAction.IsLandscapeMode)
+                mScreenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsLandscapeMode)
             }
         }
     }
-
- //  init {
- //      StartEditActivitySingleLiveEvent.addSource(createOrEditRepository.currentStatusLiveData) {
- //          if (it == CreateOrEdit.EDIT_PROPERTY) {
- //              StartEditActivitySingleLiveEvent.setValue(CreateOrEdit.EDIT_PROPERTY)
- //          }
- //      }
- //  }
 
     fun onConfigurationChanged(isTablet: Boolean) {
         this.isTablet = isTablet
@@ -74,7 +69,12 @@ class MainActivityViewModel @Inject constructor(
         priceConverterRepository.convertPricePlease()
     }
 
-    // fun notifyThisEdit(status: CreateOrEdit) {
- //     createOrEditRepository.notifyRepo(status)
- // }
+    // Check currentPropertyIdRepository to know if a property is selected
+    // If not, edit will not be called
+    fun propertyIdRepositoryStatus() {
+        if (currentPropertyIdRepository.currentPropertyIdLiveData.value != null) {
+            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.GO_TO_EDIT_PROPERTY)
+        }
+        startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.NO_PROPERTY_SELECTED)
+    }
 }
