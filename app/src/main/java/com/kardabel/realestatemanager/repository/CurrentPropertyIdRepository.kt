@@ -13,6 +13,6 @@ class CurrentPropertyIdRepository @Inject constructor(){
 
     @MainThread
     fun setCurrentPropertyId(propertyId: Long){
-        currentPropertyIdMutableLiveData.value = propertyId
+        currentPropertyIdMutableLiveData.postValue(propertyId)
     }
 }
