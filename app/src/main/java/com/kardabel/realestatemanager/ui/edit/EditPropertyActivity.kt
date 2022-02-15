@@ -69,6 +69,17 @@ class EditPropertyActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Set dropdown menu for type of property
+        val items = arrayOf(
+            "Flat", "House", "Duplex", "Penthouse", "Condo", "Apartment"
+        )
+
+        val dropDownAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            this, R.layout.activity_create_property_type_dropdown, items
+        )
+
+        binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
+
 
         //////// POPULATE FIELDS WITH OLD PROPERTY ////////////
 
@@ -90,17 +101,6 @@ class EditPropertyActivity : AppCompatActivity() {
 
 
         //////// RETRIEVE DATA ////////////
-
-        // Set dropdown menu for type of property
-        val items = arrayOf(
-            "Flat", "House", "Duplex", "Penthouse", "Condo", "Apartment",
-        )
-
-        val dropDownAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            this, R.layout.activity_create_property_type_dropdown, items
-        )
-
-        binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
@@ -142,7 +142,7 @@ class EditPropertyActivity : AppCompatActivity() {
     }
 
     private fun populateViewWithOldProperty(property: EditPropertyViewState) {
-        binding.propertyTypeDropdownMenu.setText(property.type)
+        binding.propertyTypeDropdownMenu.setText(property.type, false)
         binding.inputDescription.setText(property.description)
         binding.inputSurface.setText(property.surface)
         binding.inputBedroom.setText(property.bedroom)

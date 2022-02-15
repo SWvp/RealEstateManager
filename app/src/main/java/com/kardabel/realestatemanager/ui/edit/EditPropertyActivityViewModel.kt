@@ -68,7 +68,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
                 EditPropertyViewState(
                     propertyId = it.propertyEntity.propertyId,
-                    type = it.propertyEntity.type,
+                    type = readableType(it.propertyEntity.type),
                     description = it.propertyEntity.propertyDescription,
                     surface = it.propertyEntity.surface?.toString(),
                     room = it.propertyEntity.room?.toString(),
@@ -91,6 +91,12 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
+
+    private fun readableType(type: String): String {
+        return if (type == "null") {
+            ""
+        }else type
+    }
 
     // Create a photo list with old photo
     private fun retrieveOldPhotos(photo: List<PhotoEntity>) {
