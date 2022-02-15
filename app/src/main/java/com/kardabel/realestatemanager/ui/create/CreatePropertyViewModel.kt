@@ -30,7 +30,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val photoRepository: PhotoRepository,
     private val clock: Clock,
-   private val context: Application,
+    private val context: Application,
 
     ) : ViewModel() {
 
