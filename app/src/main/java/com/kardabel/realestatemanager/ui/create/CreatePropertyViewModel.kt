@@ -108,7 +108,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
-                interest = interests,
+                interest = interestCanBeNull(interests),
                 staticMap = staticMapUrl(address, zipcode, city)
             )
 
@@ -120,6 +120,14 @@ class CreatePropertyViewModel @Inject constructor(
             }
         } else {
             actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
+        }
+    }
+
+    private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
+        return if(interests.size == 0){
+            null
+        }else{
+            interests
         }
     }
 
@@ -166,7 +174,7 @@ class CreatePropertyViewModel @Inject constructor(
     private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
         for (photoEntity in photoEntities) {
             insertPhotoDao(photoEntity)
-            insertPhotoFirebaseStorage(photoEntity)
+            //insertPhotoFirebaseStorage(photoEntity)
 
         }
     }
@@ -178,7 +186,7 @@ class CreatePropertyViewModel @Inject constructor(
     private suspend fun insertPhotoDao(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
 
     private fun insertPhotoFirebaseStorage(photoEntity: PhotoEntity) {
-        TODO("Not yet implemented")
+
     }
 
     // Clear the photoRepo for the next use
