@@ -88,7 +88,7 @@ class EditPropertyActivity : AppCompatActivity() {
         // Set the adapter to retrieve photo
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = EditPropertyPhotoAdapter {
-            // TODO same shit as create
+            editDialogFragment(it)
 
         }
         recyclerView.adapter = photosAdapter
@@ -156,7 +156,7 @@ class EditPropertyActivity : AppCompatActivity() {
         binding.inputPropertyZipCode.setText(property.zipcode)
         binding.inputPrice.setText(property.price)
 
-        viewModel.getInterest.observe(this){ interestList ->
+        viewModel.getInterest.observe(this) { interestList ->
             displayInterestAsChip(interestList)
         }
     }
@@ -277,8 +277,8 @@ class EditPropertyActivity : AppCompatActivity() {
 
 
     // Create an alert dialog to allow user change description or delete photo
-    private fun editDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
-        val confirmFragment = EditPhotoFragment.newInstance(propertyPhotoViewState)
+    private fun editDialogFragment(editPropertyPhotoViewState: EditPropertyPhotoViewState) {
+        val confirmFragment = EditPhotoFragment.editInstance(editPropertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
 
     }

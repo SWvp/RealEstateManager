@@ -45,7 +45,7 @@ class PropertiesViewModel @Inject constructor(
 
 
     private fun combine(propertyWithPhoto: List<PropertyWithPhoto>?, currencyStatus: Boolean?) {
-        propertyWithPhoto ?: return
+        propertyWithPhoto?: return
 
         if (currencyStatus != null) {
             propertiesMediatorLiveData.postValue(propertyWithPhoto.map { propertyWithPhoto ->

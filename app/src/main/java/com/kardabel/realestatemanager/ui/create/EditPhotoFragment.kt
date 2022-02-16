@@ -3,11 +3,13 @@ package com.kardabel.realestatemanager.ui.create
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.ui.edit.EditPropertyPhotoViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,13 +22,29 @@ class EditPhotoFragment : DialogFragment() {
 
 
     var photoViewState: CreatePropertyPhotoViewState? = null
+    var photoId: Int = -1
+    var isEditInstance: Boolean = false
 
     companion object {
         fun newInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
             EditPhotoFragment().apply {
                 photoViewState = propertyPhotoViewState
+                isEditInstance = false
             }
+
+        fun editInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
+            EditPhotoFragment().apply {
+                photoViewState = CreatePropertyPhotoViewState(
+                    photoBitmap = editPropertyPhotoViewState.photoBitmap,
+                    photoDescription = editPropertyPhotoViewState.photoDescription,
+                    photoUri = Uri.parse(editPropertyPhotoViewState.photoUri),
+                )
+                photoId = editPropertyPhotoViewState.photoId!!
+                isEditInstance = true
+            }
+
     }
+
 
     var listener: ConfirmListener? = null
 
@@ -41,14 +59,21 @@ class EditPhotoFragment : DialogFragment() {
             .setView(editText)
 
             .setPositiveButton("Delete", DialogInterface.OnClickListener { dialog, id ->
-                    photoViewState?.let {
-                        val photoToDelete= Photo(
-                            photoBitmap = photoViewState!!.photoBitmap,
-                            photoDescription = photoViewState!!.photoDescription,
-                            photoUri = photoViewState!!.photoUri
-                        )
-                        viewModel.deletePhoto(photoToDelete) }
+
+                if (isEditInstance) {
+                    viewModel.deletePhotoFromDataBase(photoId)
+                }
+
+                photoViewState?.let {
+                    val photoToDelete = Photo(
+                        photoBitmap = photoViewState!!.photoBitmap,
+                        photoDescription = photoViewState!!.photoDescription,
+                        photoUri = photoViewState!!.photoUri,
+                    )
+                    viewModel.deletePhotoFromRepository(photoToDelete)
+                }
                 dismiss()
+
             })
 
             .setNeutralButton("Edit description", DialogInterface.OnClickListener { dialog, id ->

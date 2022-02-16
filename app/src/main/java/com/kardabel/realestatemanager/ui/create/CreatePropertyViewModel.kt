@@ -40,14 +40,13 @@ class CreatePropertyViewModel @Inject constructor(
     private var photoMutableList = mutableListOf<Photo>()
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
-        photoRepository.getPhotoLiveData().map { photoList ->
+        photoRepository.getAddedPhotoLiveData().map { photoList ->
             photoList.map { photo ->
                 photoMutableList = photoList as MutableList<Photo>
                 CreatePropertyPhotoViewState(
-                    photo.photoBitmap,
-                    photo.photoDescription,
-                    photo.photoUri,
-
+                    photoBitmap = photo.photoBitmap,
+                    photoDescription = photo.photoDescription,
+                    photoUri = photo.photoUri,
                 )
             }
         }
@@ -192,7 +191,7 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     // Clear the photoRepo for the next use
-    private fun emptyPhotoRepository() {
+    fun emptyPhotoRepository() {
         photoRepository.emptyPhotoList()
     }
 }

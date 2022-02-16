@@ -1,8 +1,11 @@
 package com.kardabel.realestatemanager.ui.edit
 
 import android.graphics.Bitmap
+import android.net.Uri
 
 data class EditPropertyPhotoViewState(
     val photoBitmap: Bitmap,
-    val photoDescription: String,
+    var photoDescription: String,
+    val photoUri: String,
+    val photoId: Int?,
 )

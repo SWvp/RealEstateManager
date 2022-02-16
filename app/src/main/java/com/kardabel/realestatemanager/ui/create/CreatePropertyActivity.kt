@@ -63,7 +63,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // If we wants the user reset create property (make emptyRepo public
-        //viewModel.emptyPhotoRepository()
+        viewModel.emptyPhotoRepository()
 
 
         // Set toolbar option
@@ -110,11 +110,12 @@ class CreatePropertyActivity : AppCompatActivity() {
         }
 
         // Set the adapter to retrieve photo recently added
+        // On item click go to edit dialog
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = CreatePropertyPhotosAdapter {
             editDialogFragment(it)
-
         }
+
         recyclerView.adapter = photosAdapter
 
         // and set the observer

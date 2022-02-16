@@ -32,6 +32,6 @@ interface PropertiesDao {
     @Update
     suspend fun updatePhoto(photo: PhotoEntity)
 
-    @Query("DELETE FROM property WHERE user_id = :id")
-    suspend fun deletePropertyById(id: Int)
+  //@Query("DELETE FROM property WHERE user_id = :id")
+  //suspend fun deletePropertyById(id: Int)
 }

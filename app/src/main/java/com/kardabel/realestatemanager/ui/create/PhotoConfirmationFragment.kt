@@ -43,9 +43,10 @@ class PhotoConfirmationFragment : DialogFragment() {
             .setPositiveButton("Validate", DialogInterface.OnClickListener { dialog, id ->
                 if (!editText.text.isNullOrEmpty()) {
                     val newPhoto = Photo(
-                        photoBitmap!!,
-                        editText.text.toString(),
-                        photoUri!!,
+                        photoBitmap = photoBitmap!!,
+                        photoDescription = editText.text.toString(),
+                        photoUri = photoUri!!,
+
                     )
                     viewModel.addPhoto(newPhoto)
                 }

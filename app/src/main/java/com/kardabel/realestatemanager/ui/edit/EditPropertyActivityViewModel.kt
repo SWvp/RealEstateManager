@@ -1,7 +1,6 @@
 package com.kardabel.realestatemanager.ui.edit
 
 import android.app.Application
-import android.net.Uri
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
@@ -36,21 +35,80 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
-    private var oldPhotoMutableList = mutableListOf<Photo>()
+    private var oldPhotoMutableList = mutableListOf<PhotoEntity>()
 
     var propertyId by Delegates.notNull<Long>()
 
 
-    val getPhoto: LiveData<List<EditPropertyPhotoViewState>> =
-        photoRepository.getPhotoLiveData().map { photoList ->
-            photoMutableList = photoList as MutableList<Photo>
-            photoList.map { photo ->
-                EditPropertyPhotoViewState(
-                    photo.photoBitmap,
-                    photo.photoDescription,
-                )
+    private val getOldPhoto: LiveData<List<PhotoEntity>> =
+        photoRepository.getOldPhotoLiveData()
+    private val getAddedPhoto: LiveData<List<Photo>> =
+        photoRepository.getAddedPhotoLiveData()
+
+    private val getAllPhotoMediatorLiveData =
+        MediatorLiveData<List<EditPropertyPhotoViewState>>().apply {
+
+            addSource(getOldPhoto) { oldPhoto ->
+                combine(oldPhoto, getAddedPhoto.value)
+            }
+
+            addSource(getAddedPhoto) { addedPhoto ->
+                combine(getOldPhoto.value, addedPhoto)
             }
         }
+
+    private fun combine(oldPhoto: List<PhotoEntity>?, addedPhoto: List<Photo>?) {
+        oldPhoto ?: return
+
+        if (addedPhoto == null) {
+            oldPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
+            getAllPhotoMediatorLiveData.value = oldPhoto.map { photo ->
+                EditPropertyPhotoViewState(
+                    photoBitmap = photo.photo,
+                    photoDescription = photo.photoDescription,
+                    photoUri = photo.photoUri,
+                    photoId = photo.photoId
+                )
+            }
+        } else {
+            getAllPhotoMediatorLiveData.value = toViewState(oldPhoto, addedPhoto)
+        }
+    }
+
+    private fun toViewState(
+        oldPhoto: List<PhotoEntity>,
+        addedPhoto: List<Photo>
+    ): List<EditPropertyPhotoViewState>? {
+
+        val photoList = mutableListOf<EditPropertyPhotoViewState>()
+
+        for (photo in oldPhoto) {
+            photoList.add(
+                EditPropertyPhotoViewState(
+                    photoBitmap = photo.photo,
+                    photoDescription = photo.photoDescription,
+                    photoUri = photo.photoUri,
+                    photoId = photo.photoId
+                )
+            )
+        }
+        for (photo in addedPhoto) {
+            photoMutableList.add(photo)
+            photoList.add(
+                EditPropertyPhotoViewState(
+                    photoBitmap = photo.photoBitmap,
+                    photoDescription = photo.photoDescription,
+                    photoUri = photo.photoUri.toString(),
+                    photoId = null
+                )
+            )
+        }
+        return photoList
+    }
+
+
+    // Expose photo to view
+    val getPhoto: LiveData<List<EditPropertyPhotoViewState>> = getAllPhotoMediatorLiveData
 
     val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
 
@@ -95,28 +153,14 @@ class EditPropertyActivityViewModel @Inject constructor(
     private fun readableType(type: String): String {
         return if (type == "null") {
             ""
-        }else type
+        } else type
     }
 
     // Create a photo list with old photo
-    private fun retrieveOldPhotos(photo: List<PhotoEntity>) {
-        photo.map { photoEntity ->
-            oldPhotoMutableList.add(
-                Photo(
-                    photoEntity.photo,
-                    photoEntity.photoDescription,
-                    Uri.parse(photoEntity.photoUri)
+    private fun retrieveOldPhotos(photoList: List<PhotoEntity>) {
+        photoRepository.addPhotoEntity(photoList)
+        oldPhotoMutableList = photoList as MutableList<PhotoEntity>
 
-                )
-            )
-        }
-        sendPhotoToPhotoRepository(oldPhotoMutableList)
-    }
-
-    private fun sendPhotoToPhotoRepository(oldPhotoList: MutableList<Photo>) {
-        for (oldPhoto in oldPhotoList) {
-            photoRepository.addPhoto(oldPhoto)
-        }
     }
 
     private fun addOldInterests(oldInterests: List<String>?) {
@@ -192,6 +236,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         }
     }
 
+    // Fun to allow interest list to be null -> avoid to display "" interest
     private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
         return if (interests.size == 0) {
             null
@@ -200,7 +245,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         }
     }
 
-    // Create an url to retrieve a miniature of the map with property marker
+    // ReCreate an url to retrieve a miniature of the map with property marker
     private fun staticMapUrl(address: String, zipcode: String, city: String): String {
 
         val key: String = BuildConfig.GOOGLE_PLACES_KEY
@@ -224,21 +269,19 @@ class EditPropertyActivityViewModel @Inject constructor(
     // Compare old photo list to new, if differences appear, create new photo in database
     private suspend fun createPhotoEntity() {
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
-        if (photoMutableList != oldPhotoMutableList) {
-
-            val newPhoto = photoMutableList.filterNot { oldPhotoMutableList.contains(it) }
-
-            for (photo in newPhoto) {
-                val photoEntity = PhotoEntity(
-                    photo.photoBitmap,
-                    photo.photoUri.toString(),
-                    photo.photoDescription,
-                    propertyId,
-                )
-                photoListWithPropertyId.add(photoEntity)
-            }
-            updatePhotosDataBase(photoListWithPropertyId)
+        //if (photoMutableList != oldPhotoMutableList) {
+        //  val newPhoto = photoMutableList.filterNot { oldPhotoMutableList.contains(it) }
+        for (photo in photoMutableList) {
+            val photoEntity = PhotoEntity(
+                photo.photoBitmap,
+                photo.photoUri.toString(),
+                photo.photoDescription,
+                propertyId,
+            )
+            photoListWithPropertyId.add(photoEntity)
         }
+        updatePhotosDataBase(photoListWithPropertyId)
+        //}
         emptyPhotoRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
