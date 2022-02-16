@@ -34,7 +34,7 @@ class PhotoConfirmationFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
-        val confirmDialogViewModel =
+        val viewModel =
             ViewModelProvider(this)[PhotoConfirmationFragmentViewModel::class.java]
         val editText = EditText(requireContext())
         builder
@@ -47,7 +47,7 @@ class PhotoConfirmationFragment : DialogFragment() {
                         editText.text.toString(),
                         photoUri!!,
                     )
-                    confirmDialogViewModel.addPhoto(newPhoto)
+                    viewModel.addPhoto(newPhoto)
                 }
                 dismiss()
             })

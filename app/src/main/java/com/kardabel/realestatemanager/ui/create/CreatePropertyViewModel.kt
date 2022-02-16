@@ -40,19 +40,21 @@ class CreatePropertyViewModel @Inject constructor(
     private var photoMutableList = mutableListOf<Photo>()
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
-        photoRepository.getPhotoLiveData().map {
-            it.map { photoEntity ->
-                photoMutableList = it as MutableList<Photo>
+        photoRepository.getPhotoLiveData().map { photoList ->
+            photoList.map { photo ->
+                photoMutableList = photoList as MutableList<Photo>
                 CreatePropertyPhotoViewState(
-                    photoEntity.photo,
-                    photoEntity.photoDescription,
+                    photo.photoBitmap,
+                    photo.photoDescription,
+                    photo.photoUri,
+
                 )
             }
         }
 
     // Poi are stored here
     fun addInterest(interest: String) {
-        if(interest.isNotEmpty()){
+        if (interest.isNotEmpty()) {
             interests.add(interest)
         }
     }
@@ -124,9 +126,9 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
-        return if(interests.size == 0){
+        return if (interests.size == 0) {
             null
-        }else{
+        } else {
             interests
         }
     }
@@ -146,7 +148,7 @@ class CreatePropertyViewModel @Inject constructor(
                 context.getString(R.string.coma) +
                 cityWithoutSpace +
                 context.getString(R.string.zoom_size) +
-                context.getString(R.string.marker)  +
+                context.getString(R.string.marker) +
                 addressWithComas +
                 context.getString(R.string.key) +
                 key
@@ -156,7 +158,7 @@ class CreatePropertyViewModel @Inject constructor(
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
-                photo.photo,
+                photo.photoBitmap,
                 photo.photoUri.toString(),
                 photo.photoDescription,
                 newPropertyId,

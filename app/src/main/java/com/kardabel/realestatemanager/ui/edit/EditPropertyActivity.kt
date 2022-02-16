@@ -88,6 +88,7 @@ class EditPropertyActivity : AppCompatActivity() {
         // Set the adapter to retrieve photo
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = EditPropertyPhotoAdapter {
+            // TODO same shit as create
 
         }
         recyclerView.adapter = photosAdapter
@@ -270,6 +271,14 @@ class EditPropertyActivity : AppCompatActivity() {
     // then, when validate, send whole photo object to a repo via VM
     private fun confirmDialogFragment(bitmap: Bitmap, uri: Uri) {
         val confirmFragment = PhotoConfirmationFragment.newInstance(bitmap, uri)
+        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+
+    }
+
+
+    // Create an alert dialog to allow user change description or delete photo
+    private fun editDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
+        val confirmFragment = EditPhotoFragment.newInstance(propertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
 
     }

@@ -46,7 +46,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             photoMutableList = photoList as MutableList<Photo>
             photoList.map { photo ->
                 EditPropertyPhotoViewState(
-                    photo.photo,
+                    photo.photoBitmap,
                     photo.photoDescription,
                 )
             }
@@ -230,7 +230,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
             for (photo in newPhoto) {
                 val photoEntity = PhotoEntity(
-                    photo.photo,
+                    photo.photoBitmap,
                     photo.photoUri.toString(),
                     photo.photoDescription,
                     propertyId,
