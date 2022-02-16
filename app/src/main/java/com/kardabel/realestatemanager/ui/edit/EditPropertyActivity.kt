@@ -80,14 +80,12 @@ class EditPropertyActivity : AppCompatActivity() {
 
         binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
 
-
-        //////// POPULATE FIELDS WITH OLD PROPERTY ////////////
-
+        // Populate fields with old property
         viewModel.getDetailsLiveData.observe(this) { property ->
             populateViewWithOldProperty(property)
         }
 
-        // Set the adapter to retrieve photo recently added
+        // Set the adapter to retrieve photo
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = EditPropertyPhotoAdapter {
 
@@ -100,7 +98,7 @@ class EditPropertyActivity : AppCompatActivity() {
         }
 
 
-        //////// RETRIEVE DATA ////////////
+        /////////////////////////////
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
@@ -126,6 +124,7 @@ class EditPropertyActivity : AppCompatActivity() {
             capturePhoto()
         }
 
+        // Manage action after click save button
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
                 CreateActivityViewAction.FIELDS_ERROR ->
@@ -159,8 +158,6 @@ class EditPropertyActivity : AppCompatActivity() {
         viewModel.getInterest.observe(this){ interestList ->
             displayInterestAsChip(interestList)
         }
-
-        //displayInterestAsChip(property.interest)
     }
 
     // Interests are display trough chip group
@@ -181,7 +178,7 @@ class EditPropertyActivity : AppCompatActivity() {
         }
     }
 
-    // When user type something in interest field, create a chip to display
+    // When user validate interest, create a chip to display
     private fun addNewChipInterest(interest: String) {
         val inflater = LayoutInflater.from(this)
         val chip: Chip =

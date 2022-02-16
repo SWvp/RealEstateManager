@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityDetailsBinding
-import com.kardabel.realestatemanager.ui.authentication.AuthActivity
 import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
-import com.kardabel.realestatemanager.ui.map.MapActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,15 +42,14 @@ class DetailsActivity: AppCompatActivity() {
             R.id.edit_item -> {
                 val intent = Intent(this, EditPropertyActivity::class.java)
                 startActivity(intent)
+                finish()
                 true
             }
             android.R.id.home -> {
-                finish()
-                onBackPressed()
+                super.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }
