@@ -233,7 +233,7 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
-        val confirmFragment = EditPhotoFragment.newInstance(propertyPhotoViewState)
+        val confirmFragment = EditPhotoFragment.createInstance(propertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
 
     }

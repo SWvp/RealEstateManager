@@ -23,6 +23,10 @@ class EditPhotoFragmentViewModel @Inject constructor(
         photoRepository.deletePhoto(photo)
     }
 
+    fun deletePhotoEntityFromRepository(photoId: Int) {
+        photoRepository.deletePhotoEntity(photoId)
+    }
+
     fun deletePhotoFromDataBase(photoId: Int) {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             propertiesDao.deletePhotoById(photoId)

@@ -24,7 +24,7 @@ class PhotoRepository @Inject constructor() {
     // Retrieve by create activity
     fun addPhoto(photo: Photo) {
         photoList.add(photo)
-        photoToCreateLiveData.postValue(photoList)
+        photoToCreateLiveData.value = photoList
     }
 
     // Retrieve by edit activity
@@ -37,7 +37,18 @@ class PhotoRepository @Inject constructor() {
 
     fun deletePhoto(photoToDelete: Photo) {
         photoList.remove(photoToDelete)
-        photoToCreateLiveData.postValue(photoList)
+        photoToCreateLiveData.value = photoList
+    }
+
+    fun deletePhotoEntity(photoId: Int) {
+        for(photo in photoEntityList){
+            if(photo.photoId == photoId){
+                photoEntityList.remove(photo)
+                break
+            }
+        }
+        photoToCreateLiveData.value = photoList
+        photoToEditLiveData.value = photoEntityList
     }
 
     fun editPhotoText(description: String, photoToEdit: Bitmap) {
@@ -46,7 +57,7 @@ class PhotoRepository @Inject constructor() {
                 photo.photoDescription = description
             }
         }
-        photoToCreateLiveData.postValue(photoList)
+        photoToCreateLiveData.value = photoList
     }
 
     fun emptyPhotoList() {

@@ -22,11 +22,11 @@ class EditPhotoFragment : DialogFragment() {
 
 
     var photoViewState: CreatePropertyPhotoViewState? = null
-    var photoId: Int = -1
+    var photoId: Int? = null
     var isEditInstance: Boolean = false
 
     companion object {
-        fun newInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
+        fun createInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
             EditPhotoFragment().apply {
                 photoViewState = propertyPhotoViewState
                 isEditInstance = false
@@ -39,7 +39,7 @@ class EditPhotoFragment : DialogFragment() {
                     photoDescription = editPropertyPhotoViewState.photoDescription,
                     photoUri = Uri.parse(editPropertyPhotoViewState.photoUri),
                 )
-                photoId = editPropertyPhotoViewState.photoId!!
+                photoId = editPropertyPhotoViewState.photoId
                 isEditInstance = true
             }
 
@@ -57,20 +57,29 @@ class EditPhotoFragment : DialogFragment() {
         builder
             .setMessage("Edit your photo")
             .setView(editText)
-
             .setPositiveButton("Delete", DialogInterface.OnClickListener { dialog, id ->
 
                 if (isEditInstance) {
-                    viewModel.deletePhotoFromDataBase(photoId)
-                }
-
-                photoViewState?.let {
-                    val photoToDelete = Photo(
-                        photoBitmap = photoViewState!!.photoBitmap,
-                        photoDescription = photoViewState!!.photoDescription,
-                        photoUri = photoViewState!!.photoUri,
-                    )
-                    viewModel.deletePhotoFromRepository(photoToDelete)
+                    if(photoId != null){
+                        viewModel.deletePhotoFromDataBase(photoId!!)
+                        viewModel.deletePhotoEntityFromRepository(photoId!!)
+                    }else {
+                        val photoToDelete = Photo(
+                            photoBitmap = photoViewState!!.photoBitmap,
+                            photoDescription = photoViewState!!.photoDescription,
+                            photoUri = photoViewState!!.photoUri,
+                        )
+                        viewModel.deletePhotoFromRepository(photoToDelete)
+                    }
+                }else{
+                    photoViewState?.let {
+                        val photoToDelete = Photo(
+                            photoBitmap = photoViewState!!.photoBitmap,
+                            photoDescription = photoViewState!!.photoDescription,
+                            photoUri = photoViewState!!.photoUri,
+                        )
+                        viewModel.deletePhotoFromRepository(photoToDelete)
+                    }
                 }
                 dismiss()
 

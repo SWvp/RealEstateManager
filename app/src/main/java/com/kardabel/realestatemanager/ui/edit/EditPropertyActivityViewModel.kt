@@ -34,7 +34,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
     private val interests = mutableListOf<String>()
-    private var photoMutableList = mutableListOf<Photo>()
+    private var addedPhotoMutableList = mutableListOf<Photo>()
     private var oldPhotoMutableList = mutableListOf<PhotoEntity>()
 
     var propertyId by Delegates.notNull<Long>()
@@ -49,10 +49,12 @@ class EditPropertyActivityViewModel @Inject constructor(
         MediatorLiveData<List<EditPropertyPhotoViewState>>().apply {
 
             addSource(getOldPhoto) { oldPhoto ->
+                oldPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
                 combine(oldPhoto, getAddedPhoto.value)
             }
 
             addSource(getAddedPhoto) { addedPhoto ->
+                addedPhotoMutableList = addedPhoto as MutableList<Photo>
                 combine(getOldPhoto.value, addedPhoto)
             }
         }
@@ -93,7 +95,6 @@ class EditPropertyActivityViewModel @Inject constructor(
             )
         }
         for (photo in addedPhoto) {
-            photoMutableList.add(photo)
             photoList.add(
                 EditPropertyPhotoViewState(
                     photoBitmap = photo.photoBitmap,
@@ -117,6 +118,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             propertiesRepository.getPropertyById(id).map {
 
                 emptyInterestRepository()
+                oldPhotoMutableList.clear()
 
                 propertyId = it.propertyEntity.propertyId
 
@@ -192,7 +194,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         bathroom: String?,
     ) {
         // Must contain at least one photo and an address (street, zip, city)
-        if (photoMutableList.isNotEmpty() || oldPhotoMutableList.isNotEmpty()) {
+        if (addedPhotoMutableList.isNotEmpty() || oldPhotoMutableList.isNotEmpty()) {
             if (address != null && city != null && zipcode != null) {
 
                 // Get value to entity format, string is for the view
@@ -271,7 +273,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
         //if (photoMutableList != oldPhotoMutableList) {
         //  val newPhoto = photoMutableList.filterNot { oldPhotoMutableList.contains(it) }
-        for (photo in photoMutableList) {
+        for (photo in addedPhotoMutableList) {
             val photoEntity = PhotoEntity(
                 photo.photoBitmap,
                 photo.photoUri.toString(),
