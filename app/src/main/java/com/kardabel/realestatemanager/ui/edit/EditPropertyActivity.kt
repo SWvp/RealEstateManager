@@ -3,6 +3,7 @@ package com.kardabel.realestatemanager.ui.edit
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,15 +18,20 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
-import com.kardabel.realestatemanager.ui.create.*
+import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
+import com.kardabel.realestatemanager.ui.create.RC_CHOOSE_PHOTO
+import com.kardabel.realestatemanager.ui.create.RC_IMAGE_PERMS
+import com.kardabel.realestatemanager.ui.create.REQUEST_IMAGE_CAPTURE
 import com.kardabel.realestatemanager.ui.dialog.AddedPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.EditPhotoDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,7 +121,7 @@ class EditPropertyActivity : AppCompatActivity() {
         binding.addInterestButton.setOnClickListener {
             val interest = binding.inputInterest.text.toString()
             viewModel.addInterest(interest)
-            addNewChipInterest(interest)
+            //addNewChipInterest(interest)
             binding.inputInterest.text?.clear()
         }
 
@@ -131,7 +137,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
         // Sold button
         binding.soldButton.setOnClickListener {
-            propertySold()
+            alertDialog()
         }
 
         // Manage action after click save button
@@ -310,11 +316,32 @@ class EditPropertyActivity : AppCompatActivity() {
         return getBitmap!!
     }
 
-    // On Sold button click
-    private fun propertySold() {
-        viewModel.propertySold()
+    // Alert user he is about to definitely sell the property
+    private fun alertDialog() {
+        val userChoice = arrayOf("Yes", "Not yet")
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setTitle("Confirm sale ?")
+       // builder.setMessage("We have a message")
+        builder.setCancelable(true)
+        builder.setIcon(R.drawable.warning)
+        builder.setSingleChoiceItems(userChoice, -1, DialogInterface.OnClickListener { dialog, which ->
+            //do something
+            binding.alertTv.text = userChoice[which]
+        })
+        builder.setPositiveButton("Confirm"){dialog, which ->
+            val position = (dialog as AlertDialog).listView.checkedItemPosition
+            if (position !=-1){
+                when(userChoice[position]){
+                    "Yes" -> viewModel.propertySold()
+                    "Not yet" -> dialog.cancel()
+                }
+            }
+        }
+        builder.create().show()
+
 
     }
+
 
     // Toolbar menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

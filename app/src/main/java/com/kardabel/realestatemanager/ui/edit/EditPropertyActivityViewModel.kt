@@ -309,6 +309,5 @@ class EditPropertyActivityViewModel @Inject constructor(
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             propertiesRepository.updateSaleStatus(false, propertyId)
         }
-        actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
     }
 }
