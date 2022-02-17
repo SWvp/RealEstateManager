@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.ui.create
+package com.kardabel.realestatemanager.ui.dialog
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditPhotoFragmentViewModel @Inject constructor(
+class EditPhotoDialogFragmentViewModel @Inject constructor(
     private val photoRepository: PhotoRepository,
     private val propertiesDao: PropertiesDao,
     private val applicationDispatchers: ApplicationDispatchers,

@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.ui.create
+package com.kardabel.realestatemanager.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -9,11 +9,12 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.ui.create.CreatePropertyPhotoViewState
 import com.kardabel.realestatemanager.ui.edit.EditPropertyPhotoViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditPhotoFragment : DialogFragment() {
+class EditPhotoDialogFragment : DialogFragment() {
 
     interface ConfirmListener {
         fun onDialogPositiveClick()
@@ -27,13 +28,13 @@ class EditPhotoFragment : DialogFragment() {
 
     companion object {
         fun createInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
-            EditPhotoFragment().apply {
+            EditPhotoDialogFragment().apply {
                 photoViewState = propertyPhotoViewState
                 isEditInstance = false
             }
 
         fun editInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
-            EditPhotoFragment().apply {
+            EditPhotoDialogFragment().apply {
                 photoViewState = CreatePropertyPhotoViewState(
                     photoBitmap = editPropertyPhotoViewState.photoBitmap,
                     photoDescription = editPropertyPhotoViewState.photoDescription,
@@ -51,7 +52,7 @@ class EditPhotoFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
         val viewModel =
-            ViewModelProvider(this)[EditPhotoFragmentViewModel::class.java]
+            ViewModelProvider(this)[EditPhotoDialogFragmentViewModel::class.java]
         val editText = EditText(requireContext())
         editText.setText(photoViewState?.photoDescription)
         builder

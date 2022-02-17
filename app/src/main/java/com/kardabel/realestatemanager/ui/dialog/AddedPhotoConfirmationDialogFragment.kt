@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.ui.create
+package com.kardabel.realestatemanager.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -13,7 +13,7 @@ import com.kardabel.realestatemanager.model.Photo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PhotoConfirmationFragment : DialogFragment() {
+class AddedPhotoConfirmationDialogFragment : DialogFragment() {
 
     interface ConfirmDeleteListener {
         fun onDialogPositiveClick()
@@ -24,7 +24,7 @@ class PhotoConfirmationFragment : DialogFragment() {
     var photoUri: Uri? = null
 
     companion object {
-        fun newInstance(photo: Bitmap, uri: Uri) = PhotoConfirmationFragment().apply {
+        fun newInstance(photo: Bitmap, uri: Uri) = AddedPhotoConfirmationDialogFragment().apply {
             photoBitmap = photo
             photoUri = uri
         }
@@ -35,7 +35,7 @@ class PhotoConfirmationFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
         val viewModel =
-            ViewModelProvider(this)[PhotoConfirmationFragmentViewModel::class.java]
+            ViewModelProvider(this)[AddedPhotoConfirmationDialogFragmentViewModel::class.java]
         val editText = EditText(requireContext())
         builder
             .setMessage("Enter description")
