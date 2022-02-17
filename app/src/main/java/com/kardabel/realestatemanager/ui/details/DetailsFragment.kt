@@ -49,47 +49,47 @@ class DetailsFragment : Fragment() {
         recyclerView.adapter = photosAdapter
 
         // and set the observer
-        viewModel.detailsLiveData.observe(this) {
+        viewModel.detailsLiveData.observe(this) { property ->
             // set visibility first
             // cause we don't want to see anything before user click on a property item
-            binding.detailDescriptionTitle.isVisible = it.visibility
-            binding.detailsMediaTitle.isVisible = it.visibility
-            binding.surfaceIcon.isVisible = it.visibility
-            binding.surfaceTitle.isVisible = it.visibility
-            binding.roomIcon.isVisible = it.visibility
-            binding.roomTitle.isVisible = it.visibility
-            binding.bedroomIcon.isVisible = it.visibility
-            binding.bedroomTitle.isVisible = it.visibility
-            binding.bathroomIcon.isVisible = it.visibility
-            binding.bathroomTitle.isVisible = it.visibility
-            binding.interestsIcon.isVisible = it.visibility
-            binding.interestsTitle.isVisible = it.visibility
-            binding.chipGroup.isVisible = it.visibility
-            binding.startSaleDate.isVisible = it.visibility
-            binding.locationIcon.isVisible = it.visibility
-            binding.locationTitle.isVisible = it.visibility
-            binding.startSaleDate.isVisible = it.visibility
-            binding.map.isVisible = it.visibility
+            binding.detailDescriptionTitle.isVisible = property.visibility
+            binding.detailsMediaTitle.isVisible = property.visibility
+            binding.surfaceIcon.isVisible = property.visibility
+            binding.surfaceTitle.isVisible = property.visibility
+            binding.roomIcon.isVisible = property.visibility
+            binding.roomTitle.isVisible = property.visibility
+            binding.bedroomIcon.isVisible = property.visibility
+            binding.bedroomTitle.isVisible = property.visibility
+            binding.bathroomIcon.isVisible = property.visibility
+            binding.bathroomTitle.isVisible = property.visibility
+            binding.interestsIcon.isVisible = property.visibility
+            binding.interestsTitle.isVisible = property.visibility
+            binding.chipGroup.isVisible = property.visibility
+            binding.startSaleDate.isVisible = property.visibility
+            binding.locationIcon.isVisible = property.visibility
+            binding.locationTitle.isVisible = property.visibility
+            binding.startSaleDate.isVisible = property.visibility
+            binding.map.isVisible = property.visibility
 
             // Set text
-            binding.descriptionText.text = it.description
-            binding.surfaceValue.text = it.surface
-            binding.roomValue.text = it.room
-            binding.bedroomValue.text = it.bedroom
-            binding.bathroomValue.text = it.bathroom
-            binding.address.text = it.address
-            binding.apartment.text = it.apartment
-            binding.city.text = it.city
-            binding.county.text = it.county
-            binding.zipCode.text = it.zipcode
-            binding.country.text = it.country
-            binding.startSaleDate.text = it.startSale
+            binding.descriptionText.text = property.description
+            binding.surfaceValue.text = property.surface
+            binding.roomValue.text = property.room
+            binding.bedroomValue.text = property.bedroom
+            binding.bathroomValue.text = property.bathroom
+            binding.address.text = property.address
+            binding.apartment.text = property.apartment
+            binding.city.text = property.city
+            binding.county.text = property.county
+            binding.zipCode.text = property.zipcode
+            binding.country.text = property.country
+            binding.startSaleDate.text = property.startSale
 
-            Glide.with(binding.map.context).load(it.staticMap).into(binding.map)
+            Glide.with(binding.map.context).load(property.staticMap).into(binding.map)
 
-            photosAdapter.submitList(it.photos)
+            photosAdapter.submitList(property.photos)
 
-            displayInterestAsChip(it.interest)
+            displayInterestAsChip(property.interest)
         }
     }
 

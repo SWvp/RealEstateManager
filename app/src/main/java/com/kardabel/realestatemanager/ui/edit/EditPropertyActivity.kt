@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -145,6 +146,10 @@ class EditPropertyActivity : AppCompatActivity() {
     }
 
     private fun populateViewWithOldProperty(property: EditPropertyViewState) {
+
+        // set visibility of sold button (basically invisible for create activity)
+        binding.soldButton.isVisible = property.visibility
+
         binding.propertyTypeDropdownMenu.setText(property.type, false)
         binding.inputDescription.setText(property.description)
         binding.inputSurface.setText(property.surface)
