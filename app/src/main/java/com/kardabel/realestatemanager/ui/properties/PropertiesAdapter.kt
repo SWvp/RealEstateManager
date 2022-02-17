@@ -40,6 +40,7 @@ class PropertiesAdapter(
             county.text = propertyViewState.county
             price.text = propertyViewState.price
             saleStatus.text = propertyViewState.saleStatus
+            saleStatus.setBackgroundColor(propertyViewState.saleColor)
             vendor.text = propertyViewState.vendor
             Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
 

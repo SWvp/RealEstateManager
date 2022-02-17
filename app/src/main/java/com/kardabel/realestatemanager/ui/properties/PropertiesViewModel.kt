@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.properties
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -65,6 +66,7 @@ class PropertiesViewModel @Inject constructor(
         county = property.propertyEntity.county,
         price = readablePrice(property.propertyEntity.price.toString()),
         saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+        saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
         photoBitmap = property.photo[0].photo
     )
@@ -79,6 +81,7 @@ class PropertiesViewModel @Inject constructor(
             county = property.propertyEntity.county,
             price = currencyConverter(property.propertyEntity.price, currencyStatus),
             saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+            saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
             photoBitmap = property.photo[0].photo
         )
@@ -119,6 +122,14 @@ class PropertiesViewModel @Inject constructor(
         return when (saleStatus) {
             true -> "On sale"
             false -> "Sold !"
+
+        }
+    }
+
+    private fun colorToApply(saleStatus: Boolean): Int {
+        return when (saleStatus) {
+            true -> Color.WHITE
+            false -> Color.RED
 
         }
     }

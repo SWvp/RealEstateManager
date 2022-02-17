@@ -19,13 +19,14 @@
             android:scaleType="centerCrop"
             android:src="@drawable/property_sample"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/the_best_photo_you_want" />
 
         <TextView
             android:id="@+id/item_property_sale_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+
             android:maxLines="1"
             android:textSize="@dimen/property_type_size"
             android:textStyle="bold"
@@ -42,12 +43,12 @@
             android:layout_margin="8dp"
             android:maxLines="1"
             android:textSize="@dimen/property_type_size"
-            android:textStyle="bold"
+            android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/property_vendor"
-            android:textAlignment="center"/>
+            android:textAlignment="textEnd"/>
 
         <TextView
             android:id="@+id/item_property_type"
