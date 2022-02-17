@@ -3,7 +3,6 @@ package com.kardabel.realestatemanager.ui.edit
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -47,7 +46,7 @@ import java.util.*
 class EditPropertyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreatePropertyBinding
-    private lateinit var interestChipGroup: ChipGroup
+    //private lateinit var interestChipGroup: ChipGroup
 
     private lateinit var photosAdapter: EditPropertyPhotoAdapter
 
@@ -66,9 +65,6 @@ class EditPropertyActivity : AppCompatActivity() {
 
         // Empty repo photo cache
         viewModel.emptyAllPhotoRepository()
-
-        // Set chip group binding
-        interestChipGroup = binding.chipGroup
 
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
@@ -179,34 +175,24 @@ class EditPropertyActivity : AppCompatActivity() {
         }
     }
 
-    // Interests are display trough chip group
+    // Interests are display as chip trough chip group
     private fun displayInterestAsChip(interests: List<String>?) {
+
+        val interestChipGroup: ChipGroup = binding.chipGroup
+
         interestChipGroup.clearCheck()
+        interestChipGroup.removeAllViewsInLayout()
+
         val inflater = LayoutInflater.from(this)
         if (interests != null) {
             for (interest in interests) {
                 val chip: Chip =
-                    inflater.inflate(
-                        R.layout.item_interest_chip,
-                        this.interestChipGroup,
-                        false
-                    ) as Chip
+                    inflater.inflate(R.layout.item_interest_chip, interestChipGroup, false) as Chip
                 chip.text = interest
                 interestChipGroup.addView(chip)
             }
         }
     }
-
-    // When user validate interest, create a chip to display
-    private fun addNewChipInterest(interest: String) {
-        val inflater = LayoutInflater.from(this)
-        val chip: Chip =
-            inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
-        chip.text = interest
-        interestChipGroup.addView(chip)
-
-    }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
