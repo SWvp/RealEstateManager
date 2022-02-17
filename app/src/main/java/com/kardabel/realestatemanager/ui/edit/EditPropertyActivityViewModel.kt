@@ -8,10 +8,7 @@ import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
-import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
-import com.kardabel.realestatemanager.repository.InterestRepository
-import com.kardabel.realestatemanager.repository.PhotoRepository
-import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +22,8 @@ import kotlin.properties.Delegates
 class EditPropertyActivityViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
-    private val photoRepository: PhotoRepository,
+    private val createPhotoRepository: CreatePhotoRepository,
+    private val registeredPhotoRepository: RegisteredPhotoRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val interestRepository: InterestRepository,
     private val context: Application,
@@ -35,21 +33,21 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interests = mutableListOf<String>()
     private var addedPhotoMutableList = mutableListOf<Photo>()
-    private var oldPhotoMutableList = mutableListOf<PhotoEntity>()
+    private var registeredPhotoMutableList = mutableListOf<PhotoEntity>()
 
     var propertyId by Delegates.notNull<Long>()
 
 
     private val getOldPhoto: LiveData<List<PhotoEntity>> =
-        photoRepository.getOldPhotoLiveData()
+        registeredPhotoRepository.getRegisteredPhotoLiveData()
     private val getAddedPhoto: LiveData<List<Photo>> =
-        photoRepository.getAddedPhotoLiveData()
+        createPhotoRepository.getAddedPhotoLiveData()
 
     private val getAllPhotoMediatorLiveData =
         MediatorLiveData<List<EditPropertyPhotoViewState>>().apply {
 
             addSource(getOldPhoto) { oldPhoto ->
-                oldPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
+                registeredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
                 combine(oldPhoto, getAddedPhoto.value)
             }
 
@@ -63,13 +61,14 @@ class EditPropertyActivityViewModel @Inject constructor(
         oldPhoto ?: return
 
         if (addedPhoto == null) {
-            oldPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
+            registeredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
             getAllPhotoMediatorLiveData.value = oldPhoto.map { photo ->
                 EditPropertyPhotoViewState(
                     photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
-                    photoId = photo.photoId
+                    photoId = photo.photoId,
+                    propertyOwnerId = photo.propertyOwnerId
                 )
             }
         } else {
@@ -90,7 +89,8 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
-                    photoId = photo.photoId
+                    photoId = photo.photoId,
+                    propertyOwnerId = photo.propertyOwnerId
                 )
             )
         }
@@ -100,7 +100,8 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoBitmap = photo.photoBitmap,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri.toString(),
-                    photoId = null
+                    photoId = null,
+                    propertyOwnerId = null
                 )
             )
         }
@@ -117,7 +118,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             propertiesRepository.getPropertyById(id).map {
 
                 emptyInterestRepository()
-                oldPhotoMutableList.clear()
+                registeredPhotoMutableList.clear()
 
                 propertyId = it.propertyEntity.propertyId
 
@@ -159,8 +160,8 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     // Create a photo list with old photo
     private fun retrieveOldPhotos(photoList: List<PhotoEntity>) {
-        photoRepository.addPhotoEntity(photoList)
-        oldPhotoMutableList = photoList as MutableList<PhotoEntity>
+        registeredPhotoRepository.retrieveRegisteredPhoto(photoList)
+        registeredPhotoMutableList = photoList as MutableList<PhotoEntity>
 
     }
 
@@ -193,7 +194,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         bathroom: String?,
     ) {
         // Must contain at least one photo and an address (street, zip, city)
-        if (addedPhotoMutableList.isNotEmpty() || oldPhotoMutableList.isNotEmpty()) {
+        if (addedPhotoMutableList.isNotEmpty() || registeredPhotoMutableList.isNotEmpty()) {
             if (address != null && city != null && zipcode != null) {
 
                 // Get value to entity format, string is for the view
@@ -228,6 +229,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                     updateProperty(property)
                     createPhotoEntity()
+                    //updatePhotos(registeredPhotoMutableList)
                 }
                 actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
 
@@ -281,20 +283,13 @@ class EditPropertyActivityViewModel @Inject constructor(
             )
             photoListWithPropertyId.add(photoEntity)
         }
-        updatePhotosDataBase(photoListWithPropertyId)
+        insertNewPhoto(photoListWithPropertyId)
         //}
         emptyPhotoRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
             currentPropertyIdRepository.setCurrentPropertyId(propertyId)
         }
-    }
-
-
-    private suspend fun updatePhotosDataBase(photoEntities: MutableList<PhotoEntity>) {
-        //for (photo in photoEntities) {
-            insertNewPhoto(photoEntities)
-        //}
     }
 
     private suspend fun updateProperty(property: PropertyUpdate) =
@@ -304,9 +299,12 @@ class EditPropertyActivityViewModel @Inject constructor(
     private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhoto(photos)
 
+    private suspend fun updatePhotos(photo: PhotoEntity) =
+        propertiesRepository.updatePhoto(photo)
+
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
-        photoRepository.emptyPhotoList()
+        registeredPhotoRepository.emptyRegisteredPhotoList()
     }
 
     fun emptyInterestRepository() {

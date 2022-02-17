@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.ui.create.CreatePropertyPhotoViewState
 import com.kardabel.realestatemanager.ui.edit.EditPropertyPhotoViewState
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ class EditPhotoDialogFragment : DialogFragment() {
 
     var photoViewState: CreatePropertyPhotoViewState? = null
     var photoId: Int? = null
+    var propertyOwnerId: Long? = null
     var isEditInstance: Boolean = false
 
     companion object {
@@ -41,6 +43,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                     photoUri = Uri.parse(editPropertyPhotoViewState.photoUri),
                 )
                 photoId = editPropertyPhotoViewState.photoId
+                propertyOwnerId = editPropertyPhotoViewState.propertyOwnerId
                 isEditInstance = true
             }
 
@@ -63,7 +66,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                 if (isEditInstance) {
                     if(photoId != null){
                         viewModel.deletePhotoFromDataBase(photoId!!)
-                        viewModel.deletePhotoEntityFromRepository(photoId!!)
+                        viewModel.deleteRegisteredPhotoFromRepository(photoId!!)
                     }else {
                         val photoToDelete = Photo(
                             photoBitmap = photoViewState!!.photoBitmap,
@@ -87,7 +90,16 @@ class EditPhotoDialogFragment : DialogFragment() {
             })
 
             .setNeutralButton("Edit description", DialogInterface.OnClickListener { dialog, id ->
-                viewModel.editPhotoText(editText.text.toString(), photoViewState!!.photoBitmap)
+                if(photoId != null){
+                    viewModel.updateRegisteredPhoto(PhotoEntity(
+                        photoViewState!!.photoBitmap,
+                        photoViewState!!.photoUri.toString(),
+                        editText.text.toString(),
+                        propertyOwnerId,
+                        photoId!!,
+                    ))
+                }
+                viewModel.editPhotoText(editText.text.toString(), photoViewState!!.photoUri)
                 dismiss()
             })
 

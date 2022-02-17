@@ -12,7 +12,7 @@ import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
-import com.kardabel.realestatemanager.repository.PhotoRepository
+import com.kardabel.realestatemanager.repository.CreatePhotoRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
@@ -28,7 +28,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
     private val firebaseAuth: FirebaseAuth,
-    private val photoRepository: PhotoRepository,
+    private val createPhotoRepository: CreatePhotoRepository,
     private val clock: Clock,
     private val context: Application,
 
@@ -40,7 +40,7 @@ class CreatePropertyViewModel @Inject constructor(
     private var photoMutableList = mutableListOf<Photo>()
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
-        photoRepository.getAddedPhotoLiveData().map { photoList ->
+        createPhotoRepository.getAddedPhotoLiveData().map { photoList ->
             photoList.map { photo ->
                 photoMutableList = photoList as MutableList<Photo>
                 CreatePropertyPhotoViewState(
@@ -192,6 +192,6 @@ class CreatePropertyViewModel @Inject constructor(
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
-        photoRepository.emptyPhotoList()
+        createPhotoRepository.emptyCreatePhotoList()
     }
 }

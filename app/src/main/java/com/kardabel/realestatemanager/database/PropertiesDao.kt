@@ -29,8 +29,9 @@ interface PropertiesDao {
     @Update(entity = PropertyEntity::class)
     suspend fun updateProperty(property: PropertyUpdate)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updatePhoto(photo: PhotoEntity)
+
 
   //@Query("DELETE FROM property WHERE user_id = :id")
   //suspend fun deletePropertyById(id: Int)
