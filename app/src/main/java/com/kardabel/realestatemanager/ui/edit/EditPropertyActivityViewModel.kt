@@ -302,7 +302,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
 
     private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
-        propertiesRepository.insertNewPhoto(photos)
+        propertiesRepository.insertPhoto(photos)
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
