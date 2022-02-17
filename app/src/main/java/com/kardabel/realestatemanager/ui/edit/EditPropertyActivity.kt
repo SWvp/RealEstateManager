@@ -108,7 +108,6 @@ class EditPropertyActivity : AppCompatActivity() {
             photosAdapter.submitList(it)
         }
 
-
         /////////////////////////////
 
         // Manage type
@@ -321,14 +320,12 @@ class EditPropertyActivity : AppCompatActivity() {
         val userChoice = arrayOf("Yes", "Not yet")
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Confirm sale ?")
-       // builder.setMessage("We have a message")
         builder.setCancelable(true)
         builder.setIcon(R.drawable.warning)
-        builder.setSingleChoiceItems(userChoice, -1, DialogInterface.OnClickListener { dialog, which ->
-            //do something
+        builder.setSingleChoiceItems(userChoice, -1) { _, which ->
             binding.alertTv.text = userChoice[which]
-        })
-        builder.setPositiveButton("Confirm"){dialog, which ->
+        }
+        builder.setPositiveButton("Confirm"){ dialog, _ ->
             val position = (dialog as AlertDialog).listView.checkedItemPosition
             if (position !=-1){
                 when(userChoice[position]){
@@ -338,10 +335,7 @@ class EditPropertyActivity : AppCompatActivity() {
             }
         }
         builder.create().show()
-
-
     }
-
 
     // Toolbar menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
