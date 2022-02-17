@@ -21,11 +21,11 @@ class PropertiesRepository @Inject constructor(
     fun getPropertyById(id: Long): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
 
     @WorkerThread
-    suspend fun insertProperty(property: PropertyEntity)= withContext(Dispatchers.IO)  {
+    suspend fun insertProperty(property: PropertyEntity) = withContext(Dispatchers.IO) {
         propertiesDao.insertProperty(property)
     }
 
-    suspend fun updateProperty(property: PropertyUpdate){
+    suspend fun updateProperty(property: PropertyUpdate) {
         propertiesDao.updateProperty(property)
     }
 
@@ -33,7 +33,11 @@ class PropertiesRepository @Inject constructor(
         propertiesDao.insertPhoto(photos)
     }
 
-    suspend fun updatePhoto(photo: PhotoEntity) {
-        propertiesDao.updatePhoto(photo)
+  // suspend fun updatePhoto(photo: PhotoEntity) {
+  //     propertiesDao.updatePhoto(photo)
+  // }
+
+    suspend fun updateSaleStatus(saleStatus: Boolean, propertyId: Long) {
+        propertiesDao.updatePropertySaleStatus(saleStatus, propertyId)
     }
 }

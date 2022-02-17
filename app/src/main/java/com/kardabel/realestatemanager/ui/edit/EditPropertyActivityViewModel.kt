@@ -31,7 +31,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
-    private val interests = mutableListOf<String>()
+    //private val interests = mutableListOf<String>()
     private var addedPhotoMutableList = mutableListOf<Photo>()
     private var registeredPhotoMutableList = mutableListOf<PhotoEntity>()
 
@@ -79,7 +79,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private fun toViewState(
         oldPhoto: List<PhotoEntity>,
         addedPhoto: List<Photo>
-    ): List<EditPropertyPhotoViewState>? {
+    ): List<EditPropertyPhotoViewState> {
 
         val photoList = mutableListOf<EditPropertyPhotoViewState>()
 
@@ -301,7 +301,13 @@ class EditPropertyActivityViewModel @Inject constructor(
         createPhotoRepository.emptyCreatePhotoList()
     }
 
-    fun emptyInterestRepository() {
+    private fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
+    }
+
+    fun propertySold() {
+        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+            propertiesRepository.updateSaleStatus(true, propertyId)
+        }
     }
 }

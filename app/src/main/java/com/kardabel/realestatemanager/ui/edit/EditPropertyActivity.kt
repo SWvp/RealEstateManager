@@ -129,6 +129,11 @@ class EditPropertyActivity : AppCompatActivity() {
             capturePhoto()
         }
 
+        // Sold button
+        binding.soldButton.setOnClickListener {
+            propertySold()
+        }
+
         // Manage action after click save button
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
@@ -280,15 +285,12 @@ class EditPropertyActivity : AppCompatActivity() {
     private fun confirmDialogFragment(bitmap: Bitmap, uri: Uri) {
         val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(bitmap, uri)
         confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
-
     }
-
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editDialogFragment(editPropertyPhotoViewState: EditPropertyPhotoViewState) {
         val confirmFragment = EditPhotoDialogFragment.editInstance(editPropertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
-
     }
 
     // Converter to get bitmap from Uri
@@ -306,6 +308,12 @@ class EditPropertyActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return getBitmap!!
+    }
+
+    // On Sold button click
+    private fun propertySold() {
+        viewModel.propertySold()
+
     }
 
     // Toolbar menu

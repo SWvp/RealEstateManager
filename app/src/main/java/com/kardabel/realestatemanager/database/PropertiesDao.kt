@@ -20,6 +20,9 @@ interface PropertiesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProperty(property: PropertyEntity): Long
 
+    @Query("UPDATE property SET on_sale_status=:saleStatus WHERE propertyId =:id")
+    suspend fun updatePropertySaleStatus(saleStatus: Boolean, id : Long)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPhoto(photos: List<PhotoEntity>)
 
