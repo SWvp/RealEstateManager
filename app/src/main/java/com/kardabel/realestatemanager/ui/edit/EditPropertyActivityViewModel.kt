@@ -272,8 +272,6 @@ class EditPropertyActivityViewModel @Inject constructor(
     // Compare old photo list to new, if differences appear, create new photo in database
     private suspend fun createPhotoEntity() {
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
-        //if (photoMutableList != oldPhotoMutableList) {
-        //  val newPhoto = photoMutableList.filterNot { oldPhotoMutableList.contains(it) }
         for (photo in addedPhotoMutableList) {
             val photoEntity = PhotoEntity(
                 photo.photoBitmap,
@@ -284,8 +282,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             photoListWithPropertyId.add(photoEntity)
         }
         insertNewPhoto(photoListWithPropertyId)
-        //}
-        emptyPhotoRepository()
+        emptyAllPhotoRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
             currentPropertyIdRepository.setCurrentPropertyId(propertyId)
@@ -295,21 +292,16 @@ class EditPropertyActivityViewModel @Inject constructor(
     private suspend fun updateProperty(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
 
-
     private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhoto(photos)
 
-    private suspend fun updatePhotos(photo: PhotoEntity) =
-        propertiesRepository.updatePhoto(photo)
-
     // Clear the photoRepo for the next use
-    fun emptyPhotoRepository() {
+    fun emptyAllPhotoRepository() {
         registeredPhotoRepository.emptyRegisteredPhotoList()
+        createPhotoRepository.emptyCreatePhotoList()
     }
 
     fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
     }
-
-
 }

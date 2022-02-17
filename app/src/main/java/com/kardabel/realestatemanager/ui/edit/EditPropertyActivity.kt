@@ -57,7 +57,7 @@ class EditPropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.emptyPhotoRepository()
+        viewModel.emptyAllPhotoRepository()
 
         // Set chip group binding
         interestChipGroup = binding.chipGroup
