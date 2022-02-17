@@ -57,6 +57,7 @@ class EditPropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Empty repo photo cache
         viewModel.emptyAllPhotoRepository()
 
         // Set chip group binding
@@ -138,7 +139,7 @@ class EditPropertyActivity : AppCompatActivity() {
                     ).show()
 
                 CreateActivityViewAction.FINISH_ACTIVITY ->
-                    onBackPressed()
+                    finish()
             }
         }
     }
@@ -331,7 +332,7 @@ class EditPropertyActivity : AppCompatActivity() {
             binding.inputPropertyZipCode.text.toString(),
             binding.inputPropertyCountry.text.toString(),
             binding.inputDescription.text.toString(),
-            propertyType.toString(),
+            binding.propertyTypeDropdownMenu.text.toString(),
             binding.inputPrice.text.toString(),
             binding.inputSurface.text.toString(),
             binding.inputRoom.text.toString(),
