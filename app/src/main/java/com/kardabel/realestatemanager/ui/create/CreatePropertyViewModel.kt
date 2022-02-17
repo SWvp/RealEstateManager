@@ -173,18 +173,18 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
-        for (photoEntity in photoEntities) {
-            insertPhotoDao(photoEntity)
+       // for (photoEntity in photoEntities) {
+            insertPhotoDao(photoEntities)
             //insertPhotoFirebaseStorage(photoEntity)
 
-        }
+        //}
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
         return propertiesRepository.insertProperty(property)
     }
 
-    private suspend fun insertPhotoDao(photo: PhotoEntity) = propertiesRepository.insertPhoto(photo)
+    private suspend fun insertPhotoDao(photos: List<PhotoEntity>) = propertiesRepository.insertPhoto(photos)
 
     private fun insertPhotoFirebaseStorage(photoEntity: PhotoEntity) {
 

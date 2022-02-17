@@ -107,7 +107,6 @@ class EditPropertyActivityViewModel @Inject constructor(
         return photoList
     }
 
-
     // Expose photo to view
     val getPhoto: LiveData<List<EditPropertyPhotoViewState>> = getAllPhotoMediatorLiveData
 
@@ -293,17 +292,17 @@ class EditPropertyActivityViewModel @Inject constructor(
 
 
     private suspend fun updatePhotosDataBase(photoEntities: MutableList<PhotoEntity>) {
-        for (photo in photoEntities) {
-            insertNewPhoto(photo)
-        }
+        //for (photo in photoEntities) {
+            insertNewPhoto(photoEntities)
+        //}
     }
 
     private suspend fun updateProperty(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
 
 
-    private suspend fun insertNewPhoto(photo: PhotoEntity) =
-        propertiesRepository.insertNewPhoto(photo)
+    private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
+        propertiesRepository.insertNewPhoto(photos)
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {

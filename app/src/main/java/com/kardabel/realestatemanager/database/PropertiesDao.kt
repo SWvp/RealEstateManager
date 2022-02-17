@@ -20,8 +20,8 @@ interface PropertiesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProperty(property: PropertyEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPhoto(photo: PhotoEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPhoto(photos: List<PhotoEntity>)
 
     @Query("DELETE FROM photo WHERE photoId = :id")
     suspend fun deletePhotoById(id: Int)
