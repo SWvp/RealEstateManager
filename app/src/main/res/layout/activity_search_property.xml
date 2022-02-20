@@ -168,7 +168,7 @@
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:helperText="Photo"
+        app:helperText="Number of photo"
         app:helperTextEnabled="true"
         app:layout_constraintStart_toStartOf="@+id/property_county"
         app:layout_constraintTop_toBottomOf="@+id/property_county"
