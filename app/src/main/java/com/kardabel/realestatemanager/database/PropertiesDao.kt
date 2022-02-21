@@ -23,15 +23,18 @@ interface PropertiesDao {
     @Query("UPDATE property SET on_sale_status=:saleStatus WHERE propertyId =:id")
     suspend fun updatePropertySaleStatus(saleStatus: Boolean, id : Long)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPhoto(photos: List<PhotoEntity>)
-
     @Update(entity = PropertyEntity::class)
     suspend fun updateProperty(property: PropertyUpdate)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPhotos(photos: List<PhotoEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updatePhoto(photo: PhotoEntity)
 
     @Query("DELETE FROM photo WHERE photoId = :id")
     suspend fun deletePhotoById(id: Int)
+
+    @Query("DELETE FROM photo WHERE photoId IN (:photoId)")
+    suspend fun deletePhotoById(photoId: List<Int>)
 }
