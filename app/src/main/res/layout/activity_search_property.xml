@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.search.SearchPropertyActivity">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -69,6 +79,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/surface_range_tv" />
 
+    <TextView
+        android:id="@+id/room_range_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="20sp"
+        android:text="@string/room_range"
+        android:textSize="@dimen/details_media_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/surface_range_slider"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/room_range_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:valueFrom="1.0"
+        android:valueTo="30.0"
+        android:stepSize="1.0"
+        app:values="@array/room_slider_values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/room_range_tv" />
+
+    <TextView
+        android:id="@+id/photo_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12sp"
+        android:layout_marginTop="20sp"
+        android:text="@string/photo_slider"
+        android:textSize="@dimen/details_media_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/room_range_slider"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/photo_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:value="1"
+        android:valueFrom="1.0"
+        android:valueTo="20.0"
+        android:stepSize="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photo_tv" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dropdown_menu"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -83,7 +143,7 @@
         android:hint="@string/chose_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surface_range_slider"
+        app:layout_constraintTop_toBottomOf="@+id/photo_slider"
         app:startIconDrawable="@drawable/type">
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -163,40 +223,19 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/number_of_photo"
-        android:layout_width="128dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:helperText="Number of photo"
-        app:helperTextEnabled="true"
-        app:layout_constraintStart_toStartOf="@+id/property_county"
-        app:layout_constraintTop_toBottomOf="@+id/property_county"
-        app:startIconDrawable="@drawable/photo">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_number_of_photo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:inputType="numberDecimal"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <Button
         android:id="@+id/search_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
         android:text="@string/search"
-        app:layout_constraintBottom_toBottomOf="@+id/number_of_photo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/number_of_photo"
-        app:layout_constraintTop_toTopOf="@+id/number_of_photo" />
-
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_county" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>

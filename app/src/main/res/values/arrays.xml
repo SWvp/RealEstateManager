@@ -10,4 +10,10 @@
         <item>10.0</item>
         <item>100.0</item>
     </array>
+
+    <array name="room_slider_values">
+        <item>1.0</item>
+        <item>4.0</item>
+    </array>
+
 </resources>
