@@ -13,6 +13,7 @@ import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
+import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
@@ -29,6 +30,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
     private val firebaseAuth: FirebaseAuth,
     private val createPhotoRepository: CreatePhotoRepository,
+    private val interestRepository: InterestRepository,
     private val clock: Clock,
     private val context: Application,
 
@@ -36,7 +38,6 @@ class CreatePropertyViewModel @Inject constructor(
 
     val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
-    private val interests = mutableListOf<String>()
     private var photoMutableList = mutableListOf<Photo>()
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
@@ -51,11 +52,19 @@ class CreatePropertyViewModel @Inject constructor(
             }
         }
 
+    val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
+
     // Poi are stored here
     fun addInterest(interest: String) {
-        if (interest.isNotEmpty()) {
-            interests.add(interest)
+        if (interest.length > 2) {
+            interestRepository.addInterest(interest)
+        }else{
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.INTEREST_FIELD_ERROR)
         }
+    }
+
+    fun removeInterest(interest: String) {
+        interestRepository.remove(interest)
     }
 
     // When property is ready
@@ -109,7 +118,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
-                interest = interestCanBeNull(interests),
+                interest = interestCanBeNull(interestRepository.getInterest()),
                 staticMap = staticMapUrl(address, zipcode, city)
             )
 
@@ -166,6 +175,7 @@ class CreatePropertyViewModel @Inject constructor(
         }
         sendPhotosToDataBase(photoListWithPropertyId)
         emptyPhotoRepository()
+        emptyInterestRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
@@ -173,9 +183,9 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
-       // for (photoEntity in photoEntities) {
-            insertPhotoDao(photoEntities)
-            //insertPhotoFirebaseStorage(photoEntity)
+        // for (photoEntity in photoEntities) {
+        insertPhotoDao(photoEntities)
+        //insertPhotoFirebaseStorage(photoEntity)
 
         //}
     }
@@ -184,7 +194,8 @@ class CreatePropertyViewModel @Inject constructor(
         return propertiesRepository.insertProperty(property)
     }
 
-    private suspend fun insertPhotoDao(photos: List<PhotoEntity>) = propertiesRepository.insertPhoto(photos)
+    private suspend fun insertPhotoDao(photos: List<PhotoEntity>) =
+        propertiesRepository.insertPhotos(photos)
 
     private fun insertPhotoFirebaseStorage(photoEntity: PhotoEntity) {
 
@@ -193,5 +204,10 @@ class CreatePropertyViewModel @Inject constructor(
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
+    }
+
+    // Clear the interestRepo for the next use
+    private fun emptyInterestRepository() {
+        interestRepository.emptyInterestList()
     }
 }
