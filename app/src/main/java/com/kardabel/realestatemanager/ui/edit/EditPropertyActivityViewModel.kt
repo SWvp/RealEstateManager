@@ -342,13 +342,13 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.deletePhotos(photoId)
 
     // Clear the photoRepoS for the next use
-    private fun emptyAllPhotoRepository() {
+    fun emptyAllPhotoRepository() {
         registeredPhotoRepository.emptyRegisteredPhotoList()
         createPhotoRepository.emptyCreatePhotoList()
     }
 
     // Clear the interestRepo for the next use
-    private fun emptyInterestRepository() {
+    fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
     }
 

@@ -73,6 +73,10 @@ class EditPropertyActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Empty cache repo
+        viewModel.emptyAllPhotoRepository()
+        viewModel.emptyInterestRepository()
+
         // Set dropdown menu for type of property
         val items = arrayOf(
             getString(R.string.Flat),
