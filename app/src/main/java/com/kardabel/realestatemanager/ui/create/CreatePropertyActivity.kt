@@ -103,9 +103,14 @@ class CreatePropertyActivity : AppCompatActivity() {
         binding.addInterestButton.setOnClickListener {
             val interest = binding.inputInterest.text.toString()
             viewModel.addInterest(interest)
-            addNewChipInterest(interest)
+           // addNewChipInterest(interest)
             binding.inputInterest.text?.clear()
         }
+
+        viewModel.getInterest.observe(this) { interestList ->
+            displayInterestAsChip(interestList)
+        }
+
 
         // Manage photos from storage
         binding.addStoragePictureButton.setOnClickListener {
@@ -131,25 +136,39 @@ class CreatePropertyActivity : AppCompatActivity() {
             photosAdapter.submitList(it)
         }
 
-        // Inform user if fields are missing
+        // Inform user if fields are missing or close activity
         viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
             when(viewAction){
                 CreateActivityViewAction.FIELDS_ERROR ->
                     Toast.makeText(applicationContext, getString(R.string.fields_error), Toast.LENGTH_SHORT).show()
 
                 CreateActivityViewAction.FINISH_ACTIVITY -> onBackPressed()
+
+                CreateActivityViewAction.INTEREST_FIELD_ERROR ->
+                    Toast.makeText(applicationContext, getString(R.string.interest_input_problem), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // When user type something in interest field, create a chip to display
-    private fun addNewChipInterest(interest: String) {
+    // Interests are display as chip trough chip group
+    private fun displayInterestAsChip(interests: List<String>) {
+
+        val interestChipGroup: ChipGroup = binding.chipGroup
+
+        interestChipGroup.clearCheck()
+        interestChipGroup.removeAllViewsInLayout()
+
         val inflater = LayoutInflater.from(this)
-        val chip: Chip =
-            inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
-        chip.text = interest
-        if(interest.length>2){
+        for (interest in interests) {
+            val chip: Chip =
+                inflater.inflate(R.layout.item_interest_chip, interestChipGroup, false) as Chip
+            chip.text = interest
             interestChipGroup.addView(chip)
+            chip.setOnClickListener {
+                val parent = chip.parent as ChipGroup
+                parent.removeView(chip)
+                viewModel.removeInterest(interest)
+            }
         }
     }
 
