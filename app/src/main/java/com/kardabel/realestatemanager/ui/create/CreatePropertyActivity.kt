@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
@@ -71,7 +72,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
+        binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
 
         // Set chip group binding
         interestChipGroup = binding.chipGroup

@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -70,7 +71,7 @@ class EditPropertyActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.title = "Edit property"
-        binding.toolbar.navigationIcon?.setTint(resources.getColor(R.color.white))
+        binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
