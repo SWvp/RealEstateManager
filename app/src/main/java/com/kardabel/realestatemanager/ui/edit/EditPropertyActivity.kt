@@ -64,9 +64,6 @@ class EditPropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Empty repo photo cache
-        viewModel.emptyAllPhotoRepository()
-
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -182,7 +179,7 @@ class EditPropertyActivity : AppCompatActivity() {
     }
 
     // Interests are display as chip trough chip group
-    private fun displayInterestAsChip(interests: List<String>?) {
+    private fun displayInterestAsChip(interests: List<String>) {
 
         val interestChipGroup: ChipGroup = binding.chipGroup
 
@@ -190,12 +187,15 @@ class EditPropertyActivity : AppCompatActivity() {
         interestChipGroup.removeAllViewsInLayout()
 
         val inflater = LayoutInflater.from(this)
-        if (interests != null) {
-            for (interest in interests) {
-                val chip: Chip =
-                    inflater.inflate(R.layout.item_interest_chip, interestChipGroup, false) as Chip
-                chip.text = interest
-                interestChipGroup.addView(chip)
+        for (interest in interests) {
+            val chip: Chip =
+                inflater.inflate(R.layout.item_interest_chip, interestChipGroup, false) as Chip
+            chip.text = interest
+            interestChipGroup.addView(chip)
+            chip.setOnClickListener {
+                val parent = chip.parent as ChipGroup
+                parent.removeView(chip)
+                viewModel.removeInterest(interest)
             }
         }
     }
@@ -317,10 +317,10 @@ class EditPropertyActivity : AppCompatActivity() {
         builder.setSingleChoiceItems(userChoice, -1) { _, which ->
             binding.alertTv.text = userChoice[which]
         }
-        builder.setPositiveButton(getString(R.string.confirm_Photo_Message)){ dialog, _ ->
+        builder.setPositiveButton(getString(R.string.confirm_Photo_Message)) { dialog, _ ->
             val position = (dialog as AlertDialog).listView.checkedItemPosition
-            if (position !=-1){
-                when(userChoice[position]){
+            if (position != -1) {
+                when (userChoice[position]) {
                     getString(R.string.yes) -> viewModel.propertySold()
                     getString(R.string.not_yes) -> dialog.cancel()
                 }
