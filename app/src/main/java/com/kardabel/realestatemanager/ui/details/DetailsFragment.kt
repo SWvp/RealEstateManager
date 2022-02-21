@@ -1,11 +1,9 @@
 package com.kardabel.realestatemanager.ui.details
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +13,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
-import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -108,7 +105,7 @@ class DetailsFragment : Fragment() {
                 for (interest in interests) {
                     val chip: Chip =
                         inflater.inflate(
-                            R.layout.item_interest_chip,
+                            R.layout.item_interest_chip_details,
                             this.interestChipGroup,
                             false
                         ) as Chip
