@@ -65,7 +65,6 @@ class EditPhotoDialogFragment : DialogFragment() {
 
                 if (isEditInstance) {
                     if(photoId != null){
-                        viewModel.deletePhotoFromDataBase(photoId!!)
                         viewModel.deleteRegisteredPhotoFromRepository(photoId!!)
                     }else {
                         val photoToDelete = Photo(
