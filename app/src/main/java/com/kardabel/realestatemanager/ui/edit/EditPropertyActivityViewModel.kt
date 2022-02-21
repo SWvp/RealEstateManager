@@ -174,8 +174,9 @@ class EditPropertyActivityViewModel @Inject constructor(
     }
 
     fun addInterest(interest: String) {
-        interestRepository.addInterest(interest)
-        //interests.add(interest)
+        if(interest.length>2){
+            interestRepository.addInterest(interest)
+        }
     }
 
     fun createProperty(

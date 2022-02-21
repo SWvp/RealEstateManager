@@ -142,8 +142,9 @@ class CreatePropertyActivity : AppCompatActivity() {
         val chip: Chip =
             inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
         chip.text = interest
-        interestChipGroup.addView(chip)
-
+        if(interest.length>2){
+            interestChipGroup.addView(chip)
+        }
     }
 
     override fun onRequestPermissionsResult(
