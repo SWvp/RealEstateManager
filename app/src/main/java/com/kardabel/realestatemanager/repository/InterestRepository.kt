@@ -27,4 +27,8 @@ class InterestRepository @Inject constructor() {
     fun emptyInterestList() {
         interestList.clear()
     }
+
+    fun remove(interest: String) {
+        interestList.remove(interest)
+    }
 }
