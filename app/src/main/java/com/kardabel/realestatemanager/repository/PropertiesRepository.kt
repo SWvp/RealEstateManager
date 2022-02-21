@@ -29,13 +29,13 @@ class PropertiesRepository @Inject constructor(
         propertiesDao.updateProperty(property)
     }
 
-    suspend fun insertPhoto(photos: List<PhotoEntity>) {
-        propertiesDao.insertPhoto(photos)
+    suspend fun insertPhotos(photos: List<PhotoEntity>) {
+        propertiesDao.insertPhotos(photos)
     }
 
-  // suspend fun updatePhoto(photo: PhotoEntity) {
-  //     propertiesDao.updatePhoto(photo)
-  // }
+    suspend fun deletePhotos(photoId: List<Int>) {
+        propertiesDao.deletePhotoById(photoId)
+    }
 
     suspend fun updateSaleStatus(saleStatus: Boolean, propertyId: Long) {
         propertiesDao.updatePropertySaleStatus(saleStatus, propertyId)
