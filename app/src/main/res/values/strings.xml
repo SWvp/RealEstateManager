@@ -109,6 +109,7 @@
 
     <!-- CREATE PROPERTY ACTIVITY -->
     <string name="fields_error">At least 1 photo, address, city and zipcode</string>
+    <string name="interest_input_problem">Interest example: Atm, Bank, School</string>
     <string name="url_map_static">https://maps.googleapis.com/maps/api/staticmap?center=</string>
     <string name="coma">,</string>
     <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>
