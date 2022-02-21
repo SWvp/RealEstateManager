@@ -11,33 +11,36 @@ import javax.inject.Singleton
 class RegisteredPhotoRepository @Inject constructor() {
 
     private var registeredPhotoList = mutableListOf<PhotoEntity>()
+    private var originalRegisteredPhotoList = mutableListOf<PhotoEntity>()
 
     private val registeredPhotoLiveData = MutableLiveData<List<PhotoEntity>>()
 
     fun getRegisteredPhotoLiveData(): LiveData<List<PhotoEntity>> = registeredPhotoLiveData
 
     // Used by edit activity to send photo registered
-    fun retrieveRegisteredPhoto(photoList: List<PhotoEntity>) {
-        for(photo in photoList){
-            registeredPhotoList.add(photo)
+    fun sendRegisteredPhotoToRepository(photoList: List<PhotoEntity>) {
+        if (originalRegisteredPhotoList.isEmpty()) {
+            for (photo in photoList) {
+                originalRegisteredPhotoList.add(photo)
+            }
+            registeredPhotoList = originalRegisteredPhotoList
+            registeredPhotoLiveData.postValue(originalRegisteredPhotoList)
         }
-        registeredPhotoLiveData.postValue(registeredPhotoList)
     }
 
     fun deleteRegisteredPhoto(photoId: Int) {
-        for(photo in registeredPhotoList){
-            if(photo.photoId == photoId){
+        for (photo in originalRegisteredPhotoList) {
+            if (photo.photoId == photoId) {
                 registeredPhotoList.remove(photo)
                 break
             }
         }
-        // photoToCreateLiveData.value = newPhotoList
-        registeredPhotoLiveData.value = registeredPhotoList
+        registeredPhotoLiveData.postValue(registeredPhotoList)
     }
 
     fun editPhotoText(description: String, photoUri: Uri) {
-        for(photo in registeredPhotoList){
-            if(photo.photoUri == photoUri.toString()){
+        for (photo in registeredPhotoList) {
+            if (photo.photoUri == photoUri.toString()) {
                 photo.photoDescription = description
             }
         }
@@ -46,5 +49,6 @@ class RegisteredPhotoRepository @Inject constructor() {
 
     fun emptyRegisteredPhotoList() {
         registeredPhotoList.clear()
+        registeredPhotoLiveData.postValue(registeredPhotoList)
     }
 }
