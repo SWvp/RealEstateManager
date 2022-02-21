@@ -86,16 +86,26 @@
     <!-- TYPE DROPDOWN LAYOUT -->
     <string name="dropdown_item_text">Sample text</string>
 
+    <!-- PROPERTY TYPE DROPDOWN STRINGS -->
+    <string name="Flat">Flat</string>
+    <string name="House">House</string>
+    <string name="Duplex">Duplex</string>
+    <string name="Penthouse">Penthouse</string>
+    <string name="Condo">Condo</string>
+    <string name="Apartment">Apartment</string>
+
     <!-- TOKEN GOOGLE SIGNING -->
     <string name="web_client_id">282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com</string>
 
     <string name="logging_in">Logging In</string>
 
-
     <string name="popup_title_permission_files_access">Access</string>
 
-
-
+    <!-- EDIT PROPERTY ACTIVITY -->
+    <string name="edit_property">Edit property</string>
+    <string name="yes">Yes</string>
+    <string name="not_yes">Not yet</string>
+    <string name="confirm_sale">Confirm sale?</string>
 
     <!-- CREATE PROPERTY ACTIVITY -->
     <string name="fields_error">At least 1 photo, address, city and zipcode</string>
@@ -104,6 +114,9 @@
     <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>
     <string name="marker">markers=color:blue|label:P|</string>
     <string name="key">&amp;key=</string>
+    <string name="date_pattern">yyyyMMdd_HHmmss</string>
+    <string name="authority">com.kardabel.realestatemanager.fileprovider</string>
+    <string name="confirm_Photo_Message">confirmPhotoMessage</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="no_property_selected">Select a property please</string>

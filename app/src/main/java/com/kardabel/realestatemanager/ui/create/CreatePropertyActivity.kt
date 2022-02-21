@@ -79,7 +79,12 @@ class CreatePropertyActivity : AppCompatActivity() {
 
         // Set dropdown menu for type of property
         val items = arrayOf(
-            "Flat", "House", "Duplex", "Penthouse", "Condo", "Apartment",
+            getString(R.string.Flat),
+            getString(R.string.House),
+            getString(R.string.Duplex),
+            getString(R.string.Penthouse),
+            getString(R.string.Condo),
+            getString(R.string.Apartment),
         )
 
         val dropDownAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -182,7 +187,7 @@ class CreatePropertyActivity : AppCompatActivity() {
 
         uriImageSelected = FileProvider.getUriForFile(
             this,
-            "com.kardabel.realestatemanager.fileprovider",
+            getString(R.string.authority),
             photoFile
         )
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
@@ -194,7 +199,7 @@ class CreatePropertyActivity : AppCompatActivity() {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp: String = SimpleDateFormat(getString(R.string.date_pattern)).format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
@@ -231,14 +236,14 @@ class CreatePropertyActivity : AppCompatActivity() {
     // then, when validate, send whole photo object to a repo via VM
     private fun confirmDialogFragment(bitmap: Bitmap, uri: Uri) {
         val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(bitmap, uri)
-        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+        confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
         val confirmFragment = EditPhotoDialogFragment.createInstance(propertyPhotoViewState)
-        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+        confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }
 

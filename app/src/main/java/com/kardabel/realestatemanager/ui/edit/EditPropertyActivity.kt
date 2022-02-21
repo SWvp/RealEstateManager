@@ -70,7 +70,7 @@ class EditPropertyActivity : AppCompatActivity() {
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.title = "Edit property"
+        binding.toolbar.title = getString(R.string.edit_property)
         binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -78,7 +78,12 @@ class EditPropertyActivity : AppCompatActivity() {
 
         // Set dropdown menu for type of property
         val items = arrayOf(
-            "Flat", "House", "Duplex", "Penthouse", "Condo", "Apartment"
+            getString(R.string.Flat),
+            getString(R.string.House),
+            getString(R.string.Duplex),
+            getString(R.string.Penthouse),
+            getString(R.string.Condo),
+            getString(R.string.Apartment),
         )
 
         val dropDownAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -227,7 +232,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
         uriImageSelected = FileProvider.getUriForFile(
             this,
-            "com.kardabel.realestatemanager.fileprovider",
+            getString(R.string.authority),
             photoFile
         )
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
@@ -239,7 +244,7 @@ class EditPropertyActivity : AppCompatActivity() {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp: String = SimpleDateFormat(getString(R.string.date_pattern)).format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
@@ -276,13 +281,13 @@ class EditPropertyActivity : AppCompatActivity() {
     // then, when validate, send whole photo object to a repo via VM
     private fun confirmDialogFragment(bitmap: Bitmap, uri: Uri) {
         val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(bitmap, uri)
-        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+        confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
     }
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editDialogFragment(editPropertyPhotoViewState: EditPropertyPhotoViewState) {
         val confirmFragment = EditPhotoDialogFragment.editInstance(editPropertyPhotoViewState)
-        confirmFragment.show(supportFragmentManager, "confirmPhotoMessage")
+        confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
     }
 
     // Converter to get bitmap from Uri
@@ -304,20 +309,20 @@ class EditPropertyActivity : AppCompatActivity() {
 
     // Alert user he is about to definitely sell the property
     private fun alertDialog() {
-        val userChoice = arrayOf("Yes", "Not yet")
+        val userChoice = arrayOf(getString(R.string.yes), getString(R.string.not_yes))
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle("Confirm sale ?")
+        builder.setTitle(getString(R.string.confirm_sale))
         builder.setCancelable(true)
         builder.setIcon(R.drawable.warning)
         builder.setSingleChoiceItems(userChoice, -1) { _, which ->
             binding.alertTv.text = userChoice[which]
         }
-        builder.setPositiveButton("Confirm"){ dialog, _ ->
+        builder.setPositiveButton(getString(R.string.confirm_Photo_Message)){ dialog, _ ->
             val position = (dialog as AlertDialog).listView.checkedItemPosition
             if (position !=-1){
                 when(userChoice[position]){
-                    "Yes" -> viewModel.propertySold()
-                    "Not yet" -> dialog.cancel()
+                    getString(R.string.yes) -> viewModel.propertySold()
+                    getString(R.string.not_yes) -> dialog.cancel()
                 }
             }
         }
