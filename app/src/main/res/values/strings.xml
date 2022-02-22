@@ -118,6 +118,7 @@
     <string name="date_pattern">yyyyMMdd_HHmmss</string>
     <string name="authority">com.kardabel.realestatemanager.fileprovider</string>
     <string name="confirm_Photo_Message">confirmPhotoMessage</string>
+    <string name="confirm_sold">Validate</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="no_property_selected">Select a property please</string>

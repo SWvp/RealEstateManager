@@ -44,7 +44,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     ///////////////////////////////////  MANAGE PHOTOS  /////////////////////////////////////////////
 
-    private val getOldPhoto: LiveData<List<PhotoEntity>> =
+    private val getRegisteredPhoto: LiveData<List<PhotoEntity>> =
         registeredPhotoRepository.getRegisteredPhotoLiveData()
     private val getAddedPhoto: LiveData<List<Photo>> =
         createPhotoRepository.getAddedPhotoLiveData()
@@ -52,14 +52,14 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val getAllPhotoMediatorLiveData =
         MediatorLiveData<List<EditPropertyPhotoViewState>>().apply {
 
-            addSource(getOldPhoto) { oldPhoto ->
+            addSource(getRegisteredPhoto) { oldPhoto ->
                 updatedRegisteredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
                 combine(oldPhoto, getAddedPhoto.value)
             }
 
             addSource(getAddedPhoto) { addedPhoto ->
                 addedPhotoMutableList = addedPhoto as MutableList<Photo>
-                combine(getOldPhoto.value, addedPhoto)
+                combine(getRegisteredPhoto.value, addedPhoto)
             }
         }
 
@@ -344,6 +344,11 @@ class EditPropertyActivityViewModel @Inject constructor(
     // Clear the photoRepoS for the next use
     fun emptyAllPhotoRepository() {
         registeredPhotoRepository.emptyRegisteredPhotoList()
+        createPhotoRepository.emptyCreatePhotoList()
+    }
+
+    // Clear the createdPhotoRepoS for the next use
+    fun emptyCreatedPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
     }
 

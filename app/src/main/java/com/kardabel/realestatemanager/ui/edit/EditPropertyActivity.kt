@@ -70,10 +70,6 @@ class EditPropertyActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        // Empty cache repo
-        viewModel.emptyAllPhotoRepository()
-        viewModel.emptyInterestRepository()
-
         // Set dropdown menu for type of property
         val items = arrayOf(
             getString(R.string.Flat),
@@ -96,7 +92,6 @@ class EditPropertyActivity : AppCompatActivity() {
         }
 
         // Set the adapter to retrieve photo
-
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         val photosAdapter: EditPropertyPhotoAdapter = EditPropertyPhotoAdapter {
             editDialogFragment(it)
@@ -319,7 +314,7 @@ class EditPropertyActivity : AppCompatActivity() {
         builder.setSingleChoiceItems(userChoice, -1) { _, which ->
             binding.alertTv.text = userChoice[which]
         }
-        builder.setPositiveButton(getString(R.string.confirm_Photo_Message)) { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.confirm_sold)) { dialog, _ ->
             val position = (dialog as AlertDialog).listView.checkedItemPosition
             if (position != -1) {
                 when (userChoice[position]) {
@@ -344,11 +339,20 @@ class EditPropertyActivity : AppCompatActivity() {
                 true
             }
             android.R.id.home -> {
+                emptyCache()
+                viewModel.emptyAllPhotoRepository()
+                viewModel.emptyInterestRepository()
                 onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    // Empty photo and interest repo
+    private fun emptyCache() {
+        viewModel.emptyAllPhotoRepository()
+        viewModel.emptyInterestRepository()
     }
 
     private fun saveProperty() {

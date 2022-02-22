@@ -39,5 +39,6 @@ class CreatePhotoRepository @Inject constructor() {
 
     fun emptyCreatePhotoList() {
         newPhotoList.clear()
+        //photoToCreateLiveData.value = newPhotoList
     }
 }

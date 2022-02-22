@@ -108,29 +108,36 @@ class MainActivity : AppCompatActivity() {
         // Single live event trigger when edit item is clicked
         viewModel.startEditActivitySingleLiveEvent.observe(this) {
             when (it) {
-
                 NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
-                    startActivity(
-                        Intent(
-                            this,
-                            EditPropertyActivity::class.java
-                        )
-                    )
+                    startEditActivity()
 
                 NavigateToEditViewAction.NO_PROPERTY_SELECTED ->
-                    Toast.makeText(applicationContext, getString(R.string.no_property_selected), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.no_property_selected),
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
         }
 
 
         binding.fab.setOnClickListener {
-            // viewModel.notifyThisEdit(CreateOrEdit.CREATE_PROPERTY)
             val intent = Intent(
                 this@MainActivity,
                 CreatePropertyActivity::class.java
             )
             startActivity(intent)
         }
+    }
+
+    private fun startEditActivity() {
+        viewModel.emptyCreatedPhotoRepository()
+        startActivity(
+            Intent(
+                this,
+                EditPropertyActivity::class.java
+            )
+        )
     }
 
     // Toolbar menu
