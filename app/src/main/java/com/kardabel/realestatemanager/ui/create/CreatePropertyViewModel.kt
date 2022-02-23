@@ -45,7 +45,7 @@ class CreatePropertyViewModel @Inject constructor(
             photoList.map { photo ->
                 photoMutableList = photoList as MutableList<Photo>
                 CreatePropertyPhotoViewState(
-                    photoBitmap = photo.photoBitmap,
+                    //photoBitmap = photo.photoBitmap,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                 )
@@ -166,7 +166,7 @@ class CreatePropertyViewModel @Inject constructor(
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
-                photo.photoBitmap,
+                //photo.photoBitmap,
                 photo.photoUri.toString(),
                 photo.photoDescription,
                 newPropertyId,

@@ -20,12 +20,12 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
         fun onDialogNegativeClick()
     }
 
-    var photoBitmap: Bitmap? = null
+    //var photoBitmap: Bitmap? = null
     var photoUri: Uri? = null
 
     companion object {
-        fun newInstance(photo: Bitmap, uri: Uri) = AddedPhotoConfirmationDialogFragment().apply {
-            photoBitmap = photo
+        fun newInstance(uri: Uri) = AddedPhotoConfirmationDialogFragment().apply {
+            //photoBitmap = photo
             photoUri = uri
         }
     }
@@ -43,7 +43,7 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
             .setPositiveButton("Validate", DialogInterface.OnClickListener { dialog, id ->
                 if (!editText.text.isNullOrEmpty()) {
                     val newPhoto = Photo(
-                        photoBitmap = photoBitmap!!,
+                        //photoBitmap = photoBitmap!!,
                         photoDescription = editText.text.toString(),
                         photoUri = photoUri!!,
 

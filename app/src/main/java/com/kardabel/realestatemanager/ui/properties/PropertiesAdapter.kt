@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.properties
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.ViewHolder
+import java.io.File
 
 class PropertiesAdapter(
     private val listener: (propertyId: Long) -> Unit
@@ -27,6 +29,7 @@ class PropertiesAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val type: TextView = itemView.findViewById(R.id.item_property_type)
         private val county: TextView = itemView.findViewById(R.id.item_property_county)
         private val price: TextView = itemView.findViewById(R.id.item_property_price)
@@ -36,18 +39,25 @@ class PropertiesAdapter(
 
 
         fun bind(propertyViewState: PropertyViewState, listener: (Long) -> Unit) {
+
             type.text = propertyViewState.type
             county.text = propertyViewState.county
             price.text = propertyViewState.price
             saleStatus.text = propertyViewState.saleStatus
             saleStatus.setBackgroundColor(propertyViewState.saleColor)
             vendor.text = propertyViewState.vendor
-            Glide.with(photo.context).load(propertyViewState.photoBitmap).into(photo)
+
+            Glide
+                .with(photo.context)
+                .load(propertyViewState.photoUri.toString())
+                .into(photo)
+
 
             itemView.setOnClickListener {
                 listener.invoke(propertyViewState.propertyId)
             }
         }
+
 
         companion object {
             fun create(parent: ViewGroup): ViewHolder {
@@ -69,5 +79,4 @@ class PropertiesAdapter(
             newItem: PropertyViewState
         ): Boolean = oldItem == newItem
     }
-
 }

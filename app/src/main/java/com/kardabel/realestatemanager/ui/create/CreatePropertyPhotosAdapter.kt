@@ -32,7 +32,7 @@ class CreatePropertyPhotosAdapter(
 
         fun bind(photoViewState: CreatePropertyPhotoViewState, listener: (CreatePropertyPhotoViewState) -> Unit ) {
             description.text = photoViewState.photoDescription
-            Glide.with(photo.context).load(photoViewState.photoBitmap).into(photo)
+            Glide.with(photo.context).load(photoViewState.photoUri).into(photo)
 
             itemView.setOnClickListener {
                 listener.invoke(photoViewState)

@@ -265,19 +265,21 @@ class EditPropertyActivity : AppCompatActivity() {
                     uriImageSelected = data!!.data
                 }
 
-                val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
+                confirmDialogFragment(uriImageSelected!!)
 
-                if (bitmap != null) {
-                    confirmDialogFragment(bitmap, uriImageSelected!!)
-                }
+                //val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
+
+             //if (bitmap != null) {
+             //    confirmDialogFragment(bitmap, uriImageSelected!!)
+             //}
             }
         }
     }
 
     // Create an alert dialog to ask user type a photo description,
     // then, when validate, send whole photo object to a repo via VM
-    private fun confirmDialogFragment(bitmap: Bitmap, uri: Uri) {
-        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(bitmap, uri)
+    private fun confirmDialogFragment(uri: Uri) {
+        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(uri)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
     }
 

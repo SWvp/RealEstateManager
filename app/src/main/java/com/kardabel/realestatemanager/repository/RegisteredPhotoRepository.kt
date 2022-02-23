@@ -40,7 +40,7 @@ class RegisteredPhotoRepository @Inject constructor() {
 
     fun editPhotoText(description: String, photoUri: Uri) {
         for (photo in registeredPhotoList) {
-            if (photo.photoUri == photoUri.toString()) {
+            if (photo.photoString == photoUri.toString()) {
                 photo.photoDescription = description
             }
         }

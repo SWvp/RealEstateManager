@@ -5,7 +5,7 @@ import android.net.Uri
 
 
 data class Photo(
-    val photoBitmap: Bitmap,
+    //val photoBitmap: Bitmap,
     var photoDescription: String,
     val photoUri: Uri,
 )

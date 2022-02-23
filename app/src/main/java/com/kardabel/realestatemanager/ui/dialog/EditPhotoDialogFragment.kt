@@ -38,7 +38,7 @@ class EditPhotoDialogFragment : DialogFragment() {
         fun editInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
             EditPhotoDialogFragment().apply {
                 photoViewState = CreatePropertyPhotoViewState(
-                    photoBitmap = editPropertyPhotoViewState.photoBitmap,
+                    //photoBitmap = editPropertyPhotoViewState.photoBitmap,
                     photoDescription = editPropertyPhotoViewState.photoDescription,
                     photoUri = Uri.parse(editPropertyPhotoViewState.photoUri),
                 )
@@ -68,7 +68,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                         viewModel.deleteRegisteredPhotoFromRepository(photoId!!)
                     }else {
                         val photoToDelete = Photo(
-                            photoBitmap = photoViewState!!.photoBitmap,
+                            //photoBitmap = photoViewState!!.photoBitmap,
                             photoDescription = photoViewState!!.photoDescription,
                             photoUri = photoViewState!!.photoUri,
                         )
@@ -77,7 +77,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                 }else{
                     photoViewState?.let {
                         val photoToDelete = Photo(
-                            photoBitmap = photoViewState!!.photoBitmap,
+                            //photoBitmap = photoViewState!!.photoBitmap,
                             photoDescription = photoViewState!!.photoDescription,
                             photoUri = photoViewState!!.photoUri,
                         )
@@ -91,7 +91,7 @@ class EditPhotoDialogFragment : DialogFragment() {
             .setNeutralButton("Edit description", DialogInterface.OnClickListener { dialog, id ->
                 if(photoId != null){
                     viewModel.updateRegisteredPhoto(PhotoEntity(
-                        photoViewState!!.photoBitmap,
+                        //photoViewState!!.photoBitmap,
                         photoViewState!!.photoUri.toString(),
                         editText.text.toString(),
                         propertyOwnerId,

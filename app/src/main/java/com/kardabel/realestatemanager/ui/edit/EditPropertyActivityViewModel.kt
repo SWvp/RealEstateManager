@@ -70,9 +70,9 @@ class EditPropertyActivityViewModel @Inject constructor(
             // updatedRegisteredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
             getAllPhotoMediatorLiveData.value = oldPhoto.map { photo ->
                 EditPropertyPhotoViewState(
-                    photoBitmap = photo.photo,
+                    //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
-                    photoUri = photo.photoUri,
+                    photoUri = photo.photoString,
                     photoId = photo.photoId,
                     propertyOwnerId = photo.propertyOwnerId
                 )
@@ -92,9 +92,9 @@ class EditPropertyActivityViewModel @Inject constructor(
         for (photo in oldPhoto) {
             photoList.add(
                 EditPropertyPhotoViewState(
-                    photoBitmap = photo.photo,
+                    //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
-                    photoUri = photo.photoUri,
+                    photoUri = photo.photoString,
                     photoId = photo.photoId,
                     propertyOwnerId = photo.propertyOwnerId
                 )
@@ -103,7 +103,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         for (photo in addedPhoto) {
             photoList.add(
                 EditPropertyPhotoViewState(
-                    photoBitmap = photo.photoBitmap,
+                    //photoBitmap = photo.photoBitmap,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri.toString(),
                     photoId = null,
@@ -306,7 +306,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
             for (photo in addedPhotoMutableList) {
                 val photoEntity = PhotoEntity(
-                    photo.photoBitmap,
+                    //photo.photoBitmap,
                     photo.photoUri.toString(),
                     photo.photoDescription,
                     propertyId,

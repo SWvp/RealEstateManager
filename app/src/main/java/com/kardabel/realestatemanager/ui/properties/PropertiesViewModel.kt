@@ -1,6 +1,7 @@
 package com.kardabel.realestatemanager.ui.properties
 
 import android.graphics.Color
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ class PropertiesViewModel @Inject constructor(
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val priceConverterRepository: PriceConverterRepository,
     private val currentSearchRepository: CurrentSearchRepository,
-    private val applicationDispatchers: ApplicationDispatchers
+    private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
@@ -68,7 +69,7 @@ class PropertiesViewModel @Inject constructor(
         saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
         saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
-        photoBitmap = property.photo[0].photo
+        photoUri = Uri.parse(property.photo[0].photoString)
     )
 
     private fun toViewStateWithCurrencyStatus(
@@ -83,7 +84,7 @@ class PropertiesViewModel @Inject constructor(
             saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
-            photoBitmap = property.photo[0].photo
+            photoUri = Uri.parse(property.photo[0].photoString)
         )
 
     private fun currencyConverter(

@@ -1,9 +1,9 @@
 package com.kardabel.realestatemanager.ui.details
 
-import android.graphics.Bitmap
+import android.net.Uri
 
 
 data class DetailsPhotoViewState(
-    val photoBitmap: Bitmap,
+    val photoUri: Uri,
     val photoDescription: String,
 )

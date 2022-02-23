@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.usecase
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
@@ -8,7 +9,6 @@ import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.ui.details.DetailsPhotoViewState
 import com.kardabel.realestatemanager.ui.details.DetailsViewState
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +28,7 @@ class GetCurrentPropertyUseCase @Inject constructor(
                     propertyId = it.propertyEntity.propertyId,
                     photos = it.photo.map { photoEntity ->
                         DetailsPhotoViewState(
-                            photoEntity.photo,
+                            Uri.parse(photoEntity.photoString),
                             photoEntity.photoDescription,
                         )
                     },

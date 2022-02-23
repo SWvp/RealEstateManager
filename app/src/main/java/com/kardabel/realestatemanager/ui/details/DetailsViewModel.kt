@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -25,7 +26,7 @@ class DetailsViewModel @Inject constructor(
                     propertyId = it.propertyEntity.propertyId,
                     photos = it.photo.map { photoEntity ->
                         DetailsPhotoViewState(
-                            photoEntity.photo,
+                            Uri.parse(photoEntity.photoString),
                             photoEntity.photoDescription,
                         )
                     },

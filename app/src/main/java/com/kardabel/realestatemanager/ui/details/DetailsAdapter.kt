@@ -31,12 +31,13 @@ class DetailsAdapter(
         private val description: TextView = itemView.findViewById(R.id.picture_description)
         private val photo: ImageView = itemView.findViewById(R.id.picture)
 
-        fun bind(
-            detailsPhotoViewState: DetailsPhotoViewState,
-            listener: (DetailsPhotoViewState) -> Unit
-        ) {
+        fun bind(detailsPhotoViewState: DetailsPhotoViewState, listener: (DetailsPhotoViewState) -> Unit) {
+
             description.text = detailsPhotoViewState.photoDescription
-            Glide.with(photo.context).load(detailsPhotoViewState.photoBitmap).into(photo)
+            Glide
+                .with(photo.context)
+                .load(detailsPhotoViewState.photoUri)
+                .into(photo)
 
             itemView.setOnClickListener {
                 listener.invoke(detailsPhotoViewState)
