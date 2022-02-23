@@ -41,8 +41,6 @@ class SearchPropertyActivity : AppCompatActivity() {
         //
         // var numberOfPhotoSliderValue: Int? = null
 
-        viewModel.emptyInterestRepository()
-
         interestChipGroup = binding.chipGroup
 
         // Set toolbar option
@@ -50,6 +48,7 @@ class SearchPropertyActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
         binding.toolbar.setNavigationOnClickListener {
+            viewModel.emptyInterestRepository()
             onBackPressed()
         }
 
