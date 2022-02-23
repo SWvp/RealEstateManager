@@ -105,6 +105,23 @@ class EditPropertyActivity : AppCompatActivity() {
         }
     }
 
+
+    // Toolbar menu
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_create, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save_item -> {
+                saveProperty()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun managePropertyTypeDropdownMenu() {
 
         // Set dropdown menu for type of property
@@ -343,22 +360,6 @@ class EditPropertyActivity : AppCompatActivity() {
             }
         }
         builder.create().show()
-    }
-
-    // Toolbar menu
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_create, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.save_item -> {
-                saveProperty()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     // Empty photo and interest repo

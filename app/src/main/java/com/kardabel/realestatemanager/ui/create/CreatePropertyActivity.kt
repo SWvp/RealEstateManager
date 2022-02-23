@@ -65,14 +65,47 @@ class CreatePropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set chip group binding
+        interestChipGroup = binding.chipGroup
+
+        manageToolbar()
+        managePropertyTypeDropdownMenu()
+        managePhotoAdapter()
+        manageInput()
+        liveEventAction()
+    }
+
+    private fun manageToolbar() {
 
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
 
-        // Set chip group binding
-        interestChipGroup = binding.chipGroup
+    }
+
+    // Toolbar menu
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.toolbar_create, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save_item -> {
+                saveProperty()
+                true
+            }
+            android.R.id.home -> {
+                viewModel.emptyPhotoRepository()
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun managePropertyTypeDropdownMenu() {
 
         // Set dropdown menu for type of property
         val items = arrayOf(
@@ -90,34 +123,9 @@ class CreatePropertyActivity : AppCompatActivity() {
 
         binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
 
-        // Manage type
-        binding.propertyTypeDropdownMenu.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
-                propertyType = parent.getItemAtPosition(position).toString()
-            }
+    }
 
-        // Manage interest
-        binding.addInterestButton.setOnClickListener {
-            val interest = binding.inputInterest.text.toString()
-            viewModel.addInterest(interest)
-           // addNewChipInterest(interest)
-            binding.inputInterest.text?.clear()
-        }
-
-        viewModel.getInterest.observe(this) { interestList ->
-            displayInterestAsChip(interestList)
-        }
-
-
-        // Manage photos from storage
-        binding.addStoragePictureButton.setOnClickListener {
-            addPhotoFromStorage()
-        }
-
-        // Manage camera to capture a pic
-        binding.addCameraPictureButton.setOnClickListener {
-            capturePhoto()
-        }
+    private fun managePhotoAdapter() {
 
         // Set the adapter to retrieve photo recently added
         // On item click go to edit dialog
@@ -132,19 +140,37 @@ class CreatePropertyActivity : AppCompatActivity() {
         viewModel.getPhoto.observe(this) {
             photosAdapter.submitList(it)
         }
+    }
 
-        // Inform user if fields are missing or close activity
-        viewModel.actionSingleLiveEvent.observe(this){ viewAction ->
-            when(viewAction){
-                CreateActivityViewAction.FIELDS_ERROR ->
-                    Toast.makeText(applicationContext, getString(R.string.fields_error), Toast.LENGTH_SHORT).show()
+    private fun manageInput() {
 
-                CreateActivityViewAction.FINISH_ACTIVITY ->
-                    onBackPressed()
-
-                CreateActivityViewAction.INTEREST_FIELD_ERROR ->
-                    Toast.makeText(applicationContext, getString(R.string.interest_input_problem), Toast.LENGTH_SHORT).show()
+        // Manage type
+        binding.propertyTypeDropdownMenu.onItemClickListener =
+            OnItemClickListener { parent, view, position, id ->
+                propertyType = parent.getItemAtPosition(position).toString()
             }
+
+        // Manage interest
+        binding.addInterestButton.setOnClickListener {
+            val interest = binding.inputInterest.text.toString()
+            viewModel.addInterest(interest)
+            // addNewChipInterest(interest)
+            binding.inputInterest.text?.clear()
+        }
+
+        viewModel.getInterest.observe(this) { interestList ->
+            displayInterestAsChip(interestList)
+        }
+
+
+        // Manage storage photo picker
+        binding.addStoragePictureButton.setOnClickListener {
+            addPhotoFromStorage()
+        }
+
+        // Manage camera to capture a pic
+        binding.addCameraPictureButton.setOnClickListener {
+            capturePhoto()
         }
     }
 
@@ -244,9 +270,9 @@ class CreatePropertyActivity : AppCompatActivity() {
 
                 //val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
 
-             //if (bitmap != null) {
-             //    confirmDialogFragment(bitmap, uriImageSelected!!)
-             //}
+                //if (bitmap != null) {
+                //    confirmDialogFragment(bitmap, uriImageSelected!!)
+                //}
             }
         }
     }
@@ -283,24 +309,28 @@ class CreatePropertyActivity : AppCompatActivity() {
         return getBitmap!!
     }
 
-    // Toolbar menu
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_create, menu)
-        return true
-    }
+    private fun liveEventAction() {
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.save_item -> {
-                saveProperty()
-                true
+        // Inform user if fields are missing or close activity
+        viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
+            when (viewAction) {
+                CreateActivityViewAction.FIELDS_ERROR ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.fields_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                CreateActivityViewAction.FINISH_ACTIVITY ->
+                    onBackPressed()
+
+                CreateActivityViewAction.INTEREST_FIELD_ERROR ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.interest_input_problem),
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
-            android.R.id.home -> {
-                viewModel.emptyPhotoRepository()
-                onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
