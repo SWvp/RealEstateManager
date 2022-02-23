@@ -76,12 +76,30 @@ class SearchPropertyViewModel @Inject constructor(
     fun search(county: String?) {
 
         val newSearchParams = SearchParams(
-            priceSliderMinValue,
-            priceSliderMaxValue,
-            surfaceSliderMinValue,
-            surfaceSliderMaxValue,
-            roomSliderMinValue,
-            roomSliderMaxValue,
+            priceRange = priceSliderMinValue?.let { priceMin ->
+                priceSliderMaxValue?.let { priceMax ->
+                    IntRange(
+                        priceMin,
+                        priceMax
+                    )
+                }
+            },
+            surfaceRange = surfaceSliderMinValue?.let { surfaceMin ->
+                surfaceSliderMaxValue?.let { surfaceMax ->
+                    IntRange(
+                        surfaceMin,
+                        surfaceMax
+                    )
+                }
+            },
+            roomRange = roomSliderMinValue?.let { rooomMin ->
+                roomSliderMaxValue?.let { roomMax ->
+                    IntRange(
+                        rooomMin,
+                        roomMax
+                    )
+                }
+            },
             numberOfPhotoSliderValue,
             propertyType,
             interestList,
