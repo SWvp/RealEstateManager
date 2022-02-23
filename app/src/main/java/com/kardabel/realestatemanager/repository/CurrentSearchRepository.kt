@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class CurrentSearchRepository @Inject constructor() {
 
     private val searchParamsMutableStateFlow = MutableStateFlow<SearchParams?>(null)
-    val searchParamsParamsFlow : Flow<SearchParams?> = searchParamsMutableStateFlow.asStateFlow()
+    fun searchParamsParamsFlow() : Flow<SearchParams?> = searchParamsMutableStateFlow.asStateFlow()
 
     fun updateSearchParams(searchParamsParams: SearchParams) {
         searchParamsMutableStateFlow.value = searchParamsParams
