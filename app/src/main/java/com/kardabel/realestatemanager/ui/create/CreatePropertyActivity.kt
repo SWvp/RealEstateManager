@@ -65,9 +65,6 @@ class CreatePropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // If we wants the user reset create property (make emptyRepo public
-        viewModel.emptyPhotoRepository()
-
 
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
@@ -142,7 +139,8 @@ class CreatePropertyActivity : AppCompatActivity() {
                 CreateActivityViewAction.FIELDS_ERROR ->
                     Toast.makeText(applicationContext, getString(R.string.fields_error), Toast.LENGTH_SHORT).show()
 
-                CreateActivityViewAction.FINISH_ACTIVITY -> onBackPressed()
+                CreateActivityViewAction.FINISH_ACTIVITY ->
+                    onBackPressed()
 
                 CreateActivityViewAction.INTEREST_FIELD_ERROR ->
                     Toast.makeText(applicationContext, getString(R.string.interest_input_problem), Toast.LENGTH_SHORT).show()
@@ -298,6 +296,7 @@ class CreatePropertyActivity : AppCompatActivity() {
                 true
             }
             android.R.id.home -> {
+                viewModel.emptyPhotoRepository()
                 onBackPressed()
                 true
             }

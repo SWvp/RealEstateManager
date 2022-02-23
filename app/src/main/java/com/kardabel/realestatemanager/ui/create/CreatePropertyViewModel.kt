@@ -163,7 +163,9 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
+
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
+
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
                 //photo.photoBitmap,
@@ -174,20 +176,18 @@ class CreatePropertyViewModel @Inject constructor(
             photoListWithPropertyId.add(photoEntity)
         }
         sendPhotosToDataBase(photoListWithPropertyId)
-        emptyPhotoRepository()
-        emptyInterestRepository()
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
+
         }
+        emptyPhotoRepository()
+        emptyInterestRepository()
     }
 
     private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
-        // for (photoEntity in photoEntities) {
         insertPhotoDao(photoEntities)
-        //insertPhotoFirebaseStorage(photoEntity)
 
-        //}
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
@@ -196,10 +196,6 @@ class CreatePropertyViewModel @Inject constructor(
 
     private suspend fun insertPhotoDao(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhotos(photos)
-
-    private fun insertPhotoFirebaseStorage(photoEntity: PhotoEntity) {
-
-    }
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {
