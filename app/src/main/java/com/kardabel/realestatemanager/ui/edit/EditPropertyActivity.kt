@@ -61,14 +61,51 @@ class EditPropertyActivity : AppCompatActivity() {
         binding = ActivityCreatePropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        manageToolbar()
+        managePropertyTypeDropdownMenu()
+        managePhotoAdapter()
+        manageInput()
+
+    }
+
+    private fun populateViewWithOldProperty(property: EditPropertyViewState) {
+
+        // set visibility of sold button (basically invisible for create activity)
+        binding.soldButton.isVisible = property.visibility
+
+        binding.propertyTypeDropdownMenu.setText(property.type, false)
+        binding.inputDescription.setText(property.description)
+        binding.inputSurface.setText(property.surface)
+        binding.inputBedroom.setText(property.bedroom)
+        binding.inputRoom.setText(property.room)
+        binding.inputBathroom.setText(property.bathroom)
+        binding.inputPropertyAddress.setText(property.address)
+        binding.inputApartmentNumber.setText(property.apartment)
+        binding.inputPropertyCounty.setText(property.county)
+        binding.inputPropertyCountry.setText(property.country)
+        binding.inputPropertyCity.setText(property.city)
+        binding.inputPropertyZipCode.setText(property.zipcode)
+        binding.inputPrice.setText(property.price)
+
+        viewModel.getInterest.observe(this) { interestList ->
+            displayInterestAsChip(interestList)
+        }
+    }
+
+    private fun manageToolbar() {
+
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.title = getString(R.string.edit_property)
         binding.toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
         binding.toolbar.setNavigationOnClickListener {
+            emptyCache()
             onBackPressed()
         }
+    }
+
+    private fun managePropertyTypeDropdownMenu() {
 
         // Set dropdown menu for type of property
         val items = arrayOf(
@@ -90,6 +127,9 @@ class EditPropertyActivity : AppCompatActivity() {
         viewModel.getDetailsLiveData.observe(this) { property ->
             populateViewWithOldProperty(property)
         }
+    }
+
+    private fun managePhotoAdapter() {
 
         // Set the adapter to retrieve photo
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
@@ -103,8 +143,9 @@ class EditPropertyActivity : AppCompatActivity() {
         viewModel.getPhoto.observe(this) {
             photosAdapter.submitList(it)
         }
+    }
 
-        /////////////////////////////
+    private fun manageInput() {
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
@@ -148,30 +189,6 @@ class EditPropertyActivity : AppCompatActivity() {
                 CreateActivityViewAction.FINISH_ACTIVITY ->
                     finish()
             }
-        }
-    }
-
-    private fun populateViewWithOldProperty(property: EditPropertyViewState) {
-
-        // set visibility of sold button (basically invisible for create activity)
-        binding.soldButton.isVisible = property.visibility
-
-        binding.propertyTypeDropdownMenu.setText(property.type, false)
-        binding.inputDescription.setText(property.description)
-        binding.inputSurface.setText(property.surface)
-        binding.inputBedroom.setText(property.bedroom)
-        binding.inputRoom.setText(property.room)
-        binding.inputBathroom.setText(property.bathroom)
-        binding.inputPropertyAddress.setText(property.address)
-        binding.inputApartmentNumber.setText(property.apartment)
-        binding.inputPropertyCounty.setText(property.county)
-        binding.inputPropertyCountry.setText(property.country)
-        binding.inputPropertyCity.setText(property.city)
-        binding.inputPropertyZipCode.setText(property.zipcode)
-        binding.inputPrice.setText(property.price)
-
-        viewModel.getInterest.observe(this) { interestList ->
-            displayInterestAsChip(interestList)
         }
     }
 
@@ -269,9 +286,9 @@ class EditPropertyActivity : AppCompatActivity() {
 
                 //val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
 
-             //if (bitmap != null) {
-             //    confirmDialogFragment(bitmap, uriImageSelected!!)
-             //}
+                //if (bitmap != null) {
+                //    confirmDialogFragment(bitmap, uriImageSelected!!)
+                //}
             }
         }
     }
@@ -338,13 +355,6 @@ class EditPropertyActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.save_item -> {
                 saveProperty()
-                true
-            }
-            android.R.id.home -> {
-                emptyCache()
-                viewModel.emptyAllPhotoRepository()
-                viewModel.emptyInterestRepository()
-                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

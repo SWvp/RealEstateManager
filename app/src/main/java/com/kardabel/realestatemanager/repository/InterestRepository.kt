@@ -24,11 +24,12 @@ class InterestRepository @Inject constructor() {
         return interestList
     }
 
-    fun emptyInterestList() {
-        interestList.clear()
-    }
-
     fun remove(interest: String) {
         interestList.remove(interest)
+    }
+
+    fun emptyInterestList() {
+        interestList.clear()
+        interestLiveData.postValue(interestList)
     }
 }

@@ -120,8 +120,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         binding.fab.setOnClickListener {
+            viewModel.emptyInterestRepository()
             val intent = Intent(
                 this@MainActivity,
                 CreatePropertyActivity::class.java

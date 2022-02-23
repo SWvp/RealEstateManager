@@ -8,10 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.kardabel.realestatemanager.repository.CreatePhotoRepository
-import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
-import com.kardabel.realestatemanager.repository.LocationRepository
-import com.kardabel.realestatemanager.repository.PriceConverterRepository
+import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
 import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
@@ -25,6 +22,7 @@ class MainActivityViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val createPhotoRepository: CreatePhotoRepository,
+    private val interestRepository: InterestRepository,
 ) : ViewModel() {
 
     private var isTablet: Boolean = false
@@ -89,5 +87,9 @@ class MainActivityViewModel @Inject constructor(
     // Clear the createdPhotoRepoS for the next use
     fun emptyCreatedPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
+    }
+
+    fun emptyInterestRepository() {
+        interestRepository.emptyInterestList()
     }
 }

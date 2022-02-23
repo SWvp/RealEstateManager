@@ -142,7 +142,6 @@ class EditPropertyActivityViewModel @Inject constructor(
                     room = it.propertyEntity.room?.toString(),
                     bathroom = it.propertyEntity.bathroom?.toString(),
                     bedroom = it.propertyEntity.bedroom?.toString(),
-                    //interest = it.propertyEntity.interest,
                     address = it.propertyEntity.address,
                     apartment = it.propertyEntity.apartmentNumber,
                     city = it.propertyEntity.city,
@@ -265,6 +264,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         }
 
         emptyAllPhotoRepository()
+        emptyInterestRepository()
     }
 
     // Allow interest list to be null -> avoid to display "" interest
@@ -344,11 +344,6 @@ class EditPropertyActivityViewModel @Inject constructor(
     // Clear the photoRepoS for the next use
     fun emptyAllPhotoRepository() {
         registeredPhotoRepository.emptyRegisteredPhotoList()
-        createPhotoRepository.emptyCreatePhotoList()
-    }
-
-    // Clear the createdPhotoRepoS for the next use
-    fun emptyCreatedPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
     }
 
