@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.repository
 
+import com.kardabel.realestatemanager.model.SearchParams
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,16 +11,10 @@ import javax.inject.Singleton
 class CurrentSearchRepository @Inject constructor() {
 
     private val searchParamsMutableStateFlow = MutableStateFlow<SearchParams?>(null)
-    val searchParamsFlow : Flow<SearchParams?> = searchParamsMutableStateFlow.asStateFlow()
+    val searchParamsParamsFlow : Flow<SearchParams?> = searchParamsMutableStateFlow.asStateFlow()
 
-    fun updateSearchParams(searchParams: SearchParams) {
-        searchParamsMutableStateFlow.value = searchParams
+    fun updateSearchParams(searchParamsParams: SearchParams) {
+        searchParamsMutableStateFlow.value = searchParamsParams
     }
-
-    data class SearchParams(
-        val foo: String,
-        val bar: Boolean,
-    )
-
 
 }

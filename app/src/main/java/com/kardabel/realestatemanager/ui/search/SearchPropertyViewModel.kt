@@ -3,8 +3,11 @@ package com.kardabel.realestatemanager.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.model.SearchParams
 import com.kardabel.realestatemanager.repository.CurrentSearchRepository
 import com.kardabel.realestatemanager.repository.InterestRepository
+import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,33 +18,32 @@ class SearchPropertyViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
-    var priceSliderMinValue: Int? = null
-    var priceSliderMaxValue: Int? = null
+    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
 
-    var surfaceSliderMinValue: Int? = null
-    var surfaceSliderMaxValue: Int? = null
+    private var priceSliderMinValue: Int? = null
+    private var priceSliderMaxValue: Int? = null
 
-    var roomSliderMinValue: Int? = null
-    var roomSliderMaxValue: Int? = null
+    private var surfaceSliderMinValue: Int? = null
+    private var surfaceSliderMaxValue: Int? = null
 
-    var numberOfPhotoSliderValue: Int? = null
+    private var roomSliderMinValue: Int? = null
+    private var roomSliderMaxValue: Int? = null
+
+    private var numberOfPhotoSliderValue: Int? = null
 
     private var propertyType: String? = null
 
+    private var interestList: List<String>? = null
     val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
 
-
-
     fun addInterest(interest: String) {
-        if(interest.length>2){
+        if (interest.length > 2) {
             interestRepository.addInterest(interest)
         }
     }
 
     fun removeInterest(interest: String) {
-
         interestRepository.remove(interest)
-
     }
 
     fun propertyType(value: String) {
@@ -61,19 +63,36 @@ class SearchPropertyViewModel @Inject constructor(
     fun roomRange(minValue: Int, maxValue: Int) {
         roomSliderMinValue = minValue
         roomSliderMaxValue = maxValue
-
     }
 
     fun minPhoto(value: Int) {
         numberOfPhotoSliderValue = value
     }
 
-    fun search() {
+    fun interest(interests: List<String>) {
+        interestList = interests
+    }
 
+    fun search(county: String?) {
+
+        val newSearchParams = SearchParams(
+            priceSliderMinValue,
+            priceSliderMaxValue,
+            surfaceSliderMinValue,
+            surfaceSliderMaxValue,
+            roomSliderMinValue,
+            roomSliderMaxValue,
+            numberOfPhotoSliderValue,
+            propertyType,
+            interestList,
+            county
+        )
+        searchRepository.updateSearchParams(newSearchParams)
+
+        actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
     }
 
     fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
     }
-
 }

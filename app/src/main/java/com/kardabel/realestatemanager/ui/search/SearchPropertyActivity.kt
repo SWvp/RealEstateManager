@@ -4,24 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.RangeSlider
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivitySearchPropertyBinding
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchPropertyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchPropertyBinding
-
     private lateinit var interestChipGroup: ChipGroup
-    // private var propertyType: String? = null
 
     private val viewModel by viewModels<SearchPropertyViewModel>()
 
@@ -30,18 +29,29 @@ class SearchPropertyActivity : AppCompatActivity() {
         binding = ActivitySearchPropertyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // var priceSliderMinValue: Int? = null
-        // var priceSliderMaxValue: Int? = null
-
-        // var surfaceSliderMinValue: Int? = null
-        // var surfaceSliderMaxValue: Int? = null
-
-        // var roomSliderMinValue: Int? = null
-        // var roomSliderMaxValue: Int? = null
-        //
-        // var numberOfPhotoSliderValue: Int? = null
-
         interestChipGroup = binding.chipGroup
+
+        // Retrieve interest list from repository and display them
+        viewModel.getInterest.observe(this) { interestList ->
+            viewModel.interest(interestList)
+            displayInterestAsChip(interestList)
+        }
+
+        // On search button clicked
+        binding.searchButton.setOnClickListener {
+            viewModel.search(
+                binding.inputPropertyCounty.text.toString()
+            )
+        }
+
+        manageToolbar()
+        managePropertyTypeDropdownMenu()
+        manageInput()
+        liveEventAction()
+
+    }
+
+    private fun manageToolbar() {
 
         // Set toolbar option
         setSupportActionBar(binding.toolbar)
@@ -51,6 +61,9 @@ class SearchPropertyActivity : AppCompatActivity() {
             viewModel.emptyInterestRepository()
             onBackPressed()
         }
+    }
+
+    private fun managePropertyTypeDropdownMenu() {
 
         // Set dropdown menu for type of property
         val items = arrayOf(
@@ -68,22 +81,11 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         binding.propertyTypeDropdownMenu.setAdapter(dropDownAdapter)
 
-        // Manage type
-        binding.propertyTypeDropdownMenu.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                //propertyType = parent.getItemAtPosition(position).toString()
-                viewModel.propertyType(parent.getItemAtPosition(position).toString())
-            }
+    }
 
-        // Manage interest
-        binding.addInterestButton.setOnClickListener {
-            val interest = binding.inputInterest.text.toString()
-            viewModel.addInterest(interest)
-            //addNewChipInterest(interest)
-            binding.inputInterest.text?.clear()
-        }
+    private fun manageInput() {
 
-        // Price slider
+        // Price range slider
         val priceRangeSlider = binding.priceRangeSlider
         priceRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {
@@ -91,13 +93,11 @@ class SearchPropertyActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = priceRangeSlider.values
-                //priceSliderMinValue = values[0].toInt()
-                //priceSliderMaxValue = values[1].toInt()
                 viewModel.priceRange(values[0].toInt(), values[1].toInt())
             }
         })
 
-        // Surface slider
+        // Surface range slider
         val surfaceRangeSlider = binding.surfaceRangeSlider
         surfaceRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {
@@ -105,13 +105,11 @@ class SearchPropertyActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = surfaceRangeSlider.values
-                //surfaceSliderMinValue = values[0].toInt()
-                //surfaceSliderMaxValue = values[1].toInt()
                 viewModel.surfaceRange(values[0].toInt(), values[1].toInt())
             }
         })
 
-        // Room slider
+        // Room range slider
         val roomRangeSlider = binding.surfaceRangeSlider
         roomRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {
@@ -119,8 +117,6 @@ class SearchPropertyActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = roomRangeSlider.values
-                //roomSliderMinValue = values[0].toInt()
-                //roomSliderMaxValue = values[1].toInt()
                 viewModel.roomRange(values[0].toInt(), values[1].toInt())
             }
         })
@@ -132,13 +128,17 @@ class SearchPropertyActivity : AppCompatActivity() {
             viewModel.minPhoto(value.toInt())
         }
 
-        // Retrieve interest list from repository and display them
-        viewModel.getInterest.observe(this) { interestList ->
-            displayInterestAsChip(interestList)
-        }
+        // Manage type
+        binding.propertyTypeDropdownMenu.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                viewModel.propertyType(parent.getItemAtPosition(position).toString())
+            }
 
-        binding.searchButton.setOnClickListener {
-            viewModel.search()
+        // Manage interest
+        binding.addInterestButton.setOnClickListener {
+            val interest = binding.inputInterest.text.toString()
+            viewModel.addInterest(interest)
+            binding.inputInterest.text?.clear()
         }
     }
 
@@ -162,15 +162,27 @@ class SearchPropertyActivity : AppCompatActivity() {
         }
     }
 
-    private fun addNewChipInterest(interest: String) {
-        val inflater = LayoutInflater.from(this)
-        val chip: Chip =
-            inflater.inflate(R.layout.item_interest_chip, this.interestChipGroup, false) as Chip
-        chip.text = interest
-        if (interest.length > 2) {
-            interestChipGroup.addView(chip)
+    private fun liveEventAction() {
+
+        // Inform user if fields are missing or close activity
+        viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
+            when (viewAction) {
+                ActivityViewAction.FINISH_ACTIVITY ->
+                    finishSearchActivity()
+            }
         }
     }
 
+    private fun finishSearchActivity() {
 
+        viewModel.emptyInterestRepository()
+        onBackPressed()
+
+        Toast.makeText(
+            applicationContext,
+            getString(R.string.search_complete),
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
 }

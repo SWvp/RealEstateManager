@@ -124,5 +124,8 @@
     <string name="no_property_selected">Select a property please</string>
     <string name="the_best_photo_you_want">The best photo you want</string>
 
+    <!-- SEARCH ACTIVITY -->
+    <string name="search_complete">Search complete</string>
+
 
 </resources>
