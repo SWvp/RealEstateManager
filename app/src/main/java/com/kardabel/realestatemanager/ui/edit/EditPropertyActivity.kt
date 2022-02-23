@@ -28,7 +28,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
-import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.ui.create.RC_CHOOSE_PHOTO
 import com.kardabel.realestatemanager.ui.create.RC_IMAGE_PERMS
 import com.kardabel.realestatemanager.ui.create.REQUEST_IMAGE_CAPTURE
@@ -196,14 +196,14 @@ class EditPropertyActivity : AppCompatActivity() {
         // Manage action after click save button
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
-                CreateActivityViewAction.FIELDS_ERROR ->
+                ActivityViewAction.FIELDS_ERROR ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.fields_error),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                CreateActivityViewAction.FINISH_ACTIVITY ->
+                ActivityViewAction.FINISH_ACTIVITY ->
                     finish()
             }
         }

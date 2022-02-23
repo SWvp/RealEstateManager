@@ -9,7 +9,7 @@ import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.repository.*
-import com.kardabel.realestatemanager.ui.create.CreateActivityViewAction
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -29,7 +29,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val context: Application,
 ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
 
     private var addedPhotoMutableList = mutableListOf<Photo>()
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
@@ -256,11 +256,11 @@ class EditPropertyActivityViewModel @Inject constructor(
                     }
                 }
 
-                actionSingleLiveEvent.setValue(CreateActivityViewAction.FINISH_ACTIVITY)
+                actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
 
             }
         } else {
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
+            actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
         }
 
         emptyAllPhotoRepository()

@@ -1,7 +1,7 @@
-package com.kardabel.realestatemanager.ui.create
+package com.kardabel.realestatemanager.utils
 
 
-enum class CreateActivityViewAction  {
+enum class ActivityViewAction  {
 
     // SINGLE LIVE EVENT MESSAGE FOR CREATE ACTIVITY
 

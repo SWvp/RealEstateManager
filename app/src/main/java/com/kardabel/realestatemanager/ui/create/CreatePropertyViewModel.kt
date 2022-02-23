@@ -15,6 +15,7 @@ import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
 import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +37,7 @@ class CreatePropertyViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
 
     private var photoMutableList = mutableListOf<Photo>()
 
@@ -59,7 +60,7 @@ class CreatePropertyViewModel @Inject constructor(
         if (interest.length > 2) {
             interestRepository.addInterest(interest)
         }else{
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.INTEREST_FIELD_ERROR)
+            actionSingleLiveEvent.setValue(ActivityViewAction.INTEREST_FIELD_ERROR)
         }
     }
 
@@ -129,7 +130,7 @@ class CreatePropertyViewModel @Inject constructor(
                 createPhotoEntityWithPropertyId(newPropertyId)
             }
         } else {
-            actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
+            actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
         }
     }
 
@@ -178,7 +179,7 @@ class CreatePropertyViewModel @Inject constructor(
         sendPhotosToDataBase(photoListWithPropertyId)
 
         withContext(applicationDispatchers.mainDispatcher) {
-            actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
+            actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
 
         }
         emptyPhotoRepository()
