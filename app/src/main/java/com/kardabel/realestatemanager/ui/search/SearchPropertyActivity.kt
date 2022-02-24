@@ -33,7 +33,7 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         // Retrieve interest list from repository and display them
         viewModel.getInterest.observe(this) { interestList ->
-            viewModel.interest(interestList)
+            //viewModel.interest(interestList)
             displayInterestAsChip(interestList)
         }
 
@@ -164,18 +164,24 @@ class SearchPropertyActivity : AppCompatActivity() {
 
     private fun liveEventAction() {
 
-        // Inform user if fields are missing or close activity
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
                 ActivityViewAction.FINISH_ACTIVITY ->
                     finishSearchActivity()
+
+                ActivityViewAction.NO_PARAMETER_SELECTED ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.select_parameter),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
             }
         }
     }
 
     private fun finishSearchActivity() {
 
-        viewModel.emptyInterestRepository()
         onBackPressed()
 
         Toast.makeText(
@@ -183,6 +189,5 @@ class SearchPropertyActivity : AppCompatActivity() {
             getString(R.string.search_complete),
             Toast.LENGTH_SHORT
         ).show()
-
     }
 }

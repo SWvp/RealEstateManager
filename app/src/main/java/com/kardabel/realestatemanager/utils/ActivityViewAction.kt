@@ -8,4 +8,5 @@ enum class ActivityViewAction  {
     FIELDS_ERROR,
     FINISH_ACTIVITY,
     INTEREST_FIELD_ERROR,
+    NO_PARAMETER_SELECTED,
 }

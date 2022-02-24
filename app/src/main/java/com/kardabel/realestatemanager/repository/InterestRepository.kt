@@ -14,6 +14,7 @@ class InterestRepository @Inject constructor() {
 
     fun getInterestLiveData(): LiveData<List<String>> = interestLiveData
 
+
     @MainThread
     fun addInterest(interest: String){
         interestList.add(interest)

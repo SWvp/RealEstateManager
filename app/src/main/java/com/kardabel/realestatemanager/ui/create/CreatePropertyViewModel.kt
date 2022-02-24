@@ -169,7 +169,6 @@ class CreatePropertyViewModel @Inject constructor(
 
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
-                //photo.photoBitmap,
                 photo.photoUri.toString(),
                 photo.photoDescription,
                 newPropertyId,

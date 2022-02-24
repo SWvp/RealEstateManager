@@ -33,12 +33,13 @@ class SearchPropertyViewModel @Inject constructor(
 
     private var propertyType: String? = null
 
-    private var interestList: List<String>? = null
+    private var interestList = mutableListOf<String>()
     val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
 
     fun addInterest(interest: String) {
         if (interest.length > 2) {
             interestRepository.addInterest(interest)
+            interestList.add(interest)
         }
     }
 
@@ -69,11 +70,7 @@ class SearchPropertyViewModel @Inject constructor(
         numberOfPhotoSliderValue = value
     }
 
-    fun interest(interests: List<String>) {
-        interestList = interests
-    }
-
-    fun search(county: String?) {
+    fun search(county: String) {
 
         val newSearchParams = SearchParams(
             priceRange = priceSliderMinValue?.let { priceMin ->
@@ -92,22 +89,60 @@ class SearchPropertyViewModel @Inject constructor(
                     )
                 }
             },
-            roomRange = roomSliderMinValue?.let { rooomMin ->
+            roomRange = roomSliderMinValue?.let { roomMin ->
                 roomSliderMaxValue?.let { roomMax ->
                     IntRange(
-                        rooomMin,
+                        roomMin,
                         roomMax
                     )
                 }
             },
             numberOfPhotoSliderValue,
             propertyType,
-            interestList,
-            county
+            interestListCanBeNull(interestList),
+            countyCanBeNull(county)
         )
-        searchRepository.updateSearchParams(newSearchParams)
 
-        actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
+        if (userChooseParameter(newSearchParams)) {
+            sendSearchParamsToRepository(newSearchParams)
+            emptyInterestRepository()
+            actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
+
+        } else {
+            actionSingleLiveEvent.setValue(ActivityViewAction.NO_PARAMETER_SELECTED)
+
+        }
+    }
+
+    private fun interestListCanBeNull(interests: List<String>): List<String>? {
+        return if (interests.isEmpty()) {
+            null
+        } else {
+            interests
+        }
+    }
+
+    private fun countyCanBeNull(county: String): String? {
+        return if (county.isEmpty()) {
+            null
+        } else {
+            county
+        }
+    }
+
+    private fun userChooseParameter(newSearchParams: SearchParams): Boolean {
+        return !(newSearchParams.priceRange == null
+                && newSearchParams.surfaceRange == null
+                && newSearchParams.roomRange == null
+                && newSearchParams.photo == null
+                && newSearchParams.propertyType == null
+                && newSearchParams.interest == null
+                && newSearchParams.county == null
+                )
+    }
+
+    private fun sendSearchParamsToRepository(newSearchParams: SearchParams) {
+        searchRepository.updateSearchParams(newSearchParams)
     }
 
     fun emptyInterestRepository() {
