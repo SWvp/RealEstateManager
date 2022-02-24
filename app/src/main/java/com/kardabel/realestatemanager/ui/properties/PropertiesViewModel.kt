@@ -9,10 +9,7 @@ import androidx.lifecycle.asLiveData
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.model.SearchParams
-import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
-import com.kardabel.realestatemanager.repository.CurrentSearchRepository
-import com.kardabel.realestatemanager.repository.PriceConverterRepository
-import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -23,6 +20,7 @@ class PropertiesViewModel @Inject constructor(
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val priceConverterRepository: PriceConverterRepository,
     private val currentSearchRepository: CurrentSearchRepository,
+    private val interestRepository: InterestRepository,
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
@@ -119,7 +117,14 @@ class PropertiesViewModel @Inject constructor(
         searchParams: SearchParams
     ): Boolean {
 
-        return searchParams.county == property.propertyEntity.county
+        return (searchParams.priceRange?.let { searchParams.priceRange.contains(property.propertyEntity.price) } ?: true
+                && searchParams.surfaceRange?.let { searchParams.surfaceRange.contains(property.propertyEntity.surface) } ?: true
+                && searchParams.roomRange?.let { searchParams.roomRange.contains(property.propertyEntity.room) } ?: true
+                && searchParams.photo?.let { searchParams.photo == property.photo.size } ?: true
+                && searchParams.county?.let { searchParams.county == property.propertyEntity.county } ?: true
+                && matchInterest(searchParams.interest, property.propertyEntity.interest)
+                && searchParams.propertyType?.let { searchParams.propertyType == property.propertyEntity.type } ?: true
+                )
 
     }
 
@@ -168,6 +173,17 @@ class PropertiesViewModel @Inject constructor(
             true -> Color.WHITE
             false -> Color.RED
 
+        }
+    }
+
+    private fun matchInterest(
+        searchInterests: List<String>?,
+        propertyInterests: List<String>?,
+    ): Boolean {
+        return if (propertyInterests != null && searchInterests != null) {
+            propertyInterests.any { it in searchInterests }
+        } else {
+            false
         }
     }
 
