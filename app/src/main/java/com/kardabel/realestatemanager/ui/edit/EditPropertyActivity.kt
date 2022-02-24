@@ -174,7 +174,6 @@ class EditPropertyActivity : AppCompatActivity() {
         binding.addInterestButton.setOnClickListener {
             val interest = binding.inputInterest.text.toString()
             viewModel.addInterest(interest)
-            //addNewChipInterest(interest)
             binding.inputInterest.text?.clear()
         }
 

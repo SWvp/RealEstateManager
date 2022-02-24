@@ -35,6 +35,8 @@ class EditPropertyActivityViewModel @Inject constructor(
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
     private var registeredPhotoMutableList = mutableListOf<PhotoEntity>()
 
+    private val interestList = mutableListOf<String>()
+
     var propertyId by Delegates.notNull<Long>()
 
     // Expose interest list to view
@@ -188,11 +190,14 @@ class EditPropertyActivityViewModel @Inject constructor(
     fun addInterest(interest: String) {
         if (interest.length > 2) {
             interestRepository.addInterest(interest)
+            interestList.add(interest)
         }
     }
 
     fun removeInterest(interest: String) {
         interestRepository.remove(interest)
+        interestList.remove(interest)
+
     }
 
     fun createProperty(
@@ -238,7 +243,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     bathroom = bathroomToInt,
                     saleStatus = true,
                     purchaseDate = null,
-                    interest = interestCanBeNull(interestRepository.getInterest()),
+                    interest = interestCanBeNull(interestList),
                     propertyId = propertyId,
                     staticMap = staticMapUrl(address, zipcode, city),
                 )
