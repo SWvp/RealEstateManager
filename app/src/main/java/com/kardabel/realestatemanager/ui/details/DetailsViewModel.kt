@@ -50,6 +50,8 @@ class DetailsViewModel @Inject constructor(
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
 
+    val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
+
     private fun readableSurface(value: String?): String {
         return if (value != null) {
             value + "m²"
@@ -57,15 +59,4 @@ class DetailsViewModel @Inject constructor(
             ""
         }
     }
-
-  // // List is always not empty, even when string is empty. Fun to return null if empty
-  // private fun returnInterestListOrNull(interests: List<String>?): List<String>? {
-  //     val interestList: MutableList<String>? = null
-  //     if (interests != null) {
-  //         for (interest in interests) {
-  //                 interestList?.add(interest)
-  //         }
-  //     }
-  //     return interestList
-  // }
 }
