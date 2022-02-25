@@ -182,9 +182,7 @@ class PropertiesViewModel @Inject constructor(
     ): Boolean {
         return if (propertyInterests != null && searchInterests != null) {
             propertyInterests.any { it in searchInterests }
-        } else {
-            false
-        }
+        } else searchInterests == null
     }
 
     fun onPropertyClicked(propertyId: Long) {
