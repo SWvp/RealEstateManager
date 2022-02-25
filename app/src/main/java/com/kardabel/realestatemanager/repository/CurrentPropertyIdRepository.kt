@@ -8,9 +8,14 @@ import javax.inject.Singleton
 
 @Singleton
 class CurrentPropertyIdRepository @Inject constructor(){
+
     private val currentPropertyIdMutableLiveData = MutableLiveData<Long>()
+    private val isBackFromSearchActivityLiveData = MutableLiveData<Boolean>()
+
     var isProperty: Boolean = false
+
     val currentPropertyIdLiveData: LiveData<Long> = currentPropertyIdMutableLiveData
+    val isFromSearchLiveData: LiveData<Boolean> = isBackFromSearchActivityLiveData
 
     @MainThread
     fun setCurrentPropertyId(propertyId: Long){
@@ -18,7 +23,8 @@ class CurrentPropertyIdRepository @Inject constructor(){
         isProperty = true
     }
 
-    fun isPropertyAvailable(): Boolean {
-        return isProperty
+    // In case of search, inform details view that is nothing to display
+    fun isBackFromSearchActivity(){
+        isBackFromSearchActivityLiveData.postValue(false)
     }
 }
