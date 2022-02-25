@@ -2,8 +2,8 @@ package com.kardabel.realestatemanager.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.SearchParams
+import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.CurrentSearchRepository
 import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.utils.ActivityViewAction
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SearchPropertyViewModel @Inject constructor(
     private val searchRepository: CurrentSearchRepository,
     private val interestRepository: InterestRepository,
-    private val applicationDispatchers: ApplicationDispatchers,
+    private val currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
 
     val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
@@ -106,6 +106,7 @@ class SearchPropertyViewModel @Inject constructor(
         if (userChooseParameter(newSearchParams)) {
             sendSearchParamsToRepository(newSearchParams)
             emptyInterestRepository()
+            emptyDetailsViewWhenDone()
             actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
 
         } else {
@@ -145,7 +146,13 @@ class SearchPropertyViewModel @Inject constructor(
         searchRepository.updateSearchParams(newSearchParams)
     }
 
+    // In case of back pressed or search, re initialised interest repository
     fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
+    }
+
+    // In case of search, inform details view that is nothing to display
+    private fun emptyDetailsViewWhenDone() {
+        currentPropertyIdRepository.isBackFromSearchActivity()
     }
 }
