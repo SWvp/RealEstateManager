@@ -38,13 +38,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set the adapter to retrieve photo recently added
-        val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
-        photosAdapter = DetailsAdapter {
-
-        }
-
-        recyclerView.adapter = photosAdapter
+        setAdapter()
 
         // Observe the selected property
         viewModel.detailsLiveData.observe(this) { property ->
@@ -60,6 +54,17 @@ class DetailsFragment : Fragment() {
             setViewWhenBackFromSearchActivity(it)
 
         }
+    }
+
+    private fun setAdapter() {
+
+        // Set the adapter to retrieve photo recently added
+        val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
+        photosAdapter = DetailsAdapter {
+
+        }
+
+        recyclerView.adapter = photosAdapter
     }
 
     private fun setVisibility(property: DetailsViewState) {

@@ -33,7 +33,6 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         // Retrieve interest list from repository and display them
         viewModel.getInterest.observe(this) { interestList ->
-            //viewModel.interest(interestList)
             displayInterestAsChip(interestList)
         }
 
@@ -123,8 +122,7 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         // Photo slider
         val numberOfPhotoSlider = binding.photoSlider
-        numberOfPhotoSlider.addOnChangeListener { slider, value, fromUser ->
-            // numberOfPhotoSliderValue = value.toInt()
+        numberOfPhotoSlider.addOnChangeListener { _, value, _ ->
             viewModel.minPhoto(value.toInt())
         }
 
@@ -176,6 +174,7 @@ class SearchPropertyActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+                else -> {}
             }
         }
     }

@@ -39,9 +39,7 @@ class MainActivityViewModel @Inject constructor(
             ContextCompat.checkSelfPermission(
                 context,
                 permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                //permissionGranted()
-            }
+            ) == PackageManager.PERMISSION_GRANTED -> {}
             ActivityCompat.shouldShowRequestPermissionRationale(
                 activity,
                 permission.ACCESS_FINE_LOCATION
