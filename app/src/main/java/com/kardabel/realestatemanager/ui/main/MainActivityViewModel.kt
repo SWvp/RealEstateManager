@@ -33,8 +33,6 @@ class MainActivityViewModel @Inject constructor(
     val startEditActivitySingleLiveEvent: SingleLiveEvent<NavigateToEditViewAction> =
         SingleLiveEvent()
 
-    val getCurrentId: LiveData<Long> = currentPropertyIdRepository.currentPropertyIdLiveData
-
     // CHECK PERMISSIONS WITH MVVM PATTERN
     fun checkPermission(activity: Activity) {
         when {
