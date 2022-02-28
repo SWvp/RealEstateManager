@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.kardabel.realestatemanager.model.UserLocation
 import com.kardabel.realestatemanager.ui.map.MapViewState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
@@ -27,7 +28,7 @@ class LocationRepository @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun fetchUpdates(): Flow<MapViewState> = callbackFlow {
+    fun userLocation(): Flow<UserLocation> = callbackFlow {
         val locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.SECONDS.toMillis(UPDATE_INTERVAL_SECS)
             fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_UPDATE_INTERVAL_SECS)
@@ -38,7 +39,7 @@ class LocationRepository @Inject constructor(
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val it = locationResult.lastLocation
-                val userLocation = MapViewState(
+                val userLocation = UserLocation(
                     LatLng(
                         it.latitude,
                         it.longitude,
