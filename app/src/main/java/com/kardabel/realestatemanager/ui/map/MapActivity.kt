@@ -56,14 +56,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            mapViewModel.getMapInfo.observe(this, { (latLng, zoom) ->
+            mapViewModel.getMapInfo.observe(this, { (poi, userLocation) ->
                 googleMap.clear()
 
                 // MOVE THE CAMERA TO THE USER LOCATION
                 googleMap.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(
-                        latLng,
-                        zoom
+                        userLocation.userLocation,
+                        userLocation.zoomFocus
                     )
                 )
                 // DISPLAY BLUE DOT FOR USER LOCATION
