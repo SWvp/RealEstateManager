@@ -33,7 +33,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private var addedPhotoMutableList = mutableListOf<Photo>()
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
-    private var registeredPhotoMutableList = mutableListOf<PhotoEntity>()
+    private var registeredPhotoList = mutableListOf<PhotoEntity>()
 
     private val interestList = mutableListOf<String>()
 
@@ -167,17 +167,23 @@ class EditPropertyActivityViewModel @Inject constructor(
         } else type
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////  POPULATE CACHE REPOSITORY  /////////////////////////////////////
+
     // Create a photo list with old photo
     private fun sendRegisteredPhotosToRepository(photoList: List<PhotoEntity>) {
         registeredPhotoRepository.sendRegisteredPhotoToRepository(photoList)
-        registeredPhotoMutableList = photoList as MutableList<PhotoEntity>
+        registeredPhotoList = photoList as MutableList<PhotoEntity>
 
     }
 
+    // Create an interest list with old interests
     private fun sendRegisteredInterestsToRepository(oldInterests: List<String>?) {
         if (oldInterests != null) {
             for (interest in oldInterests) {
                 interestRepository.addInterest(interest)
+                interestList.add(interest)
             }
         }
     }
@@ -327,8 +333,8 @@ class EditPropertyActivityViewModel @Inject constructor(
 
         val photoToDeleteId = mutableListOf<Int>()
 
-        if (updatedRegisteredPhotoMutableList.size < registeredPhotoMutableList.size) {
-            for (photo in registeredPhotoMutableList) {
+        if (updatedRegisteredPhotoMutableList.size < registeredPhotoList.size) {
+            for (photo in registeredPhotoList) {
                 if (!updatedRegisteredPhotoMutableList.contains(photo)) {
                     photoToDeleteId.add(photo.photoId)
                 }
