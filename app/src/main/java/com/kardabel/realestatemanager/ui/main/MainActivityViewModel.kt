@@ -6,7 +6,6 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
@@ -55,7 +54,7 @@ class MainActivityViewModel @Inject constructor(
     init {
         screenPositionSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
             if (!isTablet) {
-                screenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsLandscapeMode)
+                screenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsPortraitMode)
             }
         }
     }

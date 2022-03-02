@@ -93,10 +93,12 @@ class MainActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // When this livedata is trigger, check if we are on landscape or portrait to chose the correct view to display
+        // When this livedata is trigger by property ID update,
+        // check if we are on landscape or portrait to chose the correct view to display,
+        // if portrait, start details activity
         viewModel.screenPositionSingleLiveEvent.observe(this) {
             when (it) {
-                ScreenPositionViewAction.IsLandscapeMode -> startActivity(
+                ScreenPositionViewAction.IsPortraitMode -> startActivity(
                     Intent(
                         this,
                         DetailsActivity::class.java
