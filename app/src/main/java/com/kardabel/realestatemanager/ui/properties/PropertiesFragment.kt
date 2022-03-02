@@ -44,7 +44,7 @@ class PropertiesFragment : Fragment() {
         binding.recyclerViewProperties.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewProperties.adapter = adapter
 
-        viewModel.viewStateLiveData.observe(this){
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
     }
