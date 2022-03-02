@@ -22,8 +22,8 @@ class LocationRepository @Inject constructor(
 ) {
 
     companion object {
-        private const val UPDATE_INTERVAL_SECS = 10L
-        private const val FASTEST_UPDATE_INTERVAL_SECS = 2L
+        private const val UPDATE_INTERVAL_SECS = 10000L
+        private const val FASTEST_UPDATE_INTERVAL_SECS = 2000L
         private const val ZOOM_FOCUS = 15f
     }
 

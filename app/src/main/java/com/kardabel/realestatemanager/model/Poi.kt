@@ -4,5 +4,5 @@ import com.google.android.gms.maps.model.LatLng
 
 data class Poi(
     val propertyId: Long,
-    val propertyLatLng: LatLng
+    val propertyLatLng: LatLng?
 )
