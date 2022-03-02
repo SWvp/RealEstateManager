@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.Poi
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
+import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.LocationRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val context: Application,
+    private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     locationRepository: LocationRepository,
     propertiesRepository: PropertiesRepository,
     applicationDispatchers: ApplicationDispatchers,
@@ -56,5 +58,9 @@ class MapViewModel @Inject constructor(
             property.propertyEntity.propertyId,
             propertyLatLng
         )
+    }
+
+    fun onPropertyClicked(propertyId: Long) {
+        currentPropertyIdRepository.setCurrentPropertyId(propertyId)
     }
 }

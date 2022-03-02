@@ -2,6 +2,7 @@ package com.kardabel.realestatemanager.ui.map
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -12,18 +13,21 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMapBinding
 import com.kardabel.realestatemanager.model.Poi
+import com.kardabel.realestatemanager.ui.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListener {
 
     private var map: GoogleMap? = null
 
@@ -67,11 +71,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             map?.isMyLocationEnabled = true
 
         }
+
+        // SET A LISTENER FOR MARKER CLICK
+        map?.setOnMarkerClickListener(this)
     }
 
     private fun setUserLocation() {
 
-        mapViewModel.getMapInfo.observe(this, { (poiList, location) ->
+        mapViewModel.getMapInfo.observe(this) { (poiList, location) ->
 
             map?.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -84,15 +91,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             setPoi(poiList)
 
-        })
+        }
     }
 
     private fun setPoi(poiList: List<Poi>) {
 
+        var marker: Marker?
+
         // Add Marker for each poi
         for (poi in poiList) {
             if (poi.propertyLatLng != null) {
-                map?.addMarker(
+                marker = map?.addMarker(
                     MarkerOptions()
                         .position(poi.propertyLatLng)
                         .icon(
@@ -105,7 +114,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                                 )
                             }
                         )
+
                 )
+                marker?.tag = poi.propertyId
             }
         }
     }
@@ -121,5 +132,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val propertyId = marker.tag.toString()
+        mapViewModel.onPropertyClicked(propertyId.toLong())
+        startActivity(
+            Intent(
+                this,
+                DetailsActivity::class.java
+            )
+        )
+        return false
+
     }
 }
