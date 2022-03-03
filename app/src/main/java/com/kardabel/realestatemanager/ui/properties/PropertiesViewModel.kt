@@ -94,7 +94,7 @@ class PropertiesViewModel @Inject constructor(
         saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
         saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
-        photoUri = Uri.parse(property.photo[0].photoString)
+        photoUri = Uri.parse(property.photo[0].photoUri)
     )
 
     private fun toViewStateWithCurrencyStatus(
@@ -109,7 +109,7 @@ class PropertiesViewModel @Inject constructor(
             saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
-            photoUri = Uri.parse(property.photo[0].photoString)
+            photoUri = Uri.parse(property.photo[0].photoUri)
         )
 
     private fun filters(

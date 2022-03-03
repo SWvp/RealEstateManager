@@ -6,6 +6,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.database.PropertiesRoomDatabase
 import dagger.Module
@@ -46,6 +49,11 @@ object DataModule {
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth =
         FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage =
+        Firebase.storage
 
     @Provides
     @Singleton

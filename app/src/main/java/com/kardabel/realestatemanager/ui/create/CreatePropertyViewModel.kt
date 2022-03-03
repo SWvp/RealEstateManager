@@ -9,6 +9,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
+import com.kardabel.realestatemanager.firestore.SendPhotoToStorage
+import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -32,6 +34,8 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
+    private val sendPropertyToFirestore: SendPropertyToFirestore,
+    private val sendPhotoToStorage: SendPhotoToStorage,
     private val clock: Clock,
     private val context: Application,
 
@@ -59,7 +63,7 @@ class CreatePropertyViewModel @Inject constructor(
     fun addInterest(interest: String) {
         if (interest.length > 2) {
             interestRepository.addInterest(interest)
-        }else{
+        } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.INTEREST_FIELD_ERROR)
         }
     }
@@ -97,7 +101,7 @@ class CreatePropertyViewModel @Inject constructor(
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
-            val localDateTime = LocalDateTime.now(clock).toString()
+            val createlocalDateTime = LocalDateTime.now(clock).toString()
 
             val property = PropertyEntity(
                 address = address,
@@ -115,7 +119,7 @@ class CreatePropertyViewModel @Inject constructor(
                 bathroom = bathroomToInt,
                 uid = uid,
                 vendor = vendor,
-                createLocalDateTime = localDateTime,
+                createLocalDateTime = createlocalDateTime,
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
@@ -127,7 +131,8 @@ class CreatePropertyViewModel @Inject constructor(
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                 val newPropertyId = insertProperty(property)
-                createPhotoEntityWithPropertyId(newPropertyId)
+                createPhotoEntityWithPropertyId(newPropertyId, createlocalDateTime)
+                createPropertyOnFirestore(property)
             }
         } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
@@ -163,7 +168,10 @@ class CreatePropertyViewModel @Inject constructor(
                 key
     }
 
-    private suspend fun createPhotoEntityWithPropertyId(newPropertyId: Long) {
+    private suspend fun createPhotoEntityWithPropertyId(
+        newPropertyId: Long,
+        createLocalDateTime: String
+    ) {
 
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
 
@@ -175,17 +183,34 @@ class CreatePropertyViewModel @Inject constructor(
             )
             photoListWithPropertyId.add(photoEntity)
         }
-        sendPhotosToDataBase(photoListWithPropertyId)
+
+        sendPhotosToLocalDataBase(photoListWithPropertyId)
+        sendPhotoToCloudStorage(photoListWithPropertyId, createLocalDateTime)
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
 
         }
+
         emptyPhotoRepository()
         emptyInterestRepository()
     }
 
-    private suspend fun sendPhotosToDataBase(photoEntities: MutableList<PhotoEntity>) {
+    private fun createPropertyOnFirestore(property: PropertyEntity) {
+        sendPropertyToFirestore.createPropertyDocument(property)
+
+    }
+
+    private fun sendPhotoToCloudStorage(
+        photos: MutableList<PhotoEntity>,
+        createLocalDateTime: String
+    ) {
+        sendPhotoToStorage.createPhotoDocument(photos, createLocalDateTime)
+
+
+    }
+
+    private suspend fun sendPhotosToLocalDataBase(photoEntities: MutableList<PhotoEntity>) {
         insertPhotoDao(photoEntities)
 
     }

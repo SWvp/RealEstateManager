@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
+import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
 import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
@@ -12,9 +13,9 @@ import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -25,6 +26,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
     private val registeredPhotoRepository: RegisteredPhotoRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val sendPropertyToFirestore: SendPropertyToFirestore,
     private val interestRepository: InterestRepository,
     private val context: Application,
 ) : ViewModel() {
@@ -37,7 +39,9 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interestList = mutableListOf<String>()
 
-    var propertyId by Delegates.notNull<Long>()
+    private var propertyId by Delegates.notNull<Long>()
+    private var createLocalDateTime by Delegates.notNull<String>()
+    private var dateToFormat by Delegates.notNull<String>()
 
     // Expose interest list to view
     val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
@@ -74,7 +78,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 EditPropertyPhotoViewState(
                     //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
-                    photoUri = photo.photoString,
+                    photoUri = photo.photoUri,
                     photoId = photo.photoId,
                     propertyOwnerId = photo.propertyOwnerId
                 )
@@ -96,7 +100,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 EditPropertyPhotoViewState(
                     //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
-                    photoUri = photo.photoString,
+                    photoUri = photo.photoUri,
                     photoId = photo.photoId,
                     propertyOwnerId = photo.propertyOwnerId
                 )
@@ -125,38 +129,39 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     val getDetailsLiveData: LiveData<EditPropertyViewState> =
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
-            propertiesRepository.getPropertyById(id).map {
+            propertiesRepository.getPropertyById(id).map { property ->
 
                 emptyInterestRepository()
                 updatedRegisteredPhotoMutableList.clear()
 
-                propertyId = it.propertyEntity.propertyId
+                propertyId = property.propertyEntity.propertyId
+                createLocalDateTime = property.propertyEntity.createLocalDateTime
+                dateToFormat = property.propertyEntity.createDateToFormat
 
-                sendRegisteredInterestsToRepository(it.propertyEntity.interest)
-
-                sendRegisteredPhotosToRepository(it.photo)
+                sendRegisteredInterestsToRepository(property.propertyEntity.interest)
+                sendRegisteredPhotosToRepository(property.photo)
 
                 EditPropertyViewState(
-                    propertyId = it.propertyEntity.propertyId,
-                    type = readableType(it.propertyEntity.type),
-                    description = it.propertyEntity.propertyDescription,
-                    surface = it.propertyEntity.surface?.toString(),
-                    room = it.propertyEntity.room?.toString(),
-                    bathroom = it.propertyEntity.bathroom?.toString(),
-                    bedroom = it.propertyEntity.bedroom?.toString(),
-                    address = it.propertyEntity.address,
-                    apartment = it.propertyEntity.apartmentNumber,
-                    city = it.propertyEntity.city,
-                    county = it.propertyEntity.county,
-                    zipcode = it.propertyEntity.zipcode,
-                    country = it.propertyEntity.country,
-                    startSale = it.propertyEntity.createDateToFormat,
-                    createLocalDateTime = it.propertyEntity.createLocalDateTime,
-                    vendor = it.propertyEntity.vendor,
+                    propertyId = property.propertyEntity.propertyId,
+                    type = readableType(property.propertyEntity.type),
+                    description = property.propertyEntity.propertyDescription,
+                    surface = property.propertyEntity.surface?.toString(),
+                    room = property.propertyEntity.room?.toString(),
+                    bathroom = property.propertyEntity.bathroom?.toString(),
+                    bedroom = property.propertyEntity.bedroom?.toString(),
+                    address = property.propertyEntity.address,
+                    apartment = property.propertyEntity.apartmentNumber,
+                    city = property.propertyEntity.city,
+                    county = property.propertyEntity.county,
+                    zipcode = property.propertyEntity.zipcode,
+                    country = property.propertyEntity.country,
+                    startSale = property.propertyEntity.createDateToFormat,
+                    createLocalDateTime = property.propertyEntity.createLocalDateTime,
+                    vendor = property.propertyEntity.vendor,
                     visibility = true,
-                    staticMap = it.propertyEntity.staticMap,
-                    price = it.propertyEntity.price?.toString(),
-                    uid = it.propertyEntity.uid,
+                    staticMap = property.propertyEntity.staticMap,
+                    price = property.propertyEntity.price?.toString(),
+                    uid = property.propertyEntity.uid,
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
@@ -173,8 +178,10 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     // Create a photo list with old photo
     private fun sendRegisteredPhotosToRepository(photoList: List<PhotoEntity>) {
-        registeredPhotoRepository.sendRegisteredPhotoToRepository(photoList)
-        registeredPhotoList = photoList as MutableList<PhotoEntity>
+        if (registeredPhotoList.isEmpty()) {
+            registeredPhotoRepository.sendRegisteredPhotoToRepository(photoList)
+            registeredPhotoList = photoList as MutableList<PhotoEntity>
+        }
 
     }
 
@@ -256,26 +263,31 @@ class EditPropertyActivityViewModel @Inject constructor(
 
                 // Get the property id to update photoEntity
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-                    async {
-                        updateProperty(property)
+
+                    updateProperty(property)
+
+                    updateFirestore(property)
+
+                    checkForRegisteredPhoto()
+
+                    createPhotoEntity()
+
+                    emptyAllPhotoRepository()
+                    emptyInterestRepository()
+
+                    withContext(applicationDispatchers.mainDispatcher) {
+                        actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
+
                     }
-                    async {
-                        checkForRegisteredPhoto()
-                    }
-                    async {
-                        createPhotoEntity()
-                    }
+
                 }
 
-                actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
+                //actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
 
             }
         } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
         }
-
-        emptyAllPhotoRepository()
-        emptyInterestRepository()
     }
 
     // Allow interest list to be null -> avoid to display "" interest
@@ -313,7 +325,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
 
-        if(addedPhotoMutableList.isNotEmpty()){
+        if (addedPhotoMutableList.isNotEmpty()) {
 
             for (photo in addedPhotoMutableList) {
                 val photoEntity = PhotoEntity(
@@ -345,6 +357,10 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private suspend fun updateProperty(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
+
+    private fun updateFirestore(property: PropertyUpdate) {
+        sendPropertyToFirestore.updatePropertyDocument(property, createLocalDateTime, dateToFormat)
+    }
 
     private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhotos(photos)

@@ -19,6 +19,7 @@ class RegisteredPhotoRepository @Inject constructor() {
 
     // Used by edit activity to send photo registered
     fun sendRegisteredPhotoToRepository(photoList: List<PhotoEntity>) {
+
         if (originalRegisteredPhotoList.isEmpty()) {
             for (photo in photoList) {
                 originalRegisteredPhotoList.add(photo)
@@ -40,7 +41,7 @@ class RegisteredPhotoRepository @Inject constructor() {
 
     fun editPhotoText(description: String, photoUri: Uri) {
         for (photo in registeredPhotoList) {
-            if (photo.photoString == photoUri.toString()) {
+            if (photo.photoUri == photoUri.toString()) {
                 photo.photoDescription = description
             }
         }
