@@ -1,11 +1,8 @@
 package com.kardabel.realestatemanager.repository
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kardabel.realestatemanager.model.Photo
-import com.kardabel.realestatemanager.model.PhotoEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,9 +25,9 @@ class CreatePhotoRepository @Inject constructor() {
         photoToCreateLiveData.value = newPhotoList
     }
 
-    fun editPhotoText(description: String, photoUri: Uri) {
+    fun editPhotoText(description: String, photoUriString: String) {
         for(photo in newPhotoList){
-            if(photo.photoUri == photoUri){
+            if(photo.photoUri == photoUriString){
                 photo.photoDescription = description
             }
         }
@@ -39,6 +36,5 @@ class CreatePhotoRepository @Inject constructor() {
 
     fun emptyCreatePhotoList() {
         newPhotoList.clear()
-        //photoToCreateLiveData.value = newPhotoList
     }
 }

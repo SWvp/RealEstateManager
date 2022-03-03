@@ -36,7 +36,7 @@ class EditPhotoDialogFragmentViewModel @Inject constructor(
         }
     }
 
-    fun editPhotoText(description: String, photoUri: Uri) {
+    fun editPhotoText(description: String, photoUri: String) {
         createPhotoRepository.editPhotoText(description, photoUri)
         registeredPhotoRepository.editPhotoText(description, photoUri)
 

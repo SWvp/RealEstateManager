@@ -73,10 +73,8 @@ class EditPropertyActivityViewModel @Inject constructor(
         oldPhoto ?: return
 
         if (addedPhoto == null) {
-            // updatedRegisteredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
             getAllPhotoMediatorLiveData.value = oldPhoto.map { photo ->
                 EditPropertyPhotoViewState(
-                    //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
@@ -98,7 +96,6 @@ class EditPropertyActivityViewModel @Inject constructor(
         for (photo in oldPhoto) {
             photoList.add(
                 EditPropertyPhotoViewState(
-                    //photoBitmap = photo.photo,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
@@ -109,9 +106,8 @@ class EditPropertyActivityViewModel @Inject constructor(
         for (photo in addedPhoto) {
             photoList.add(
                 EditPropertyPhotoViewState(
-                    //photoBitmap = photo.photoBitmap,
                     photoDescription = photo.photoDescription,
-                    photoUri = photo.photoUri.toString(),
+                    photoUri = photo.photoUri,
                     photoId = null,
                     propertyOwnerId = null
                 )
@@ -268,6 +264,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
                     updateFirestore(property)
 
+                    // Todo pas grave quelles aient la même taille, elles peuvent être différentes..
                     checkForRegisteredPhoto()
 
                     createPhotoEntity()
@@ -330,7 +327,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             for (photo in addedPhotoMutableList) {
                 val photoEntity = PhotoEntity(
                     //photo.photoBitmap,
-                    photo.photoUri.toString(),
+                    photo.photoUri,
                     photo.photoDescription,
                     propertyId,
                 )

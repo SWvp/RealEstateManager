@@ -34,6 +34,7 @@ import com.kardabel.realestatemanager.ui.create.RC_IMAGE_PERMS
 import com.kardabel.realestatemanager.ui.create.REQUEST_IMAGE_CAPTURE
 import com.kardabel.realestatemanager.ui.dialog.AddedPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.EditPhotoDialogFragment
+import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
@@ -298,21 +299,18 @@ class EditPropertyActivity : AppCompatActivity() {
                     uriImageSelected = data!!.data
                 }
 
-                confirmDialogFragment(uriImageSelected!!)
+                    val uriPathHelper = UriPathHelper()
+                    val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
+                    confirmDialogFragment(filePath!!)
 
-                //val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
-
-                //if (bitmap != null) {
-                //    confirmDialogFragment(bitmap, uriImageSelected!!)
-                //}
             }
         }
     }
 
     // Create an alert dialog to ask user type a photo description,
     // then, when validate, send whole photo object to a repo via VM
-    private fun confirmDialogFragment(uri: Uri) {
-        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(uri)
+    private fun confirmDialogFragment(photoUriString: String) {
+        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(photoUriString)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
     }
 

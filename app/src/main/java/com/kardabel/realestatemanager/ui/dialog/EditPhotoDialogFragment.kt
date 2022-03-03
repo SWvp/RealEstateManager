@@ -2,8 +2,6 @@ package com.kardabel.realestatemanager.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
-import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
@@ -16,12 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EditPhotoDialogFragment : DialogFragment() {
-
-    interface ConfirmListener {
-        fun onDialogPositiveClick()
-        fun onDialogNegativeClick()
-    }
-
 
     var photoViewState: CreatePropertyPhotoViewState? = null
     var photoId: Int? = null
@@ -40,7 +32,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                 photoViewState = CreatePropertyPhotoViewState(
                     //photoBitmap = editPropertyPhotoViewState.photoBitmap,
                     photoDescription = editPropertyPhotoViewState.photoDescription,
-                    photoUri = Uri.parse(editPropertyPhotoViewState.photoUri),
+                    photoUri = editPropertyPhotoViewState.photoUri,
                 )
                 photoId = editPropertyPhotoViewState.photoId
                 propertyOwnerId = editPropertyPhotoViewState.propertyOwnerId
@@ -48,9 +40,6 @@ class EditPhotoDialogFragment : DialogFragment() {
             }
 
     }
-
-
-    var listener: ConfirmListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
@@ -61,12 +50,12 @@ class EditPhotoDialogFragment : DialogFragment() {
         builder
             .setMessage("Edit your photo")
             .setView(editText)
-            .setPositiveButton("Delete", DialogInterface.OnClickListener { dialog, id ->
+            .setPositiveButton("Delete") { dialog, id ->
 
                 if (isEditInstance) {
-                    if(photoId != null){
+                    if (photoId != null) {
                         viewModel.deleteRegisteredPhotoFromRepository(photoId!!)
-                    }else {
+                    } else {
                         val photoToDelete = Photo(
                             //photoBitmap = photoViewState!!.photoBitmap,
                             photoDescription = photoViewState!!.photoDescription,
@@ -74,7 +63,7 @@ class EditPhotoDialogFragment : DialogFragment() {
                         )
                         viewModel.deletePhotoFromRepository(photoToDelete)
                     }
-                }else{
+                } else {
                     photoViewState?.let {
                         val photoToDelete = Photo(
                             //photoBitmap = photoViewState!!.photoBitmap,
@@ -86,29 +75,27 @@ class EditPhotoDialogFragment : DialogFragment() {
                 }
                 dismiss()
 
-            })
+            }
 
-            .setNeutralButton("Edit description", DialogInterface.OnClickListener { dialog, id ->
-                if(photoId != null){
-                    viewModel.updateRegisteredPhoto(PhotoEntity(
-                        //photoViewState!!.photoBitmap,
-                        photoViewState!!.photoUri.toString(),
-                        editText.text.toString(),
-                        propertyOwnerId,
-                        photoId!!,
-                    ))
+            .setNeutralButton("Edit description") { _, _ ->
+                if (photoId != null) {
+                    viewModel.updateRegisteredPhoto(
+                        PhotoEntity(
+                            //photoViewState!!.photoBitmap,
+                            photoViewState!!.photoUri,
+                            editText.text.toString(),
+                            propertyOwnerId,
+                            photoId!!,
+                        )
+                    )
                 }
                 viewModel.editPhotoText(editText.text.toString(), photoViewState!!.photoUri)
                 dismiss()
-            })
+            }
 
-            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
+            .setNegativeButton("Cancel") { _, _ ->
                 dismiss()
-            })
-
-
-
-
+            }
 
         return builder.create()
     }

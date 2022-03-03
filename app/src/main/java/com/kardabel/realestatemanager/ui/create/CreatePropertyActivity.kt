@@ -28,6 +28,7 @@ import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
 import com.kardabel.realestatemanager.ui.dialog.AddedPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.EditPhotoDialogFragment
 import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -159,6 +160,7 @@ class CreatePropertyActivity : AppCompatActivity() {
             binding.inputInterest.text?.clear()
         }
 
+        // Get interests
         viewModel.getInterest.observe(this) { interestList ->
             displayInterestAsChip(interestList)
         }
@@ -263,25 +265,22 @@ class CreatePropertyActivity : AppCompatActivity() {
     private fun handleResponse(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
+
                 if (uriImageSelected == null) {
                     uriImageSelected = data!!.data
+                    val uriPathHelper = UriPathHelper()
+                    val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
+                    confirmDialogFragment(filePath!!)
                 }
 
-                confirmDialogFragment(uriImageSelected!!)
-
-                //val bitmap: Bitmap? = uriImageSelected?.let { decodeUriToBitmap(this, it) }
-
-                //if (bitmap != null) {
-                //    confirmDialogFragment(bitmap, uriImageSelected!!)
-                //}
             }
         }
     }
 
     // Create an alert dialog to ask user type a photo description,
     // then, when validate, send whole photo object to a repo via VM
-    private fun confirmDialogFragment(uri: Uri) {
-        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(uri)
+    private fun confirmDialogFragment(photoUriString: String) {
+        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(photoUriString)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }

@@ -5,5 +5,5 @@ import android.net.Uri
 
 data class CreatePropertyPhotoViewState(
     val photoDescription: String,
-    val photoUri: Uri,
+    val photoUri: String,
 )

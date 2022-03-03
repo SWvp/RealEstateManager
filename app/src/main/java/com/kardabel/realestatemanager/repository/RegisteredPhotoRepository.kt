@@ -39,9 +39,9 @@ class RegisteredPhotoRepository @Inject constructor() {
         registeredPhotoLiveData.postValue(registeredPhotoList)
     }
 
-    fun editPhotoText(description: String, photoUri: Uri) {
+    fun editPhotoText(description: String, photoUriString: String) {
         for (photo in registeredPhotoList) {
-            if (photo.photoUri == photoUri.toString()) {
+            if (photo.photoUri == photoUriString) {
                 photo.photoDescription = description
             }
         }

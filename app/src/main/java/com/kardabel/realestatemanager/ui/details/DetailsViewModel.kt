@@ -26,7 +26,7 @@ class DetailsViewModel @Inject constructor(
                     propertyId = it.propertyEntity.propertyId,
                     photos = it.photo.map { photoEntity ->
                         DetailsPhotoViewState(
-                            Uri.parse(photoEntity.photoUri),
+                            photoEntity.photoUri,
                             photoEntity.photoDescription,
                         )
                     },

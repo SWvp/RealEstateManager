@@ -2,9 +2,6 @@ package com.kardabel.realestatemanager.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
@@ -16,17 +13,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddedPhotoConfirmationDialogFragment : DialogFragment() {
 
     interface ConfirmDeleteListener {
-        fun onDialogPositiveClick()
         fun onDialogNegativeClick()
     }
 
-    //var photoBitmap: Bitmap? = null
-    var photoUri: Uri? = null
+    var photoUri: String? = null
 
     companion object {
-        fun newInstance(uri: Uri) = AddedPhotoConfirmationDialogFragment().apply {
-            //photoBitmap = photo
-            photoUri = uri
+        fun newInstance(uriString: String) = AddedPhotoConfirmationDialogFragment().apply {
+            photoUri = uriString
         }
     }
 
@@ -40,21 +34,21 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
         builder
             .setMessage("Enter description")
             .setView(editText)
-            .setPositiveButton("Validate", DialogInterface.OnClickListener { dialog, id ->
+            .setPositiveButton("Validate") { _, _ ->
                 if (!editText.text.isNullOrEmpty()) {
                     val newPhoto = Photo(
                         //photoBitmap = photoBitmap!!,
                         photoDescription = editText.text.toString(),
                         photoUri = photoUri!!,
 
-                    )
+                        )
                     viewModel.addPhoto(newPhoto)
                 }
                 dismiss()
-            })
-            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
+            }
+            .setNegativeButton("Cancel") { _, _ ->
                 listener?.onDialogNegativeClick()
-            })
+            }
         return builder.create()
     }
 }
