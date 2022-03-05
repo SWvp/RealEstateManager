@@ -22,7 +22,7 @@ class EditPhotoDialogFragmentViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
-    fun deletePhotoFromRepository(photo: Photo) {
+    fun deletePhotoFromRepository(photo: PhotoEntity) {
         createPhotoRepository.deleteAddedPhoto(photo)
     }
 

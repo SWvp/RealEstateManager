@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.model.PhotoEntity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,10 +37,11 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
             .setView(editText)
             .setPositiveButton("Validate") { _, _ ->
                 if (!editText.text.isNullOrEmpty()) {
-                    val newPhoto = Photo(
+                    val newPhoto = PhotoEntity(
                         //photoBitmap = photoBitmap!!,
                         photoDescription = editText.text.toString(),
                         photoUri = photoUri!!,
+                        propertyOwnerId = null
 
                         )
                     viewModel.addPhoto(newPhoto)

@@ -43,14 +43,13 @@ class CreatePropertyViewModel @Inject constructor(
 
     val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
 
-    private var photoMutableList = mutableListOf<Photo>()
+    private var photoMutableList = mutableListOf<PhotoEntity>()
 
     val getPhoto: LiveData<List<CreatePropertyPhotoViewState>> =
         createPhotoRepository.getAddedPhotoLiveData().map { photoList ->
             photoList.map { photo ->
-                photoMutableList = photoList as MutableList<Photo>
+                photoMutableList = photoList as MutableList<PhotoEntity>
                 CreatePropertyPhotoViewState(
-                    //photoBitmap = photo.photoBitmap,
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                 )
@@ -177,7 +176,7 @@ class CreatePropertyViewModel @Inject constructor(
 
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
-                photo.photoUri.toString(),
+                photo.photoUri,
                 photo.photoDescription,
                 newPropertyId,
             )

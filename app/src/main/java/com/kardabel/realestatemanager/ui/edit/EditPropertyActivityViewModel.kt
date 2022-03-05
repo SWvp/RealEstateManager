@@ -6,7 +6,6 @@ import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
-import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.repository.*
@@ -33,9 +32,10 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
 
-    private var addedPhotoMutableList = mutableListOf<Photo>()
+    private var addedPhotoMutableList = mutableListOf<PhotoEntity>()
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
     private var registeredPhotoList = mutableListOf<PhotoEntity>()
+
 
     private val interestList = mutableListOf<String>()
 
@@ -52,28 +52,26 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val getRegisteredPhoto: LiveData<List<PhotoEntity>> =
         registeredPhotoRepository.getRegisteredPhotoLiveData()
-    private val getAddedPhoto: LiveData<List<Photo>> =
+    private val getAddedPhoto: LiveData<List<PhotoEntity>> =
         createPhotoRepository.getAddedPhotoLiveData()
 
     private val getAllPhotoMediatorLiveData =
         MediatorLiveData<List<EditPropertyPhotoViewState>>().apply {
 
             addSource(getRegisteredPhoto) { oldPhoto ->
-                updatedRegisteredPhotoMutableList = oldPhoto as MutableList<PhotoEntity>
                 combine(oldPhoto, getAddedPhoto.value)
             }
 
             addSource(getAddedPhoto) { addedPhoto ->
-                addedPhotoMutableList = addedPhoto as MutableList<Photo>
                 combine(getRegisteredPhoto.value, addedPhoto)
             }
         }
 
-    private fun combine(oldPhoto: List<PhotoEntity>?, addedPhoto: List<Photo>?) {
-        oldPhoto ?: return
+    private fun combine(registeredPhoto: List<PhotoEntity>?, addedPhoto: List<PhotoEntity>?) {
+        registeredPhoto ?: return
 
         if (addedPhoto == null) {
-            getAllPhotoMediatorLiveData.value = oldPhoto.map { photo ->
+            getAllPhotoMediatorLiveData.value = registeredPhoto.map { photo ->
                 EditPropertyPhotoViewState(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
@@ -82,18 +80,18 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
             }
         } else {
-            getAllPhotoMediatorLiveData.value = toViewState(oldPhoto, addedPhoto)
+            getAllPhotoMediatorLiveData.value = toViewState(registeredPhoto, addedPhoto)
         }
     }
 
     private fun toViewState(
-        oldPhoto: List<PhotoEntity>,
-        addedPhoto: List<Photo>
+        registeredPhoto: List<PhotoEntity>,
+        addedPhoto: List<PhotoEntity>
     ): List<EditPropertyPhotoViewState> {
 
         val photoList = mutableListOf<EditPropertyPhotoViewState>()
 
-        for (photo in oldPhoto) {
+        for (photo in registeredPhoto) {
             photoList.add(
                 EditPropertyPhotoViewState(
                     photoDescription = photo.photoDescription,
@@ -113,6 +111,13 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
             )
         }
+
+        updatedRegisteredPhotoMutableList = registeredPhoto as MutableList<PhotoEntity>
+
+        addedPhotoMutableList = addedPhoto as MutableList<PhotoEntity>
+
+        //updatePhotoList(registeredPhoto, addedPhoto)
+
         return photoList
     }
 
@@ -128,7 +133,6 @@ class EditPropertyActivityViewModel @Inject constructor(
             propertiesRepository.getPropertyById(id).map { property ->
 
                 emptyInterestRepository()
-                updatedRegisteredPhotoMutableList.clear()
 
                 propertyId = property.propertyEntity.propertyId
                 createLocalDateTime = property.propertyEntity.createLocalDateTime
@@ -279,8 +283,6 @@ class EditPropertyActivityViewModel @Inject constructor(
 
                 }
 
-                //actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
-
             }
         } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
@@ -326,7 +328,6 @@ class EditPropertyActivityViewModel @Inject constructor(
 
             for (photo in addedPhotoMutableList) {
                 val photoEntity = PhotoEntity(
-                    //photo.photoBitmap,
                     photo.photoUri,
                     photo.photoDescription,
                     propertyId,

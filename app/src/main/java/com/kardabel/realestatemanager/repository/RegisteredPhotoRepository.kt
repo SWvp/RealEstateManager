@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.repository
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kardabel.realestatemanager.model.PhotoEntity

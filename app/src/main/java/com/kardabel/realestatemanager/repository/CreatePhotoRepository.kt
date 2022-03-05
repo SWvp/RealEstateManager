@@ -3,24 +3,25 @@ package com.kardabel.realestatemanager.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kardabel.realestatemanager.model.Photo
+import com.kardabel.realestatemanager.model.PhotoEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CreatePhotoRepository @Inject constructor() {
 
-    private var newPhotoList = mutableListOf<Photo>()
+    private var newPhotoList = mutableListOf<PhotoEntity>()
 
-    private val photoToCreateLiveData = MutableLiveData<List<Photo>>()
+    private val photoToCreateLiveData = MutableLiveData<List<PhotoEntity>>()
 
-    fun getAddedPhotoLiveData(): LiveData<List<Photo>> = photoToCreateLiveData
+    fun getAddedPhotoLiveData(): LiveData<List<PhotoEntity>> = photoToCreateLiveData
 
-    fun addPhoto(photo: Photo) {
+    fun addPhoto(photo: PhotoEntity) {
         newPhotoList.add(photo)
         photoToCreateLiveData.value = newPhotoList
     }
 
-    fun deleteAddedPhoto(photoToDelete: Photo) {
+    fun deleteAddedPhoto(photoToDelete: PhotoEntity) {
         newPhotoList.remove(photoToDelete)
         photoToCreateLiveData.value = newPhotoList
     }
