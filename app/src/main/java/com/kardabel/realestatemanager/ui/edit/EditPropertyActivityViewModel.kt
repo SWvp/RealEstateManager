@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
+import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
 import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
@@ -26,6 +27,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val registeredPhotoRepository: RegisteredPhotoRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val sendPropertyToFirestore: SendPropertyToFirestore,
+    private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
     private val interestRepository: InterestRepository,
     private val context: Application,
 ) : ViewModel() {
@@ -35,6 +37,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private var addedPhotoMutableList = mutableListOf<PhotoEntity>()
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
     private var registeredPhotoList = mutableListOf<PhotoEntity>()
+    private var photoFullList = mutableListOf<PhotoEntity>()
 
 
     private val interestList = mutableListOf<String>()
@@ -76,6 +79,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
+                    photoTimestamp = photo.photoTimestamp.toString(),
                     propertyOwnerId = photo.propertyOwnerId
                 )
             }
@@ -97,6 +101,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
+                    photoTimestamp = photo.photoTimestamp.toString(),
                     propertyOwnerId = photo.propertyOwnerId
                 )
             )
@@ -107,6 +112,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = null,
+                    photoTimestamp = photo.photoTimestamp.toString(),
                     propertyOwnerId = null
                 )
             )
@@ -259,6 +265,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     interest = interestCanBeNull(interestList),
                     propertyId = propertyId,
                     staticMap = staticMapUrl(address, zipcode, city),
+                    updateTimestamp = System.currentTimeMillis(),
                 )
 
                 // Get the property id to update photoEntity
@@ -272,6 +279,8 @@ class EditPropertyActivityViewModel @Inject constructor(
                     checkForRegisteredPhoto()
 
                     createPhotoEntity()
+
+                    updateCloudStorage(createLocalDateTime)
 
                     emptyAllPhotoRepository()
                     emptyInterestRepository()
@@ -328,13 +337,15 @@ class EditPropertyActivityViewModel @Inject constructor(
 
             for (photo in addedPhotoMutableList) {
                 val photoEntity = PhotoEntity(
-                    photo.photoUri,
-                    photo.photoDescription,
-                    propertyId,
+                    photoUri = photo.photoUri,
+                    photoDescription = photo.photoDescription,
+                    propertyOwnerId = propertyId,
+                    photoTimestamp = System.nanoTime(),
                 )
                 photoListWithPropertyId.add(photoEntity)
             }
             insertNewPhoto(photoListWithPropertyId)
+            photoFullList.addAll(photoListWithPropertyId)
         }
     }
 
@@ -351,6 +362,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             }
         }
         deletePhoto(photoToDeleteId)
+        photoFullList.addAll(updatedRegisteredPhotoMutableList)
     }
 
     private suspend fun updateProperty(property: PropertyUpdate) =
@@ -358,6 +370,14 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private fun updateFirestore(property: PropertyUpdate) {
         sendPropertyToFirestore.updatePropertyDocument(property, createLocalDateTime, dateToFormat)
+    }
+
+    private fun updateCloudStorage(
+        createLocalDateTime: String
+    ) {
+        sendPhotoToCloudStorage.updateDocument(photoFullList, createLocalDateTime)
+
+
     }
 
     private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
