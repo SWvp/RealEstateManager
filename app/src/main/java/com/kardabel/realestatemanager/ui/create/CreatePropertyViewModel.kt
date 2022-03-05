@@ -9,9 +9,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.firestore.SendPhotoToStorage
+import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
 import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
-import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
@@ -35,7 +34,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
     private val sendPropertyToFirestore: SendPropertyToFirestore,
-    private val sendPhotoToStorage: SendPhotoToStorage,
+    private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
     private val clock: Clock,
     private val context: Application,
 
@@ -52,6 +51,7 @@ class CreatePropertyViewModel @Inject constructor(
                 CreatePropertyPhotoViewState(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
+                    photoTimestamp = photo.photoTimestamp.toString()
                 )
             }
         }
@@ -100,7 +100,7 @@ class CreatePropertyViewModel @Inject constructor(
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
-            val createlocalDateTime = LocalDateTime.now(clock).toString()
+            val createLocalDateTime = LocalDateTime.now(clock).toString()
 
             val property = PropertyEntity(
                 address = address,
@@ -118,19 +118,20 @@ class CreatePropertyViewModel @Inject constructor(
                 bathroom = bathroomToInt,
                 uid = uid,
                 vendor = vendor,
-                createLocalDateTime = createlocalDateTime,
+                createLocalDateTime = createLocalDateTime,
                 createDateToFormat = createDateToFormat,
                 saleStatus = true,
                 purchaseDate = null,
                 interest = interestCanBeNull(interestRepository.getInterest()),
-                staticMap = staticMapUrl(address, zipcode, city)
+                staticMap = staticMapUrl(address, zipcode, city),
+                updateTimestamp = System.currentTimeMillis(),
             )
 
 
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                 val newPropertyId = insertProperty(property)
-                createPhotoEntityWithPropertyId(newPropertyId, createlocalDateTime)
+                createPhotoEntityWithPropertyId(newPropertyId, createLocalDateTime)
                 createPropertyOnFirestore(property)
             }
         } else {
@@ -176,9 +177,10 @@ class CreatePropertyViewModel @Inject constructor(
 
         for (photo in photoMutableList) {
             val photoEntity = PhotoEntity(
-                photo.photoUri,
-                photo.photoDescription,
-                newPropertyId,
+                photoUri = photo.photoUri,
+                photoDescription = photo.photoDescription,
+                propertyOwnerId = newPropertyId,
+                photoTimestamp = System.nanoTime(),
             )
             photoListWithPropertyId.add(photoEntity)
         }
@@ -201,10 +203,10 @@ class CreatePropertyViewModel @Inject constructor(
     }
 
     private fun sendPhotoToCloudStorage(
-        photos: MutableList<PhotoEntity>,
+        photos: List<PhotoEntity>,
         createLocalDateTime: String
     ) {
-        sendPhotoToStorage.createPhotoDocument(photos, createLocalDateTime)
+        sendPhotoToCloudStorage.createPhotoDocument(photos, createLocalDateTime)
 
 
     }

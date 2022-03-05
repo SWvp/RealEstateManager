@@ -6,4 +6,5 @@ import android.net.Uri
 data class CreatePropertyPhotoViewState(
     val photoDescription: String,
     val photoUri: String,
+    val photoTimestamp: String,
 )

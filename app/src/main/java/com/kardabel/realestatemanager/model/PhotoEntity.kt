@@ -10,5 +10,6 @@ data class PhotoEntity constructor(
     @ColumnInfo(name = "photo_uri") val photoUri: String,
     @ColumnInfo(name = "photo_description") var photoDescription: String,
     @ColumnInfo(name = "property_owner_id") var propertyOwnerId: Long?,
+    @ColumnInfo(name = "photo_timestamp") var photoTimestamp: Long,
     @PrimaryKey(autoGenerate = true) val photoId: Int = 0,
     )

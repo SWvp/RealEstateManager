@@ -4,9 +4,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 
 data class EditPropertyPhotoViewState(
-    //val photoBitmap: Bitmap,
     var photoDescription: String,
     val photoUri: String,
     val photoId: Int?,
+    val photoTimestamp: String,
     val propertyOwnerId: Long?,
 )

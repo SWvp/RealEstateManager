@@ -28,6 +28,7 @@ data class PropertyEntity constructor(
     @ColumnInfo(name = "on_sale_status") val saleStatus: Boolean,
     @ColumnInfo(name = "purchase_date") val purchaseDate: String?,
     @ColumnInfo(name = "interest") val interest: List<String>?,
+    @ColumnInfo(name = "update_timestamp") val updateTimestamp: Long,
     @PrimaryKey(autoGenerate = true) val propertyId: Long = 0,
 
 )

@@ -25,5 +25,6 @@ data class PropertyUpdate(
     @ColumnInfo(name = "purchase_date") val purchaseDate: String?,
     @ColumnInfo(name = "interest") val interest: List<String>?,
     @ColumnInfo(name = "static_map") val staticMap: String,
+    @ColumnInfo(name = "update_timestamp") val updateTimestamp: Long,
     @PrimaryKey val propertyId: Long,
 )
