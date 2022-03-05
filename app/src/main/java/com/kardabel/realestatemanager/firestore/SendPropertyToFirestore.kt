@@ -19,7 +19,7 @@ class SendPropertyToFirestore @Inject constructor(
 
         if (firebaseAuth.currentUser != null) {
 
-            getCollectionReference(property.uid).document(property.uid + property.createLocalDateTime)
+            getCollectionReference().document(property.uid + property.createLocalDateTime)
                 .set(getMappedProperty(property))
                 .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
@@ -35,7 +35,7 @@ class SendPropertyToFirestore @Inject constructor(
         val newProperty: PropertyEntity =
             createPropertyEntity(property, createLocalDateTime, dateToFormat)
 
-        getCollectionReference(newProperty.uid).document(newProperty.uid + newProperty.createLocalDateTime)
+        getCollectionReference().document(newProperty.uid + newProperty.createLocalDateTime)
             .update(getMappedProperty(newProperty))
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -110,7 +110,7 @@ class SendPropertyToFirestore @Inject constructor(
 
     }
 
-    private fun getCollectionReference(uid: String): CollectionReference {
-        return firebaseFirestore.collection(uid)
+    private fun getCollectionReference(): CollectionReference {
+        return firebaseFirestore.collection("properties")
     }
 }
