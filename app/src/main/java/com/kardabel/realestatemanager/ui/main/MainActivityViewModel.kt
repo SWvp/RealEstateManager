@@ -7,21 +7,25 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
 import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val context: Application,
     private val priceConverterRepository: PriceConverterRepository,
-    private val locationRepository: LocationRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
+    private val mergeRoomToFirestoreRepository: MergeRoomToFirestoreRepository,
+    private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
     private var isTablet: Boolean = false
@@ -86,5 +90,11 @@ class MainActivityViewModel @Inject constructor(
 
     fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
+    }
+
+    fun synchroniseWithFirestore() {
+        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+            mergeRoomToFirestoreRepository.synchroniseRoomToFirestore()
+        }
     }
 }
