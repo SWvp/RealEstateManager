@@ -369,7 +369,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.updateProperty(property)
 
     private fun updateFirestore(property: PropertyUpdate) {
-        sendPropertyToFirestore.updatePropertyDocument(property, createLocalDateTime, dateToFormat)
+        sendPropertyToFirestore.updatePropertyDocumentFromEditView(property, createLocalDateTime, dateToFormat)
     }
 
     private fun updateCloudStorage(
