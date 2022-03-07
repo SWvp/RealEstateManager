@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.details
 
-import android.graphics.Bitmap
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.kardabel.realestatemanager.TestCoroutineRule
@@ -22,20 +21,20 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class DetailsViewModelTest {
+class DetailsFragmentViewModelTest {
 
     companion object {
         private const val EXPECTED_CURRENT_PROPERTY_ID = 42L
-        private const val EXPECTED_PRICE = 400_000
-        private const val EXPECTED_SURFACE = 85
-        private const val EXPECTED_ROOM = 4
-        private const val EXPECTED_BEDROOM = 3
-        private const val EXPECTED_BATHROOM = 1
-        private const val EXPECTED_IS_SOLD = false
+        private const val EXPECTED_TIMESTAMP = 1254845878L
+        private const val EXPECTED_PRICE = "400000"
+        private const val EXPECTED_SURFACE = "85"
+        private const val EXPECTED_ROOM = "4"
+        private const val EXPECTED_BEDROOM = "3"
+        private const val EXPECTED_BATHROOM = "1"
+        private const val EXPECTED_IS_SOLD = "On Sale !"
         private val EXPECTED_INTERESTS = emptyList<String>()
 
         private const val EXPECTED_PHOTO_ID = 666
-        private val EXPECTED_PHOTO_BITMAP = mockk<Bitmap>()
     }
 
     @get: Rule
@@ -73,7 +72,7 @@ class DetailsViewModelTest {
         }
     }
 
-    private fun getViewModel() = DetailsViewModel(
+    private fun getViewModel() = DetailsFragmentViewModel(
         currentPropertyIdRepository = currentPropertyIdRepository,
         propertiesRepository = propertiesRepository,
         applicationDispatchers = getApplicationDispatchersTest(testCoroutineRule)
@@ -107,9 +106,10 @@ class DetailsViewModelTest {
         ),
         photo = listOf(
             PhotoEntity(
-                photo = EXPECTED_PHOTO_BITMAP,
+                photoUri = "photoUri",
                 photoDescription = "photoDescription",
                 propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
                 photoId = EXPECTED_PHOTO_ID,
             )
         )
@@ -121,15 +121,16 @@ class DetailsViewModelTest {
         propertyId = EXPECTED_CURRENT_PROPERTY_ID,
         photos = listOf(
             DetailsPhotoViewState(
-                EXPECTED_PHOTO_BITMAP,
-                "photoDescription"
+                "photoUri",
+                "propertyDescription"
+
             )
         ),
         description = "propertyDescription",
         surface = "85m²",
-        room = EXPECTED_ROOM.toString(),
-        bathroom = EXPECTED_BATHROOM.toString(),
-        bedroom = EXPECTED_BEDROOM.toString(),
+        room = EXPECTED_ROOM,
+        bathroom = EXPECTED_BATHROOM,
+        bedroom = EXPECTED_BEDROOM,
         interest = emptyList(),
         address = "address",
         apartment = "apartmentNumber",

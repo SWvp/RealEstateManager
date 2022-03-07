@@ -68,7 +68,7 @@ class SendPropertyToFirestore @Inject constructor(
             saleStatus = property.saleStatus,
             purchaseDate = property.purchaseDate,
             interest = property.interest,
-            updateTimestamp = property.propertyId
+            updateTimestamp = property.updateTimestamp
         )
     }
 

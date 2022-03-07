@@ -37,7 +37,7 @@ class PropertiesRepository @Inject constructor(
         propertiesDao.deletePhotoById(photoId)
     }
 
-    suspend fun updateSaleStatus(saleStatus: Boolean, propertyId: Long) {
+    suspend fun updateSaleStatus(saleStatus: String, propertyId: Long) {
         propertiesDao.updatePropertySaleStatus(saleStatus, propertyId)
     }
 }

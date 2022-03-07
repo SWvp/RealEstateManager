@@ -1,4 +1,4 @@
 package com.kardabel.realestatemanager.firestore
 
-class RetrieveFromCloudStorage {
+class RetrievePhotosFromCloudStorage {
 }

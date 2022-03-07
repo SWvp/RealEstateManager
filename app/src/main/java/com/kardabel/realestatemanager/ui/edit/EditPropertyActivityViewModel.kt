@@ -151,10 +151,10 @@ class EditPropertyActivityViewModel @Inject constructor(
                     propertyId = property.propertyEntity.propertyId,
                     type = readableType(property.propertyEntity.type),
                     description = property.propertyEntity.propertyDescription,
-                    surface = property.propertyEntity.surface?.toString(),
-                    room = property.propertyEntity.room?.toString(),
-                    bathroom = property.propertyEntity.bathroom?.toString(),
-                    bedroom = property.propertyEntity.bedroom?.toString(),
+                    surface = property.propertyEntity.surface,
+                    room = property.propertyEntity.room,
+                    bathroom = property.propertyEntity.bathroom,
+                    bedroom = property.propertyEntity.bedroom,
                     address = property.propertyEntity.address,
                     apartment = property.propertyEntity.apartmentNumber,
                     city = property.propertyEntity.city,
@@ -166,7 +166,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     vendor = property.propertyEntity.vendor,
                     visibility = true,
                     staticMap = property.propertyEntity.staticMap,
-                    price = property.propertyEntity.price?.toString(),
+                    price = property.propertyEntity.price,
                     uid = property.propertyEntity.uid,
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
@@ -240,11 +240,6 @@ class EditPropertyActivityViewModel @Inject constructor(
             if (address != null && city != null && zipcode != null) {
 
                 // Get value to entity format, string is for the view
-                val priceToInt = price?.toIntOrNull()
-                val surfaceToInt = surface?.toIntOrNull()
-                val roomToInt = room?.toIntOrNull()
-                val bedroomToInt = bedroom?.toIntOrNull()
-                val bathroomToInt = bathroom?.toIntOrNull()
 
                 val property = PropertyUpdate(
                     address = address,
@@ -255,17 +250,17 @@ class EditPropertyActivityViewModel @Inject constructor(
                     country = country,
                     propertyDescription = propertyDescription,
                     type = type,
-                    price = priceToInt,
-                    surface = surfaceToInt,
-                    room = roomToInt,
-                    bedroom = bedroomToInt,
-                    bathroom = bathroomToInt,
-                    saleStatus = true,
+                    price = price,
+                    surface = surface,
+                    room = room,
+                    bedroom = bedroom,
+                    bathroom = bathroom,
+                    saleStatus = true.toString(),
                     purchaseDate = null,
                     interest = interestCanBeNull(interestList),
                     propertyId = propertyId,
                     staticMap = staticMapUrl(address, zipcode, city),
-                    updateTimestamp = System.currentTimeMillis(),
+                    updateTimestamp = System.currentTimeMillis().toString(),
                 )
 
                 // Get the property id to update photoEntity
@@ -399,7 +394,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     fun propertySold() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertiesRepository.updateSaleStatus(false, propertyId)
+            propertiesRepository.updateSaleStatus("Sold", propertyId)
         }
     }
 }

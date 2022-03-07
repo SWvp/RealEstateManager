@@ -92,11 +92,6 @@ class CreatePropertyViewModel @Inject constructor(
         if (photoMutableList.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && zipcode.isNotEmpty()) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
-            val priceToInt = price.toIntOrNull()
-            val surfaceToInt = surface.toIntOrNull()
-            val roomToInt = room.toIntOrNull()
-            val bedroomToInt = bedroom.toIntOrNull()
-            val bathroomToInt = bathroom.toIntOrNull()
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
@@ -111,20 +106,20 @@ class CreatePropertyViewModel @Inject constructor(
                 country = country,
                 propertyDescription = propertyDescription,
                 type = type,
-                price = priceToInt,
-                surface = surfaceToInt,
-                room = roomToInt,
-                bedroom = bedroomToInt,
-                bathroom = bathroomToInt,
+                price = price,
+                surface = surface,
+                room = room,
+                bedroom = bedroom,
+                bathroom = bathroom,
                 uid = uid,
                 vendor = vendor,
                 createLocalDateTime = createLocalDateTime,
                 createDateToFormat = createDateToFormat,
-                saleStatus = true,
+                saleStatus = "On Sale !",
                 purchaseDate = null,
                 interest = interestCanBeNull(interestRepository.getInterest()),
                 staticMap = staticMapUrl(address, zipcode, city),
-                updateTimestamp = System.currentTimeMillis(),
+                updateTimestamp = System.currentTimeMillis().toString(),
             )
 
 

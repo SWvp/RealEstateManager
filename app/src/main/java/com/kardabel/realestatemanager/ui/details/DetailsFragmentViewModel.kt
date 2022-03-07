@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.details
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(
+class DetailsFragmentViewModel @Inject constructor(
     currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
@@ -31,10 +30,10 @@ class DetailsViewModel @Inject constructor(
                         )
                     },
                     description = it.propertyEntity.propertyDescription,
-                    surface = readableSurface(it.propertyEntity.surface?.toString()),
-                    room = it.propertyEntity.room?.toString(),
-                    bathroom = it.propertyEntity.bathroom?.toString(),
-                    bedroom = it.propertyEntity.bedroom?.toString(),
+                    surface = readableSurface(it.propertyEntity.surface),
+                    room = it.propertyEntity.room,
+                    bathroom = it.propertyEntity.bathroom,
+                    bedroom = it.propertyEntity.bedroom,
                     interest = it.propertyEntity.interest,
                     address = it.propertyEntity.address,
                     apartment = it.propertyEntity.apartmentNumber,
@@ -53,10 +52,10 @@ class DetailsViewModel @Inject constructor(
     val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
 
     private fun readableSurface(value: String?): String {
-        return if (value != null) {
+        return if (value != "") {
             value + "m²"
         } else {
-            ""
+            value
         }
     }
 }

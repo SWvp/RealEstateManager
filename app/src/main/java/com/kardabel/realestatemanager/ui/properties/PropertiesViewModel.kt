@@ -9,19 +9,21 @@ import androidx.lifecycle.asLiveData
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.model.SearchParams
-import com.kardabel.realestatemanager.repository.*
+import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
+import com.kardabel.realestatemanager.repository.CurrentSearchRepository
+import com.kardabel.realestatemanager.repository.PriceConverterRepository
+import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
-    private val propertiesRepository: PropertiesRepository,
+    propertiesRepository: PropertiesRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
-    private val priceConverterRepository: PriceConverterRepository,
-    private val currentSearchRepository: CurrentSearchRepository,
-    private val interestRepository: InterestRepository,
-    private val applicationDispatchers: ApplicationDispatchers,
+    priceConverterRepository: PriceConverterRepository,
+    currentSearchRepository: CurrentSearchRepository,
+    applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
@@ -71,7 +73,7 @@ class PropertiesViewModel @Inject constructor(
         } else if (searchParams != null) {
             val filteredList = mutableListOf<PropertyViewState>()
             for (property in propertyWithPhoto) {
-                if (filters(property, searchParams)) {
+                if (applySearchParams(property, searchParams)) {
                     filteredList.add(toViewState(property))
 
                 }
@@ -91,7 +93,7 @@ class PropertiesViewModel @Inject constructor(
         type = readableType(property.propertyEntity.type),
         county = property.propertyEntity.county,
         price = readablePrice(property.propertyEntity.price.toString()),
-        saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+        saleStatus = property.propertyEntity.saleStatus,
         saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
         photoUri = Uri.parse(property.photo[0].photoUri)
@@ -105,21 +107,31 @@ class PropertiesViewModel @Inject constructor(
             propertyId = property.propertyEntity.propertyId,
             type = readableType(property.propertyEntity.type),
             county = property.propertyEntity.county,
-            price = currencyConverter(property.propertyEntity.price, currencyStatus),
-            saleStatus = saleStatusToString(property.propertyEntity.saleStatus),
+            price = currencyConverter(property.propertyEntity.price?.toInt(), currencyStatus),
+            saleStatus = property.propertyEntity.saleStatus,
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
             photoUri = Uri.parse(property.photo[0].photoUri)
         )
 
-    private fun filters(
+    private fun applySearchParams(
         property: PropertyWithPhoto,
         searchParams: SearchParams
     ): Boolean {
 
-        return (searchParams.priceRange?.let { searchParams.priceRange.contains(property.propertyEntity.price) } ?: true
-                && searchParams.surfaceRange?.let { searchParams.surfaceRange.contains(property.propertyEntity.surface) } ?: true
-                && searchParams.roomRange?.let { searchParams.roomRange.contains(property.propertyEntity.room) } ?: true
+        return (searchParams.priceRange?.let {
+            property.propertyEntity.price?.let { it1 ->
+                searchParams.priceRange.contains(it1.toInt())
+            }
+        } ?: true
+                && searchParams.surfaceRange?.let { property.propertyEntity.surface?.let { it1 ->
+            searchParams.surfaceRange.contains(
+                it1.toInt())
+        } } ?: true
+                && searchParams.roomRange?.let { property.propertyEntity.room?.let { it1 ->
+            searchParams.roomRange.contains(
+                it1.toInt())
+        } } ?: true
                 && searchParams.photo?.let { searchParams.photo == property.photo.size } ?: true
                 && searchParams.county?.let { searchParams.county == property.propertyEntity.county } ?: true
                 && matchInterest(searchParams.interest, property.propertyEntity.interest)
@@ -153,26 +165,19 @@ class PropertiesViewModel @Inject constructor(
     }
 
     private fun readablePrice(price: String?): String {
-        return if (price != "null") {
+        return if (price != "") {
             "$$price"
         } else {
             "Price N/C"
         }
     }
 
-    private fun saleStatusToString(saleStatus: Boolean): String {
+    private fun colorToApply(saleStatus: String): Int {
         return when (saleStatus) {
-            true -> "On sale"
-            false -> "Sold !"
-
-        }
-    }
-
-    private fun colorToApply(saleStatus: Boolean): Int {
-        return when (saleStatus) {
-            true -> Color.WHITE
-            false -> Color.RED
-
+            "On Sale !" -> Color.WHITE
+            else -> {
+                Color.RED
+            }
         }
     }
 
