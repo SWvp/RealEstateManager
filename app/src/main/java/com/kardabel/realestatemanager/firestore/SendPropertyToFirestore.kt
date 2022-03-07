@@ -26,7 +26,7 @@ class SendPropertyToFirestore @Inject constructor(
         }
     }
 
-    fun updatePropertyDocument(
+    fun updatePropertyDocumentFromEditView(
         property: PropertyUpdate,
         createLocalDateTime: String,
         dateToFormat: String
@@ -47,28 +47,28 @@ class SendPropertyToFirestore @Inject constructor(
         dateToFormat: String
     ): PropertyEntity {
         return PropertyEntity(
-            property.address,
-            property.apartmentNumber.toString(),
-            property.city,
-            property.zipcode,
-            property.county.toString(),
-            property.country.toString(),
-            property.propertyDescription.toString(),
-            property.type.toString(),
-            property.price,
-            property.surface,
-            property.room,
-            property.bedroom,
-            property.bathroom,
-            firebaseAuth.currentUser!!.uid,
-            firebaseAuth.currentUser!!.displayName.toString(),
-            property.staticMap,
-            createLocalDateTime,
-            dateToFormat,
-            property.saleStatus,
-            property.purchaseDate,
-            property.interest,
-            property.propertyId
+            address = property.address,
+            apartmentNumber = property.apartmentNumber.toString(),
+            city = property.city,
+            zipcode = property.zipcode,
+            county = property.county.toString(),
+            country = property.country.toString(),
+            propertyDescription = property.propertyDescription.toString(),
+            type = property.type.toString(),
+            price = property.price,
+            surface = property.surface,
+            room = property.room,
+            bedroom = property.bedroom,
+            bathroom = property.bathroom,
+            uid = firebaseAuth.currentUser!!.uid,
+            vendor = firebaseAuth.currentUser!!.displayName.toString(),
+            staticMap = property.staticMap,
+            createLocalDateTime = createLocalDateTime,
+            createDateToFormat = dateToFormat,
+            saleStatus = property.saleStatus,
+            purchaseDate = property.purchaseDate,
+            interest = property.interest,
+            updateTimestamp = property.propertyId
         )
     }
 
@@ -79,6 +79,16 @@ class SendPropertyToFirestore @Inject constructor(
         } else {
             interest as ArrayList<String>
         }
+    }
+
+    fun updatePropertyDocumentFromRoom(
+        property: PropertyEntity,
+    ) {
+
+        getCollectionReference().document(property.uid + property.createLocalDateTime)
+            .update(getMappedProperty(property))
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
     }
 
     private fun getMappedProperty(property: PropertyEntity): HashMap<String, Any> {
