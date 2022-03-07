@@ -130,6 +130,8 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(intent)
         }
+
+        viewModel.synchroniseWithFirestore()
     }
 
     private fun startEditActivity() {
