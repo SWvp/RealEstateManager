@@ -11,6 +11,7 @@ import java.io.File
 import javax.inject.Inject
 import com.google.firebase.storage.ktx.component1
 import com.google.firebase.storage.ktx.component2
+import com.google.firebase.storage.ktx.storageMetadata
 
 
 class SendPhotoToCloudStorage @Inject constructor(
@@ -23,12 +24,22 @@ class SendPhotoToCloudStorage @Inject constructor(
 
         for (photo in photos) {
 
+            val file = Uri.fromFile(File(photo.photoUri))
+
+
+            val metadata = storageMetadata {
+                contentType = "image/jpg"
+                setCustomMetadata("photoDescription", photo.photoDescription)
+            }
+
             getPhotoReference(firebaseAuth.uid!!, createLocalDateTime, photo.photoTimestamp)
                 .putFile(
-                    Uri.fromFile(File(photo.photoUri))
+                    file,
+                    metadata
                 )
                 .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
                 .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error writing document", e) }
+
         }
 
     }
