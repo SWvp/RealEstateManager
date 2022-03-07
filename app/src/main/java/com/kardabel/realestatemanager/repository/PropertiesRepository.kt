@@ -16,7 +16,7 @@ class PropertiesRepository @Inject constructor(
     private val propertiesDao: PropertiesDao
 ) {
 
-    fun getProperties(): Flow<List<PropertyWithPhoto>> = propertiesDao.getProperties()
+    fun getProperties(): Flow<List<PropertyWithPhoto>> = propertiesDao.getPropertiesWithPhoto()
 
     fun getPropertyById(id: Long): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
 
