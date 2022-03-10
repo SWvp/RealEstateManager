@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.ui.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.AdapterView
@@ -84,12 +85,16 @@ class SearchPropertyActivity : AppCompatActivity() {
 
     private fun manageInput() {
 
+
+
         // Price range slider
         val priceRangeSlider = binding.priceRangeSlider
         priceRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
+            @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: RangeSlider) {
             }
 
+            @SuppressLint("RestrictedApi")
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = priceRangeSlider.values
                 viewModel.priceRange(values[0].toInt(), values[1].toInt())
@@ -99,9 +104,11 @@ class SearchPropertyActivity : AppCompatActivity() {
         // Surface range slider
         val surfaceRangeSlider = binding.surfaceRangeSlider
         surfaceRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
+            @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: RangeSlider) {
             }
 
+            @SuppressLint("RestrictedApi")
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = surfaceRangeSlider.values
                 viewModel.surfaceRange(values[0].toInt(), values[1].toInt())
@@ -109,11 +116,13 @@ class SearchPropertyActivity : AppCompatActivity() {
         })
 
         // Room range slider
-        val roomRangeSlider = binding.surfaceRangeSlider
+        val roomRangeSlider = binding.roomRangeSlider
         roomRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
+            @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: RangeSlider) {
             }
 
+            @SuppressLint("RestrictedApi")
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 val values = roomRangeSlider.values
                 viewModel.roomRange(values[0].toInt(), values[1].toInt())
