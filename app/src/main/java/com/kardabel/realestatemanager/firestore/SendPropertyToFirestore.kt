@@ -19,7 +19,7 @@ class SendPropertyToFirestore @Inject constructor(
 
         if (firebaseAuth.currentUser != null) {
 
-            getCollectionReference().document(property.uid + property.createLocalDateTime)
+            getCollectionReference().document(property.uid + property.propertyCreationDate)
                 .set(getMappedProperty(property))
                 .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
@@ -35,7 +35,7 @@ class SendPropertyToFirestore @Inject constructor(
         val newProperty: PropertyEntity =
             createPropertyEntity(property, createLocalDateTime, dateToFormat)
 
-        getCollectionReference().document(newProperty.uid + newProperty.createLocalDateTime)
+        getCollectionReference().document(newProperty.uid + newProperty.propertyCreationDate)
             .update(getMappedProperty(newProperty))
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -63,8 +63,8 @@ class SendPropertyToFirestore @Inject constructor(
             uid = firebaseAuth.currentUser!!.uid,
             vendor = firebaseAuth.currentUser!!.displayName.toString(),
             staticMap = property.staticMap,
-            createLocalDateTime = createLocalDateTime,
-            createDateToFormat = dateToFormat,
+            propertyCreationDate = createLocalDateTime,
+            creationDateToFormat = dateToFormat,
             saleStatus = property.saleStatus,
             purchaseDate = property.purchaseDate,
             interest = property.interest,
@@ -85,7 +85,7 @@ class SendPropertyToFirestore @Inject constructor(
         property: PropertyEntity,
     ) {
 
-        getCollectionReference().document(property.uid + property.createLocalDateTime)
+        getCollectionReference().document(property.uid + property.propertyCreationDate)
             .update(getMappedProperty(property))
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
@@ -110,8 +110,8 @@ class SendPropertyToFirestore @Inject constructor(
             "user_id" to property.uid,
             "vendor" to property.vendor,
             "static_map" to property.staticMap,
-            "creation_local_date_time" to property.createLocalDateTime,
-            "creation_date_to_format" to property.createDateToFormat,
+            "creation_local_date_time" to property.propertyCreationDate,
+            "creation_date_to_format" to property.creationDateToFormat,
             "on_sale_status" to property.saleStatus,
             "purchase_date" to property.purchaseDate.toString(),
             "interest" to interestsCantBeNull(property.interest),
