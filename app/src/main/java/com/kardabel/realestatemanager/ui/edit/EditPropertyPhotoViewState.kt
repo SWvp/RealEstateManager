@@ -7,6 +7,7 @@ data class EditPropertyPhotoViewState(
     var photoDescription: String,
     val photoUri: String,
     val photoId: Int?,
-    val photoTimestamp: String,
     val propertyOwnerId: Long?,
+    val photoTimestamp: String,
+    val photoCreationDate: String,
 )
