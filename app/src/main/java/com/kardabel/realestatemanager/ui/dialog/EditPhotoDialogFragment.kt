@@ -16,19 +16,20 @@ class EditPhotoDialogFragment : DialogFragment() {
 
     var photoViewState: CreatePropertyPhotoViewState? = null
     var photoId: Int? = null
+    var propertyTimestamp: String? = null
     var propertyOwnerId: Long? = null
-    var propertyTimestamp: Long? = null
+    var propertyCreationDate: String? = null
 
     var isEditInstance: Boolean = false
 
     companion object {
-        fun createInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
+        fun createPropertyInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
             EditPhotoDialogFragment().apply {
                 photoViewState = propertyPhotoViewState
                 isEditInstance = false
             }
 
-        fun editInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
+        fun editPropertyInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
             EditPhotoDialogFragment().apply {
                 photoViewState = CreatePropertyPhotoViewState(
                     photoDescription = editPropertyPhotoViewState.photoDescription,
@@ -36,8 +37,9 @@ class EditPhotoDialogFragment : DialogFragment() {
                     photoTimestamp = editPropertyPhotoViewState.photoTimestamp
                 )
                 photoId = editPropertyPhotoViewState.photoId
+                propertyTimestamp = editPropertyPhotoViewState.photoTimestamp
                 propertyOwnerId = editPropertyPhotoViewState.propertyOwnerId
-                propertyTimestamp = editPropertyPhotoViewState.photoTimestamp.toLong()
+                propertyCreationDate = editPropertyPhotoViewState.photoCreationDate
 
                 isEditInstance = true
             }
@@ -62,8 +64,9 @@ class EditPhotoDialogFragment : DialogFragment() {
                         val photoToDelete = PhotoEntity(
                             photoDescription = photoViewState!!.photoDescription,
                             photoUri = photoViewState!!.photoUri,
-                            photoTimestamp = photoViewState!!.photoTimestamp.toLong(),
                             propertyOwnerId = null,
+                            photoTimestamp = photoViewState!!.photoTimestamp,
+                            photoCreationDate = "will be set later",
                         )
                         viewModel.deletePhotoFromRepository(photoToDelete)
                     }
@@ -73,8 +76,9 @@ class EditPhotoDialogFragment : DialogFragment() {
                             //photoBitmap = photoViewState!!.photoBitmap,
                             photoDescription = photoViewState!!.photoDescription,
                             photoUri = photoViewState!!.photoUri,
-                            photoTimestamp = System.currentTimeMillis(),
                             propertyOwnerId = null,
+                            photoTimestamp = System.currentTimeMillis().toString(),
+                            photoCreationDate = "will be set later",
                         )
                         viewModel.deletePhotoFromRepository(photoToDelete)
                     }
@@ -87,11 +91,12 @@ class EditPhotoDialogFragment : DialogFragment() {
                 if (photoId != null) {
                     viewModel.updateRegisteredPhoto(
                         PhotoEntity(
-                            photoViewState!!.photoUri,
-                            editText.text.toString(),
-                            propertyOwnerId,
-                            propertyTimestamp!!,
-                            photoId!!,
+                            photoUri = photoViewState!!.photoUri,
+                            photoDescription = editText.text.toString(),
+                            propertyOwnerId = propertyOwnerId,
+                            photoTimestamp = propertyTimestamp!!,
+                            photoCreationDate = propertyCreationDate!!,
+                            photoId = photoId!!,
                         )
                     )
                 }
