@@ -32,7 +32,6 @@ class RegisteredPhotoRepository @Inject constructor() {
         for (photo in originalRegisteredPhotoList) {
             if (photo.photoId == photoId) {
                 registeredPhotoList.remove(photo)
-                break
             }
         }
         registeredPhotoLiveData.postValue(registeredPhotoList)
