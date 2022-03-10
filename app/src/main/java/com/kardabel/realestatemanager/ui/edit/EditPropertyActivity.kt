@@ -151,7 +151,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
         // Set the adapter to retrieve photo
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
-        val photosAdapter: EditPropertyPhotoAdapter = EditPropertyPhotoAdapter {
+        val photosAdapter = EditPropertyPhotoAdapter {
             editDialogFragment(it)
 
         }
@@ -316,7 +316,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editDialogFragment(editPropertyPhotoViewState: EditPropertyPhotoViewState) {
-        val confirmFragment = EditPhotoDialogFragment.editInstance(editPropertyPhotoViewState)
+        val confirmFragment = EditPhotoDialogFragment.editPropertyInstance(editPropertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
     }
 
@@ -366,7 +366,7 @@ class EditPropertyActivity : AppCompatActivity() {
     }
 
     private fun saveProperty() {
-        viewModel.createProperty(
+        viewModel.editProperty(
             binding.inputPropertyAddress.text.toString(),
             binding.inputApartmentNumber.text.toString(),
             binding.inputPropertyCounty.text.toString(),
