@@ -16,13 +16,13 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
         fun onDialogNegativeClick()
     }
 
-    var photoTimestamp: Long? = null
+    var photoTimestamp: String? = null
     var photoUri: String? = null
 
     companion object {
         fun newInstance(uriString: String) = AddedPhotoConfirmationDialogFragment().apply {
             photoUri = uriString
-            photoTimestamp = System.currentTimeMillis()
+            photoTimestamp = System.currentTimeMillis().toString()
         }
     }
 
@@ -41,8 +41,9 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
                     val newPhoto = PhotoEntity(
                         photoDescription = editText.text.toString(),
                         photoUri = photoUri!!,
+                        propertyOwnerId = null,
                         photoTimestamp = photoTimestamp!!,
-                        propertyOwnerId = null
+                        photoCreationDate = "will be set later",
 
                         )
                     viewModel.addPhoto(newPhoto)
