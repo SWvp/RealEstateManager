@@ -51,7 +51,7 @@ class CreatePropertyViewModel @Inject constructor(
                 CreatePropertyPhotoViewState(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
-                    photoTimestamp = photo.photoTimestamp.toString()
+                    photoTimestamp = photo.photoTimestamp
                 )
             }
         }
@@ -95,7 +95,7 @@ class CreatePropertyViewModel @Inject constructor(
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
             val createDateToFormat = Utils.getTodayDate()
-            val createLocalDateTime = LocalDateTime.now(clock).toString()
+            val propertyCreationDate = LocalDateTime.now(clock).toString()
 
             val property = PropertyEntity(
                 address = address,
@@ -113,8 +113,8 @@ class CreatePropertyViewModel @Inject constructor(
                 bathroom = bathroom,
                 uid = uid,
                 vendor = vendor,
-                createLocalDateTime = createLocalDateTime,
-                createDateToFormat = createDateToFormat,
+                propertyCreationDate = propertyCreationDate,
+                creationDateToFormat = createDateToFormat,
                 saleStatus = "On Sale !",
                 purchaseDate = null,
                 interest = interestCanBeNull(interestRepository.getInterest()),
@@ -126,7 +126,7 @@ class CreatePropertyViewModel @Inject constructor(
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                 val newPropertyId = insertProperty(property)
-                createPhotoEntityWithPropertyId(newPropertyId, createLocalDateTime)
+                createPhotoEntityWithPropertyId(newPropertyId, propertyCreationDate)
                 createPropertyOnFirestore(property)
             }
         } else {
@@ -175,13 +175,14 @@ class CreatePropertyViewModel @Inject constructor(
                 photoUri = photo.photoUri,
                 photoDescription = photo.photoDescription,
                 propertyOwnerId = newPropertyId,
-                photoTimestamp = System.nanoTime(),
+                photoTimestamp = System.nanoTime().toString(),
+                photoCreationDate = createLocalDateTime,
             )
             photoListWithPropertyId.add(photoEntity)
         }
 
         sendPhotosToLocalDataBase(photoListWithPropertyId)
-        sendPhotoToCloudStorage(photoListWithPropertyId, createLocalDateTime)
+        sendPhotoToCloudStorage(photoListWithPropertyId)
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
@@ -199,10 +200,8 @@ class CreatePropertyViewModel @Inject constructor(
 
     private fun sendPhotoToCloudStorage(
         photos: List<PhotoEntity>,
-        createLocalDateTime: String
     ) {
-        sendPhotoToCloudStorage.createPhotoDocument(photos, createLocalDateTime)
-
+        sendPhotoToCloudStorage.createPhotoDocument(photos)
 
     }
 
