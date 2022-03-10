@@ -2,7 +2,6 @@ package com.kardabel.realestatemanager.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import javax.inject.Inject
 import javax.inject.Singleton
