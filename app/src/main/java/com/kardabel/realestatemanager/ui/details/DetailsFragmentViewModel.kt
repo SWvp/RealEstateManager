@@ -41,7 +41,7 @@ class DetailsFragmentViewModel @Inject constructor(
                     county = it.propertyEntity.county,
                     zipcode = it.propertyEntity.zipcode,
                     country = it.propertyEntity.country,
-                    startSale = it.propertyEntity.createDateToFormat,
+                    startSale = it.propertyEntity.creationDateToFormat,
                     vendor = it.propertyEntity.vendor,
                     visibility = true,
                     staticMap = it.propertyEntity.staticMap
