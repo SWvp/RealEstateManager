@@ -9,6 +9,7 @@ import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
 import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
+import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
@@ -42,8 +43,9 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interestList = mutableListOf<String>()
 
+    private var uid by Delegates.notNull<String>()
     private var propertyId by Delegates.notNull<Long>()
-    private var createLocalDateTime by Delegates.notNull<String>()
+    private var propertyCreationDate by Delegates.notNull<String>()
     private var dateToFormat by Delegates.notNull<String>()
 
     // Expose interest list to view
@@ -51,7 +53,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////  MANAGE PHOTOS  /////////////////////////////////////////////
+    ///////////////////////////////  RETRIEVE AND DISPLAY PHOTOS  //////////////////////////////////
 
     private val getRegisteredPhoto: LiveData<List<PhotoEntity>> =
         registeredPhotoRepository.getRegisteredPhotoLiveData()
@@ -79,10 +81,12 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
-                    photoTimestamp = photo.photoTimestamp.toString(),
-                    propertyOwnerId = photo.propertyOwnerId
+                    propertyOwnerId = photo.propertyOwnerId,
+                    photoTimestamp = photo.photoTimestamp,
+                    photoCreationDate = photo.photoCreationDate
                 )
             }
+
         } else {
             getAllPhotoMediatorLiveData.value = toViewState(registeredPhoto, addedPhoto)
         }
@@ -101,8 +105,9 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = photo.photoId,
-                    photoTimestamp = photo.photoTimestamp.toString(),
-                    propertyOwnerId = photo.propertyOwnerId
+                    propertyOwnerId = photo.propertyOwnerId,
+                    photoTimestamp = photo.photoTimestamp,
+                    photoCreationDate = photo.photoCreationDate
                 )
             )
         }
@@ -112,8 +117,9 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoDescription = photo.photoDescription,
                     photoUri = photo.photoUri,
                     photoId = null,
-                    photoTimestamp = photo.photoTimestamp.toString(),
-                    propertyOwnerId = null
+                    propertyOwnerId = null,
+                    photoTimestamp = photo.photoTimestamp,
+                    photoCreationDate = photo.photoCreationDate
                 )
             )
         }
@@ -122,7 +128,6 @@ class EditPropertyActivityViewModel @Inject constructor(
 
         addedPhotoMutableList = addedPhoto as MutableList<PhotoEntity>
 
-        //updatePhotoList(registeredPhoto, addedPhoto)
 
         return photoList
     }
@@ -138,39 +143,41 @@ class EditPropertyActivityViewModel @Inject constructor(
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
             propertiesRepository.getPropertyById(id).map { property ->
 
-                emptyInterestRepository()
-
+                uid = property.propertyEntity.uid
                 propertyId = property.propertyEntity.propertyId
-                createLocalDateTime = property.propertyEntity.createLocalDateTime
-                dateToFormat = property.propertyEntity.createDateToFormat
+                propertyCreationDate = property.propertyEntity.propertyCreationDate
+                dateToFormat = property.propertyEntity.creationDateToFormat
 
                 sendRegisteredInterestsToRepository(property.propertyEntity.interest)
                 sendRegisteredPhotosToRepository(property.photo)
 
-                EditPropertyViewState(
-                    propertyId = property.propertyEntity.propertyId,
-                    type = readableType(property.propertyEntity.type),
-                    description = property.propertyEntity.propertyDescription,
-                    surface = property.propertyEntity.surface,
-                    room = property.propertyEntity.room,
-                    bathroom = property.propertyEntity.bathroom,
-                    bedroom = property.propertyEntity.bedroom,
-                    address = property.propertyEntity.address,
-                    apartment = property.propertyEntity.apartmentNumber,
-                    city = property.propertyEntity.city,
-                    county = property.propertyEntity.county,
-                    zipcode = property.propertyEntity.zipcode,
-                    country = property.propertyEntity.country,
-                    startSale = property.propertyEntity.createDateToFormat,
-                    createLocalDateTime = property.propertyEntity.createLocalDateTime,
-                    vendor = property.propertyEntity.vendor,
-                    visibility = true,
-                    staticMap = property.propertyEntity.staticMap,
-                    price = property.propertyEntity.price,
-                    uid = property.propertyEntity.uid,
-                )
+                toViewState(property)
+
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
+
+    private fun toViewState(property: PropertyWithPhoto) = EditPropertyViewState(
+        propertyId = property.propertyEntity.propertyId,
+        type = readableType(property.propertyEntity.type),
+        description = property.propertyEntity.propertyDescription,
+        surface = property.propertyEntity.surface,
+        room = property.propertyEntity.room,
+        bathroom = property.propertyEntity.bathroom,
+        bedroom = property.propertyEntity.bedroom,
+        address = property.propertyEntity.address,
+        apartment = property.propertyEntity.apartmentNumber,
+        city = property.propertyEntity.city,
+        county = property.propertyEntity.county,
+        zipcode = property.propertyEntity.zipcode,
+        country = property.propertyEntity.country,
+        startSale = property.propertyEntity.creationDateToFormat,
+        createLocalDateTime = property.propertyEntity.propertyCreationDate,
+        vendor = property.propertyEntity.vendor,
+        visibility = true,
+        staticMap = property.propertyEntity.staticMap,
+        price = property.propertyEntity.price,
+        uid = property.propertyEntity.uid,
+    )
 
     private fun readableType(type: String): String {
         return if (type == "null") {
@@ -187,16 +194,18 @@ class EditPropertyActivityViewModel @Inject constructor(
         if (registeredPhotoList.isEmpty()) {
             registeredPhotoRepository.sendRegisteredPhotoToRepository(photoList)
             registeredPhotoList = photoList as MutableList<PhotoEntity>
+            updatedRegisteredPhotoMutableList = photoList
         }
-
     }
 
     // Create an interest list with old interests
     private fun sendRegisteredInterestsToRepository(oldInterests: List<String>?) {
         if (oldInterests != null) {
-            for (interest in oldInterests) {
-                interestRepository.addInterest(interest)
-                interestList.add(interest)
+            if (interestList.isEmpty()) {
+                for (interest in oldInterests) {
+                    interestRepository.addInterest(interest)
+                    interestList.add(interest)
+                }
             }
         }
     }
@@ -204,7 +213,6 @@ class EditPropertyActivityViewModel @Inject constructor(
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////  EDIT PROPERTY ////////////////////////////////////////////////
-
 
     fun addInterest(interest: String) {
         if (interest.length > 2) {
@@ -219,25 +227,25 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     }
 
-    fun createProperty(
-        address: String?,
-        apartmentNumber: String?,
-        county: String?,
-        city: String?,
-        zipcode: String?,
-        country: String?,
-        propertyDescription: String?,
+    fun editProperty(
+        address: String,
+        apartmentNumber: String,
+        county: String,
+        city: String,
+        zipcode: String,
+        country: String,
+        propertyDescription: String,
         type: String?,
-        price: String?,
-        surface: String?,
-        room: String?,
-        bedroom: String?,
-        bathroom: String?,
+        price: String,
+        surface: String,
+        room: String,
+        bedroom: String,
+        bathroom: String,
     ) {
 
         // Must contain at least one photo and an address (street, zip, city)
         if (addedPhotoMutableList.isNotEmpty() || updatedRegisteredPhotoMutableList.isNotEmpty()) {
-            if (address != null && city != null && zipcode != null) {
+            if (address != "" && city != "" && zipcode != "") {
 
                 // Get value to entity format, string is for the view
 
@@ -255,7 +263,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     room = room,
                     bedroom = bedroom,
                     bathroom = bathroom,
-                    saleStatus = true.toString(),
+                    saleStatus = "On Sale !",
                     purchaseDate = null,
                     interest = interestCanBeNull(interestList),
                     propertyId = propertyId,
@@ -267,15 +275,11 @@ class EditPropertyActivityViewModel @Inject constructor(
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
 
                     updateProperty(property)
+                    updatePropertyOnFirestore(property)
 
-                    updateFirestore(property)
-
-                    // Todo pas grave quelles aient la même taille, elles peuvent être différentes..
                     checkForRegisteredPhoto()
-
                     createPhotoEntity()
-
-                    updateCloudStorage(createLocalDateTime)
+                    updatePhotoOnCloudStorage()
 
                     emptyAllPhotoRepository()
                     emptyInterestRepository()
@@ -284,9 +288,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                         actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
 
                     }
-
                 }
-
             }
         } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
@@ -335,7 +337,8 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoUri = photo.photoUri,
                     photoDescription = photo.photoDescription,
                     propertyOwnerId = propertyId,
-                    photoTimestamp = System.nanoTime(),
+                    photoTimestamp = System.nanoTime().toString(),
+                    photoCreationDate = propertyCreationDate
                 )
                 photoListWithPropertyId.add(photoEntity)
             }
@@ -363,15 +366,16 @@ class EditPropertyActivityViewModel @Inject constructor(
     private suspend fun updateProperty(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
 
-    private fun updateFirestore(property: PropertyUpdate) {
-        sendPropertyToFirestore.updatePropertyDocumentFromEditView(property, createLocalDateTime, dateToFormat)
+    private fun updatePropertyOnFirestore(property: PropertyUpdate) {
+        sendPropertyToFirestore.updatePropertyDocumentFromEditView(
+            property,
+            propertyCreationDate,
+            dateToFormat
+        )
     }
 
-    private fun updateCloudStorage(
-        createLocalDateTime: String
-    ) {
-        sendPhotoToCloudStorage.updateDocument(photoFullList, createLocalDateTime)
-
+    private fun updatePhotoOnCloudStorage() {
+        sendPhotoToCloudStorage.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
 
     }
 
