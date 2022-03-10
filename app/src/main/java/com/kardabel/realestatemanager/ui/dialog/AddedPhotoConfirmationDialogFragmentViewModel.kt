@@ -11,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AddedPhotoConfirmationDialogFragmentViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
-    private val applicationDispatchers: ApplicationDispatchers
 
 ) : ViewModel() {
 
