@@ -6,12 +6,12 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.kardabel.realestatemanager.model.PhotoEntity
-import java.io.File
-import javax.inject.Inject
 import com.google.firebase.storage.ktx.component1
 import com.google.firebase.storage.ktx.component2
 import com.google.firebase.storage.ktx.storageMetadata
+import com.kardabel.realestatemanager.model.PhotoEntity
+import java.io.File
+import javax.inject.Inject
 
 
 class SendPhotoToCloudStorage @Inject constructor(
@@ -19,8 +19,7 @@ class SendPhotoToCloudStorage @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
 ) {
 
-
-    fun createPhotoDocument(photos: List<PhotoEntity>, createLocalDateTime: String) {
+    fun createPhotoDocument(photos: List<PhotoEntity>) {
 
         for (photo in photos) {
 
@@ -32,61 +31,56 @@ class SendPhotoToCloudStorage @Inject constructor(
                 setCustomMetadata("photoDescription", photo.photoDescription)
             }
 
-            getPhotoReference(firebaseAuth.uid!!, createLocalDateTime, photo.photoTimestamp)
+            getPhotoReference(firebaseAuth.uid, photo.photoCreationDate, photo.photoTimestamp)
                 .putFile(
                     file,
                     metadata
                 )
-                .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                .addOnSuccessListener {
+                    Log.d(
+                        ContentValues.TAG,
+                        "DocumentSnapshot successfully written!"
+                    )
+                }
                 .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error writing document", e) }
-
         }
-
     }
-
 
     private fun getPhotoReference(
-        uid: String,
-        createLocalDate: String,
-        photoTimestamp: Long
+        uid: String?,
+        photoCreationDate: String,
+        photoTimestamp: String
     ): StorageReference {
-        return firebaseStorage.reference.child("$uid/$createLocalDate/$photoTimestamp")
+        return firebaseStorage.reference.child("photos/$uid/$photoCreationDate/$photoTimestamp")
     }
 
-    private fun getFolderReference(
-        uid: String,
-        createLocalDate: String,
-    ): StorageReference {
-        return firebaseStorage.reference.child("$uid/$createLocalDate")
-    }
+    fun updatePhotoOnCloudStorage(photos: List<PhotoEntity>, createLocalDateTime: String, uid: String) {
 
+        deleteOldDocument(createLocalDateTime, uid)
 
-    fun updateDocument(photos: List<PhotoEntity>, createLocalDateTime: String) {
-
-        deleteOldDocument(createLocalDateTime)
-
-        createPhotoDocument(photos, createLocalDateTime)
+        createPhotoDocument(photos)
 
     }
 
-    private fun deleteOldDocument(createLocalDateTime: String) {
+    private fun deleteOldDocument(createLocalDateTime: String, uid: String) {
 
-        getFolderReference(firebaseAuth.uid!!, createLocalDateTime).listAll()
+
+
+        firebaseStorage.reference.child("photos/$uid/$createLocalDateTime").listAll()
             .addOnSuccessListener { (items, prefixes) ->
                 prefixes.forEach { prefix ->
                     // All the prefixes under listRef.
                     // You may call listAll() recursively on them.
                 }
 
-                items.forEach { item ->
-                    item.delete()
+                items.forEach { photo ->
+
+                    photo.delete()
+
                 }
             }
             .addOnFailureListener {
                 // Uh-oh, an error occurred!
             }
-
     }
-
-
 }
