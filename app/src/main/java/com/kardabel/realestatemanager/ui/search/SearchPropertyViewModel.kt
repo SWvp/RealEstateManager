@@ -116,18 +116,14 @@ class SearchPropertyViewModel @Inject constructor(
     }
 
     private fun interestListCanBeNull(interests: List<String>): List<String>? {
-        return if (interests.isEmpty()) {
+        return interests.ifEmpty {
             null
-        } else {
-            interests
         }
     }
 
     private fun countyCanBeNull(county: String): String? {
-        return if (county.isEmpty()) {
+        return county.ifEmpty {
             null
-        } else {
-            county
         }
     }
 
