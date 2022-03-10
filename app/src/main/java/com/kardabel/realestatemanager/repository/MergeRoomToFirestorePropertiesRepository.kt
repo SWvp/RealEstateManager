@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MergeRoomToFirestoreRepository @Inject constructor(
+class MergeRoomToFirestorePropertiesRepository @Inject constructor(
     private val propertiesDao: PropertiesDao,
     private val sendPropertyToFirestore: SendPropertyToFirestore,
 ) {
