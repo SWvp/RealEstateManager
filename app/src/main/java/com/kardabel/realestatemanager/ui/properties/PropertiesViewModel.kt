@@ -92,7 +92,7 @@ class PropertiesViewModel @Inject constructor(
         propertyId = property.propertyEntity.propertyId,
         type = readableType(property.propertyEntity.type),
         county = property.propertyEntity.county,
-        price = readablePrice(property.propertyEntity.price.toString()),
+        price = readablePrice(property.propertyEntity.price),
         saleStatus = property.propertyEntity.saleStatus,
         saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
@@ -107,7 +107,7 @@ class PropertiesViewModel @Inject constructor(
             propertyId = property.propertyEntity.propertyId,
             type = readableType(property.propertyEntity.type),
             county = property.propertyEntity.county,
-            price = currencyConverter(property.propertyEntity.price?.toInt(), currencyStatus),
+            price = currencyConverter(property.propertyEntity.price.toInt(), currencyStatus),
             saleStatus = property.propertyEntity.saleStatus,
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
@@ -119,26 +119,52 @@ class PropertiesViewModel @Inject constructor(
         searchParams: SearchParams
     ): Boolean {
 
-        return (searchParams.priceRange?.let {
-            property.propertyEntity.price?.let { it1 ->
-                searchParams.priceRange.contains(it1.toInt())
-            }
-        } ?: true
-                && searchParams.surfaceRange?.let { property.propertyEntity.surface?.let { it1 ->
-            searchParams.surfaceRange.contains(
-                it1.toInt())
-        } } ?: true
-                && searchParams.roomRange?.let { property.propertyEntity.room?.let { it1 ->
-            searchParams.roomRange.contains(
-                it1.toInt())
-        } } ?: true
-                && searchParams.photo?.let { searchParams.photo == property.photo.size } ?: true
-                && searchParams.county?.let { searchParams.county == property.propertyEntity.county } ?: true
+        return (surfaceMatchParams(searchParams.surfaceRange, property.propertyEntity.surface)
+                && priceMatchParams(searchParams.priceRange, property.propertyEntity.price)
+                && roomMatchParams(searchParams.roomRange, property.propertyEntity.room)
+                && searchParams.photo?.let { searchParams.photo == property.photo.size } != false
+                && searchParams.propertyType?.let { searchParams.propertyType == property.propertyEntity.type } != false
                 && matchInterest(searchParams.interest, property.propertyEntity.interest)
-                && searchParams.propertyType?.let { searchParams.propertyType == property.propertyEntity.type } ?: true
-                )
+                && searchParams.county?.let { searchParams.county == property.propertyEntity.county } != false)
 
     }
+
+    private fun surfaceMatchParams(surfaceRange: IntRange?, surfaceProperty: String): Boolean {
+
+        var surfaceCanBeNull: String? = surfaceProperty
+
+        if (surfaceCanBeNull == "") {
+            surfaceCanBeNull = null
+        }
+
+        return surfaceRange?.let { surfaceCanBeNull?.let { surfaceRange.contains(it.toInt()) } } ?: true
+
+    }
+
+    private fun priceMatchParams(priceRange: IntRange?, priceProperty: String): Boolean {
+
+        var priceCanBeNull: String? = priceProperty
+
+        if (priceCanBeNull == "") {
+            priceCanBeNull = null
+        }
+
+        return priceRange?.let { priceCanBeNull?.let { priceRange.contains(it.toInt()) } } ?: true
+
+    }
+
+    private fun roomMatchParams(roomRange: IntRange?, roomProperty: String): Boolean {
+
+        var roomCanBeNull: String? = roomProperty
+
+        if (roomCanBeNull == "") {
+            roomCanBeNull = null
+        }
+
+        return roomRange?.let { roomCanBeNull?.let { roomRange.contains(it.toInt()) } } ?: true
+
+    }
+
 
     private fun currencyConverter(
         price: Int?,
