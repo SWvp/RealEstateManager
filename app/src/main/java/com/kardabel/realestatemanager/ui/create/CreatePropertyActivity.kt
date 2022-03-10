@@ -133,7 +133,7 @@ class CreatePropertyActivity : AppCompatActivity() {
         // On item click go to edit dialog
         val recyclerView: RecyclerView = binding.picturePropertyRecyclerView
         photosAdapter = CreatePropertyPhotosAdapter {
-            editDialogFragment(it)
+            editPhotoDialogFragment(it)
         }
 
         recyclerView.adapter = photosAdapter
@@ -286,7 +286,7 @@ class CreatePropertyActivity : AppCompatActivity() {
     }
 
     // Create an alert dialog to allow user change description or delete photo
-    private fun editDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
+    private fun editPhotoDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
         val confirmFragment = EditPhotoDialogFragment.createPropertyInstance(propertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
