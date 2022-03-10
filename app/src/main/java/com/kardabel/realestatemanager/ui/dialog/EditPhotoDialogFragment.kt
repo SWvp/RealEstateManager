@@ -73,11 +73,10 @@ class EditPhotoDialogFragment : DialogFragment() {
                 } else {
                     photoViewState?.let {
                         val photoToDelete = PhotoEntity(
-                            //photoBitmap = photoViewState!!.photoBitmap,
-                            photoDescription = photoViewState!!.photoDescription,
                             photoUri = photoViewState!!.photoUri,
+                            photoDescription = photoViewState!!.photoDescription,
                             propertyOwnerId = null,
-                            photoTimestamp = System.currentTimeMillis().toString(),
+                            photoTimestamp = photoViewState!!.photoTimestamp,
                             photoCreationDate = "will be set later",
                         )
                         viewModel.deletePhotoFromRepository(photoToDelete)
