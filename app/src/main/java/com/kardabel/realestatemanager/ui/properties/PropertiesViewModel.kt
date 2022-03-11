@@ -96,7 +96,7 @@ class PropertiesViewModel @Inject constructor(
         saleStatus = property.propertyEntity.saleStatus,
         saleColor = colorToApply(property.propertyEntity.saleStatus),
         vendor = property.propertyEntity.vendor,
-        photoUri = Uri.parse(property.photo[0].photoUri)
+        photoUri = photoListCanBeEmpty(property)
     )
 
     private fun toViewStateWithCurrencyStatus(
@@ -111,8 +111,17 @@ class PropertiesViewModel @Inject constructor(
             saleStatus = property.propertyEntity.saleStatus,
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
-            photoUri = Uri.parse(property.photo[0].photoUri)
+            photoUri = photoListCanBeEmpty(property)
+
         )
+
+    private fun photoListCanBeEmpty(property: PropertyWithPhoto): Uri? {
+        return if(property.photo.isNotEmpty()){
+            Uri.parse(property.photo[0].photoUri)
+        }else{
+            null
+        }
+    }
 
     private fun applySearchParams(
         property: PropertyWithPhoto,
