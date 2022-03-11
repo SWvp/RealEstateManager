@@ -34,54 +34,54 @@ class SynchronizeRoomToFirestoreWorker @AssistedInject constructor(
 
 
     override suspend fun doWork(): Result {
-        withContext(applicationDispatchers.ioDispatcher) {
+ //    withContext(applicationDispatchers.ioDispatcher) {
 
-            val roomProperties: List<PropertyEntity> = propertiesDao.getProperties()
-            val firestoreProperties = mutableListOf<PropertyEntity>()
+ //        val roomProperties: List<PropertyEntity> = propertiesDao.getProperties()
+ //        val firestoreProperties = mutableListOf<PropertyEntity>()
 
-            firestore.collection("properties").addSnapshotListener { value, error ->
+ //        firestore.collection("properties").addSnapshotListener { value, error ->
 
-                assert(value != null)
-                for (document in value!!.documentChanges) {
+ //            assert(value != null)
+ //            for (document in value!!.documentChanges) {
 
-                    firestoreProperties.add(document.document.toObject(PropertyEntity::class.java))
-                }
+ //                firestoreProperties.add(document.document.toObject(PropertyEntity::class.java))
+ //            }
 
-                for (property in roomProperties) {
+ //            for (property in roomProperties) {
 
-                    val firestoreIdMatcher =
-                        firestoreProperties.firstOrNull { it.uid == property.uid }
-                    if (firestoreIdMatcher == null) {
-                        createFirestoreProperties(property)
-                        firestoreProperties.remove(property)
+ //                val firestoreIdMatcher =
+ //                    firestoreProperties.firstOrNull { it.uid == property.uid }
+ //                if (firestoreIdMatcher == null) {
+ //                    createFirestoreProperties(property)
+ //                    firestoreProperties.remove(property)
 
-                    } else if (firestoreIdMatcher.updateTimestamp < property.updateTimestamp) {
-                        updateFirestoreProperties(property)
-                        firestoreProperties.remove(property)
-                    }
+ //                } else if (firestoreIdMatcher.updateTimestamp < property.updateTimestamp) {
+ //                    updateFirestoreProperties(property)
+ //                    firestoreProperties.remove(property)
+ //                }
 
-                }
-            }
-            propertiesDao.insertProperties(firestoreProperties)
-        }
+ //            }
+ //        }
+ //        propertiesDao.insertProperties(firestoreProperties)
+ //    }
         return Result.success()
 
     }
 
-    private suspend fun <T> Flow<List<T>>.flattenToList() =
-        flatMapConcat { it.asFlow() }.toList()
+ // private suspend fun <T> Flow<List<T>>.flattenToList() =
+ //     flatMapConcat { it.asFlow() }.toList()
 
-    private fun createFirestoreProperties(property: PropertyEntity) {
+ // private fun createFirestoreProperties(property: PropertyEntity) {
 
-        sendPropertyToFirestore.createPropertyDocument(property)
+ //     sendPropertyToFirestore.createPropertyDocument(property)
 
-    }
+ // }
 
-    private fun updateFirestoreProperties(property: PropertyEntity) {
+ // private fun updateFirestoreProperties(property: PropertyEntity) {
 
 
-        sendPropertyToFirestore.updatePropertyDocumentFromRoom(property)
+ //     sendPropertyToFirestore.updatePropertyDocumentFromRoom(property)
 
-    }
+ // }
 
 }
