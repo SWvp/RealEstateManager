@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission." />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18"/>
 
@@ -19,6 +20,7 @@
 
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
