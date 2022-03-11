@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.repository
 
-import androidx.annotation.MainThread
 import com.kardabel.realestatemanager.model.SearchParams
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
