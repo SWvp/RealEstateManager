@@ -34,7 +34,7 @@ class DetailsFragmentViewModel @Inject constructor(
                     room = it.propertyEntity.room,
                     bathroom = it.propertyEntity.bathroom,
                     bedroom = it.propertyEntity.bedroom,
-                    interest = it.propertyEntity.interest,
+                    interest = interestCantBeEmpty(it.propertyEntity.interest),
                     address = it.propertyEntity.address,
                     apartment = it.propertyEntity.apartmentNumber,
                     city = it.propertyEntity.city,
@@ -48,6 +48,17 @@ class DetailsFragmentViewModel @Inject constructor(
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
+
+    // When retrieve properties from firestore,
+    // if interest are empty, it says we have one item empty,
+    // so to avoid empty chips, make it nullable
+    private fun interestCantBeEmpty(interest: List<String>?): List<String>? {
+        return if (interest != null && interest[0].isEmpty()) {
+            null
+        }else{
+            interest
+        }
+    }
 
     val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
 
