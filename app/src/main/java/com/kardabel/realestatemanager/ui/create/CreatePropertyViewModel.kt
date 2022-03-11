@@ -128,17 +128,18 @@ class CreatePropertyViewModel @Inject constructor(
                 val newPropertyId = insertProperty(property)
                 createPhotoEntityWithPropertyId(newPropertyId, propertyCreationDate)
                 createPropertyOnFirestore(property)
+
+                emptyPhotoRepository()
+                emptyInterestRepository()
             }
         } else {
             actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
         }
     }
 
-    private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
-        return if (interests.size == 0) {
+    private fun interestCanBeNull(interests: List<String>): List<String>? {
+        return interests.ifEmpty {
             null
-        } else {
-            interests
         }
     }
 
@@ -188,9 +189,6 @@ class CreatePropertyViewModel @Inject constructor(
             actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
 
         }
-
-        emptyPhotoRepository()
-        emptyInterestRepository()
     }
 
     private fun createPropertyOnFirestore(property: PropertyEntity) {
@@ -205,16 +203,11 @@ class CreatePropertyViewModel @Inject constructor(
 
     }
 
-    private suspend fun sendPhotosToLocalDataBase(photoEntities: MutableList<PhotoEntity>) {
-        insertPhotoDao(photoEntities)
-
-    }
-
     private suspend fun insertProperty(property: PropertyEntity): Long {
         return propertiesRepository.insertProperty(property)
     }
 
-    private suspend fun insertPhotoDao(photos: List<PhotoEntity>) =
+    private suspend fun sendPhotosToLocalDataBase(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhotos(photos)
 
     // Clear the photoRepo for the next use
