@@ -12,5 +12,5 @@ data class PropertyViewState(
     @ColorInt
     val saleColor: Int,
     val vendor: String,
-    val photoUri: Uri,
+    val photoUri: Uri?,
 )

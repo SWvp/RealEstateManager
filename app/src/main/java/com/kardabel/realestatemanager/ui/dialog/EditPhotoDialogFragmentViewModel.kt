@@ -1,12 +1,9 @@
 package com.kardabel.realestatemanager.ui.dialog
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.database.PropertiesDao
-import com.kardabel.realestatemanager.model.Photo
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
 import com.kardabel.realestatemanager.repository.RegisteredPhotoRepository
@@ -30,11 +27,6 @@ class EditPhotoDialogFragmentViewModel @Inject constructor(
         registeredPhotoRepository.deleteRegisteredPhoto(photoId)
     }
 
-    fun deletePhotoFromDataBase(photoId: Int) {
-        viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            propertiesDao.deletePhotoById(photoId)
-        }
-    }
 
     fun editPhotoText(description: String, photoUri: String) {
         createPhotoRepository.editPhotoText(description, photoUri)

@@ -26,7 +26,7 @@ data class PropertyEntity constructor(
     @ColumnInfo(name = "creation_date_to_format") val creationDateToFormat: String = "",
     @ColumnInfo(name = "on_sale_status") val saleStatus: String = "",
     @ColumnInfo(name = "purchase_date") val purchaseDate: String? = null,
-    @ColumnInfo(name = "interest") val interest: List<String>? = null,
+    @ColumnInfo(name = "interest") var interest: List<String>? = null,
     @ColumnInfo(name = "update_timestamp") val updateTimestamp: String = "",
     @PrimaryKey(autoGenerate = true) val propertyId: Long = 0,
 

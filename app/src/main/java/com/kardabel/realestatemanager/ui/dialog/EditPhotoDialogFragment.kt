@@ -55,7 +55,7 @@ class EditPhotoDialogFragment : DialogFragment() {
         builder
             .setMessage("Edit your photo")
             .setView(editText)
-            .setPositiveButton("Delete") { dialog, id ->
+            .setPositiveButton("Delete") { _, _ ->
 
                 if (isEditInstance) {
                     if (photoId != null) {

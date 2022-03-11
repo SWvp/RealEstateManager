@@ -2,10 +2,7 @@ package com.kardabel.realestatemanager.ui.edit
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -28,19 +25,17 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
-import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.ui.create.RC_CHOOSE_PHOTO
 import com.kardabel.realestatemanager.ui.create.RC_IMAGE_PERMS
 import com.kardabel.realestatemanager.ui.create.REQUEST_IMAGE_CAPTURE
 import com.kardabel.realestatemanager.ui.dialog.AddedPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.EditPhotoDialogFragment
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -205,6 +200,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
                 ActivityViewAction.FINISH_ACTIVITY ->
                     finish()
+                else -> {}
             }
         }
     }
@@ -318,23 +314,6 @@ class EditPropertyActivity : AppCompatActivity() {
     private fun editDialogFragment(editPropertyPhotoViewState: EditPropertyPhotoViewState) {
         val confirmFragment = EditPhotoDialogFragment.editPropertyInstance(editPropertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
-    }
-
-    // Converter to get bitmap from Uri
-    private fun decodeUriToBitmap(context: Context, sendUri: Uri): Bitmap {
-        var getBitmap: Bitmap? = null
-        try {
-            val imageStream: InputStream
-            try {
-                imageStream = context.contentResolver.openInputStream(sendUri)!!
-                getBitmap = BitmapFactory.decodeStream(imageStream)
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return getBitmap!!
     }
 
     // Alert user he is about to definitely sell the property

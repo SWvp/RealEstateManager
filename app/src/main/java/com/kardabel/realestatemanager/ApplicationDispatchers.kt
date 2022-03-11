@@ -9,5 +9,4 @@ import javax.inject.Singleton
 class ApplicationDispatchers @Inject constructor() {
     val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-    val unconfinedDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 }

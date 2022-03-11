@@ -1,7 +1,5 @@
 package com.kardabel.realestatemanager.ui.edit
 
-import com.kardabel.realestatemanager.ui.details.DetailsPhotoViewState
-
 
 data class EditPropertyViewState(
     val propertyId: Long,
@@ -11,7 +9,6 @@ data class EditPropertyViewState(
     val room: String?,
     val bathroom: String?,
     val bedroom: String?,
-    //val interest: List<String>?,
     val address: String,
     val apartment: String?,
     val city: String,

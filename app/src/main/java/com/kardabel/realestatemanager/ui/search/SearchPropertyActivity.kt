@@ -137,7 +137,7 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
                 viewModel.propertyType(parent.getItemAtPosition(position).toString())
             }
 

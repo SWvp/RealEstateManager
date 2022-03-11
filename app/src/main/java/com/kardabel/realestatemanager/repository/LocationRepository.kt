@@ -1,19 +1,16 @@
 package com.kardabel.realestatemanager.repository
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.location.Location
 import android.os.Looper
-import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.kardabel.realestatemanager.model.UserLocation
-import com.kardabel.realestatemanager.ui.map.MapViewState
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

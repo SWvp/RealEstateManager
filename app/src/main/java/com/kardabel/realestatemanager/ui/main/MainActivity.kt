@@ -13,7 +13,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityMainBinding
 import com.kardabel.realestatemanager.ui.authentication.AuthActivity
@@ -35,9 +34,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var googleSignInClient: GoogleSignInClient
 
-    private val auth by lazy {
-        FirebaseAuth.getInstance()
-    }
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -108,8 +104,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Single live event trigger when edit item is clicked
-        viewModel.startEditActivitySingleLiveEvent.observe(this) {
-            when (it) {
+        viewModel.startEditActivitySingleLiveEvent.observe(this) { viewAction ->
+            when (viewAction) {
                 NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
                     startEditActivity()
 
@@ -131,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //viewModel.synchroniseWithFirestore()
+        viewModel.synchroniseWithFirestore()
     }
 
     private fun startEditActivity() {

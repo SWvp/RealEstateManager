@@ -23,7 +23,7 @@ class AuthActivity : AppCompatActivity() {
     private var _binding: ActivityAuthBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient
     private val Req_Code: Int = 123
 
     private lateinit var auth: FirebaseAuth

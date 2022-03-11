@@ -24,7 +24,7 @@ class MainActivityViewModel @Inject constructor(
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
-    private val mergeRoomToFirestorePropertiesRepository: MergeRoomToFirestorePropertiesRepository,
+    private val mergePropertiesDataBaseRepository: MergePropertiesDataBaseRepository,
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
@@ -94,7 +94,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun synchroniseWithFirestore() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            mergeRoomToFirestorePropertiesRepository.synchroniseRoomToFirestore()
+            mergePropertiesDataBaseRepository.synchronisePropertiesDataBases()
         }
     }
 }

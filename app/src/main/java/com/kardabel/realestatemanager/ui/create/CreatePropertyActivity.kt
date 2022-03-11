@@ -2,10 +2,7 @@ package com.kardabel.realestatemanager.ui.create
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -33,9 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -292,23 +287,6 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     }
 
-    // Converter to get bitmap from Uri
-    private fun decodeUriToBitmap(context: Context, sendUri: Uri): Bitmap {
-        var getBitmap: Bitmap? = null
-        try {
-            val imageStream: InputStream
-            try {
-                imageStream = context.contentResolver.openInputStream(sendUri)!!
-                getBitmap = BitmapFactory.decodeStream(imageStream)
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return getBitmap!!
-    }
-
     private fun liveEventAction() {
 
         // Inform user if fields are missing or close activity
@@ -330,6 +308,7 @@ class CreatePropertyActivity : AppCompatActivity() {
                         getString(R.string.interest_input_problem),
                         Toast.LENGTH_SHORT
                     ).show()
+                else -> {}
             }
         }
     }

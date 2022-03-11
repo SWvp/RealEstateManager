@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.properties
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.ViewHolder
-import java.io.File
+
 
 class PropertiesAdapter(
     private val listener: (propertyId: Long) -> Unit
