@@ -54,7 +54,11 @@ class SendPhotoToCloudStorage @Inject constructor(
         return firebaseStorage.reference.child("photos/$uid/$photoCreationDate/$photoTimestamp")
     }
 
-    fun updatePhotoOnCloudStorage(photos: List<PhotoEntity>, createLocalDateTime: String, uid: String) {
+    fun updatePhotoOnCloudStorage(
+        photos: List<PhotoEntity>,
+        createLocalDateTime: String,
+        uid: String
+    ) {
 
         deleteOldDocument(createLocalDateTime, uid)
 
@@ -65,10 +69,9 @@ class SendPhotoToCloudStorage @Inject constructor(
     private fun deleteOldDocument(createLocalDateTime: String, uid: String) {
 
 
-
         firebaseStorage.reference.child("photos/$uid/$createLocalDateTime").listAll()
             .addOnSuccessListener { (items, prefixes) ->
-                prefixes.forEach { prefix ->
+                prefixes.forEach { _ ->
                     // All the prefixes under listRef.
                     // You may call listAll() recursively on them.
                 }
