@@ -53,11 +53,14 @@ class DetailsFragmentViewModel @Inject constructor(
     // if interest are empty, it says we have one item empty,
     // so to avoid empty chips, make it nullable
     private fun interestCantBeEmpty(interest: List<String>?): List<String>? {
-        return if (interest != null && interest[0].isEmpty()) {
-            null
+        return if(interest!= null){
+            interest.ifEmpty {
+                null
+            }
         }else{
             interest
         }
+
     }
 
     val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
