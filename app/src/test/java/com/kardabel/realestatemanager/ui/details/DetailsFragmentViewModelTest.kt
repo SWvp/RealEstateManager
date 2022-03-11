@@ -25,7 +25,8 @@ class DetailsFragmentViewModelTest {
 
     companion object {
         private const val EXPECTED_CURRENT_PROPERTY_ID = 42L
-        private const val EXPECTED_TIMESTAMP = 1254845878L
+        private const val EXPECTED_TIMESTAMP = "1254845878"
+        private const val EXPECTED_CREATION_DATE = "987654"
         private const val EXPECTED_PRICE = "400000"
         private const val EXPECTED_SURFACE = "85"
         private const val EXPECTED_ROOM = "4"
@@ -97,8 +98,8 @@ class DetailsFragmentViewModelTest {
             uid = "uid",
             vendor = "vendor",
             staticMap = "staticMap",
-            createLocalDateTime = "createLocalDateTime",
-            createDateToFormat = "createDateToFormat",
+            propertyCreationDate = "createLocalDateTime",
+            creationDateToFormat = "createDateToFormat",
             saleStatus = EXPECTED_IS_SOLD,
             purchaseDate = "purchaseDate",
             interest = EXPECTED_INTERESTS,
@@ -110,6 +111,7 @@ class DetailsFragmentViewModelTest {
                 photoDescription = "photoDescription",
                 propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
                 photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
                 photoId = EXPECTED_PHOTO_ID,
             )
         )
