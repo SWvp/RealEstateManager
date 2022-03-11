@@ -48,12 +48,12 @@ class SendPropertyToFirestore @Inject constructor(
     ): PropertyEntity {
         return PropertyEntity(
             address = property.address,
-            apartmentNumber = property.apartmentNumber.toString(),
+            apartmentNumber = property.apartmentNumber,
             city = property.city,
             zipcode = property.zipcode,
-            county = property.county.toString(),
-            country = property.country.toString(),
-            propertyDescription = property.propertyDescription.toString(),
+            county = property.county,
+            country = property.country,
+            propertyDescription = property.propertyDescription,
             type = property.type.toString(),
             price = property.price,
             surface = property.surface,
@@ -70,15 +70,6 @@ class SendPropertyToFirestore @Inject constructor(
             interest = property.interest,
             updateTimestamp = property.updateTimestamp
         )
-    }
-
-    private fun interestsCantBeNull(interest: List<String>?): ArrayList<String> {
-
-        return if (interest == null) {
-            ArrayList()
-        } else {
-            interest as ArrayList<String>
-        }
     }
 
     fun updatePropertyDocumentFromRoom(
@@ -102,22 +93,31 @@ class SendPropertyToFirestore @Inject constructor(
             "country" to property.country,
             "property_description" to property.propertyDescription,
             "type" to property.type,
-            "price" to property.price.toString(),
-            "surface" to property.surface.toString(),
-            "room" to property.room.toString(),
-            "bedroom" to property.bedroom.toString(),
-            "bathroom" to property.bathroom.toString(),
-            "user_id" to property.uid,
+            "price" to property.price,
+            "surface" to property.surface,
+            "room" to property.room,
+            "bedroom" to property.bedroom,
+            "bathroom" to property.bathroom,
+            "uid" to property.uid,
             "vendor" to property.vendor,
-            "static_map" to property.staticMap,
-            "creation_local_date_time" to property.propertyCreationDate,
-            "creation_date_to_format" to property.creationDateToFormat,
-            "on_sale_status" to property.saleStatus,
-            "purchase_date" to property.purchaseDate.toString(),
+            "staticMap" to property.staticMap,
+            "propertyCreationDate" to property.propertyCreationDate,
+            "creationDateToFormat" to property.creationDateToFormat,
+            "saleStatus" to property.saleStatus,
+            "purchaseDate" to property.purchaseDate.toString(),
             "interest" to interestsCantBeNull(property.interest),
-            "propertyId" to property.propertyId
+            "updateTimestamp" to property.updateTimestamp,
         )
 
+    }
+
+    private fun interestsCantBeNull(interest: List<String>?): ArrayList<String> {
+
+        return if (interest == null) {
+            ArrayList()
+        } else {
+            interest as ArrayList<String>
+        }
     }
 
     private fun getCollectionReference(): CollectionReference {
