@@ -2,28 +2,26 @@ package com.kardabel.realestatemanager.ui.properties
 
 import android.graphics.Color
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.model.SearchParams
-import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
-import com.kardabel.realestatemanager.repository.CurrentSearchRepository
-import com.kardabel.realestatemanager.repository.PriceConverterRepository
-import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
     propertiesRepository: PropertiesRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val currentPropertySaleStatus: CurrentPropertySaleStatus,
     priceConverterRepository: PriceConverterRepository,
     currentSearchRepository: CurrentSearchRepository,
     applicationDispatchers: ApplicationDispatchers,
+    private val propertiesDao: PropertiesDao,
 ) : ViewModel() {
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
@@ -83,7 +81,7 @@ class PropertiesViewModel @Inject constructor(
 
         } else if (currencyStatus != null) {
             propertiesMediatorLiveData.postValue(propertyWithPhoto.map { properties ->
-                toViewStateWithCurrencyStatus(properties, currencyStatus)
+                toViewStateWithCurrencyUpdated(properties, currencyStatus)
             })
         }
     }
@@ -99,7 +97,7 @@ class PropertiesViewModel @Inject constructor(
         photoUri = photoListCanBeEmpty(property)
     )
 
-    private fun toViewStateWithCurrencyStatus(
+    private fun toViewStateWithCurrencyUpdated(
         property: PropertyWithPhoto,
         currencyStatus: Boolean
     ) =
@@ -227,5 +225,9 @@ class PropertiesViewModel @Inject constructor(
 
     fun onPropertyClicked(propertyId: Long) {
         currentPropertyIdRepository.setCurrentPropertyId(propertyId)
+        viewModelScope.launch {
+            val property = propertiesDao.getPropertyByIdNoFlow(propertyId)
+            currentPropertySaleStatus.updateSaleStatus(property.propertyEntity.saleStatus)
+        }
     }
 }

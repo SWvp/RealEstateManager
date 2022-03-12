@@ -22,6 +22,10 @@ interface PropertiesDao {
     @Query("SELECT * FROM property WHERE propertyId=:id")
     fun getPropertyById(id : Long): Flow<PropertyWithPhoto>
 
+    @Transaction
+    @Query("SELECT * FROM property WHERE propertyId=:id")
+    suspend fun getPropertyByIdNoFlow(id : Long): PropertyWithPhoto
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertProperty(property: PropertyEntity): Long
 

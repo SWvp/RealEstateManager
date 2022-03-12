@@ -109,6 +109,13 @@ class MainActivity : AppCompatActivity() {
                 NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
                     startEditActivity()
 
+                NavigateToEditViewAction.PROPERTY_SOLD ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.sale),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                 NavigateToEditViewAction.NO_PROPERTY_SELECTED ->
                     Toast.makeText(
                         applicationContext,
@@ -155,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.edit_item -> {
                 // If no property is selected, edit will not be called
-                viewModel.propertyIdRepositoryStatus()
+                viewModel.checkPropertyStatus()
 
                 true
             }

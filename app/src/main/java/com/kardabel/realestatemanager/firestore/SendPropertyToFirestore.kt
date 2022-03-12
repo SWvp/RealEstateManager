@@ -7,6 +7,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -118,6 +119,16 @@ class SendPropertyToFirestore @Inject constructor(
         } else {
             interest as ArrayList<String>
         }
+    }
+
+    suspend fun updatePropertyWhenSold(
+        uid: String,
+        propertyCreationDate: String
+    ) {
+
+        getCollectionReference().document(uid + propertyCreationDate)
+            .update("saleStatus" , "Sold").await()
+
     }
 
     private fun getCollectionReference(): CollectionReference {

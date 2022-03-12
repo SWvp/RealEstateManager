@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.repository.*
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
 import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
@@ -22,6 +23,7 @@ class MainActivityViewModel @Inject constructor(
     private val context: Application,
     private val priceConverterRepository: PriceConverterRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val currentPropertySaleStatus: CurrentPropertySaleStatus,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
     private val mergePropertiesDataBaseRepository: MergePropertiesDataBaseRepository,
@@ -72,10 +74,13 @@ class MainActivityViewModel @Inject constructor(
     }
 
     // Check currentPropertyIdRepository to know if a property is selected
-    // If not, edit will not be called
-    fun propertyIdRepositoryStatus() {
-        if(currentPropertyIdRepository.isProperty){
+    // and currentPropertySaleStatus to check if sold
+    fun checkPropertyStatus() {
+        if(currentPropertyIdRepository.isProperty && currentPropertySaleStatus.isOnSale){
             startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.GO_TO_EDIT_PROPERTY)
+
+        }else if (currentPropertyIdRepository.isProperty && !currentPropertySaleStatus.isOnSale){
+            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.PROPERTY_SOLD)
 
         }else{
 

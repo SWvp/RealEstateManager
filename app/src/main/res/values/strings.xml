@@ -128,5 +128,7 @@
     <string name="search_complete">Search complete</string>
     <string name="select_parameter">Select at least one parameter or back pressed</string>
 
+    <string name="sale">This property is already sold !</string>
+
 
 </resources>

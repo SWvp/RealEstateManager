@@ -275,7 +275,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 // Get the property id to update photoEntity
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
 
-                    updateProperty(property)
+                    updatePropertyOnRoom(property)
                     updatePropertyOnFirestore(property)
 
                     checkForRegisteredPhoto()
@@ -341,7 +341,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
                 photoListWithPropertyId.add(photoEntity)
             }
-            insertNewPhoto(photoListWithPropertyId)
+            insertNewPhotoOnRoom(photoListWithPropertyId)
             photoFullList.addAll(photoListWithPropertyId)
         }
     }
@@ -358,11 +358,11 @@ class EditPropertyActivityViewModel @Inject constructor(
                 }
             }
         }
-        deletePhoto(photoToDeleteId)
+        deletePhotoOnRoom(photoToDeleteId)
         photoFullList.addAll(updatedRegisteredPhotoMutableList)
     }
 
-    private suspend fun updateProperty(property: PropertyUpdate) =
+    private suspend fun updatePropertyOnRoom(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
 
     private fun updatePropertyOnFirestore(property: PropertyUpdate) {
@@ -378,10 +378,10 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     }
 
-    private suspend fun insertNewPhoto(photos: List<PhotoEntity>) =
+    private suspend fun insertNewPhotoOnRoom(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhotos(photos)
 
-    private suspend fun deletePhoto(photoId: List<Int>) =
+    private suspend fun deletePhotoOnRoom(photoId: List<Int>) =
         propertiesRepository.deletePhotos(photoId)
 
     // Clear the photoRepoS for the next use
@@ -398,6 +398,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     fun propertySold() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             propertiesRepository.updateSaleStatus("Sold", propertyId)
+            sendPropertyToFirestore.updatePropertyWhenSold(uid, propertyCreationDate)
         }
     }
 }

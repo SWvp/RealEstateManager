@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityDetailsBinding
 import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
+import com.kardabel.realestatemanager.utils.ActivityViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +34,25 @@ class DetailsActivity: AppCompatActivity() {
                 .replace(binding.detailContainer.id, DetailsFragment())
                 .commitNow()
         }
+
+
+        viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
+            when (viewAction) {
+                ActivityViewAction.SALE ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.sale),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                ActivityViewAction.ON_SALE ->{
+                    val intent = Intent(this, EditPropertyActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                else -> {}
+            }
+        }
     }
 
     // Toolbar menu
@@ -44,9 +65,7 @@ class DetailsActivity: AppCompatActivity() {
         return when (item.itemId) {
             R.id.edit_item -> {
                 emptyCreatedPhotoRepository()
-                val intent = Intent(this, EditPropertyActivity::class.java)
-                startActivity(intent)
-                finish()
+                viewModel.checkSaleStatusBeforeAccessToEditPropertyActivity()
                 true
             }
             android.R.id.home -> {
