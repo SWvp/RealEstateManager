@@ -17,6 +17,7 @@ data class DetailsViewState(
     val zipcode: String,
     val country: String?,
     val startSale: String,
+    val soldDate: String?,
     val vendor: String,
     val staticMap: String,
     val visibility: Boolean,
