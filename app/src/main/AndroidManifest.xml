@@ -41,6 +41,11 @@
             </meta-data>
         </provider>
 
+        <provider
+            android:authorities="com.kardabel.realestatemanager.provider"
+            android:name="RealEstateContentProvider"
+            android:exported="true" />
+
 
         <meta-data
             android:name="com.google.android.gms.version"
