@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.ui.properties.PropertiesAdapter.ViewHolder
 
@@ -49,6 +51,9 @@ class PropertiesAdapter(
             Glide
                 .with(photo.context)
                 .load(propertyViewState.photoUri.toString())
+                .error(R.drawable.no_photo_available_yet)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
                 .into(photo)
 
 
