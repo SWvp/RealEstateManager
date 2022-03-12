@@ -94,7 +94,7 @@ class CreatePropertyViewModel @Inject constructor(
             // Get value to entity format, string is for the view, we don't trust anything else
             val uid = firebaseAuth.currentUser!!.uid
             val vendor = firebaseAuth.currentUser!!.displayName.toString()
-            val createDateToFormat = Utils.getTodayDate()
+            val createDateToFormat = Utils.todayDate()
             val propertyCreationDate = LocalDateTime.now(clock).toString()
 
             val property = PropertyEntity(
@@ -196,7 +196,7 @@ class CreatePropertyViewModel @Inject constructor(
 
     }
 
-    private fun sendPhotoToCloudStorage(
+    private suspend fun sendPhotoToCloudStorage(
         photos: List<PhotoEntity>,
     ) {
         sendPhotoToCloudStorage.createPhotoDocument(photos)
