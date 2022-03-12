@@ -86,6 +86,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     photoCreationDate = photo.photoCreationDate
                 )
             }
+            updatedRegisteredPhotoMutableList = registeredPhoto as MutableList<PhotoEntity>
 
         } else {
             getAllPhotoMediatorLiveData.value = toViewState(registeredPhoto, addedPhoto)
@@ -297,10 +298,8 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     // Allow interest list to be null -> avoid to display "" interest
     private fun interestCanBeNull(interests: MutableList<String>): List<String>? {
-        return if (interests.size == 0) {
+        return interests.ifEmpty {
             null
-        } else {
-            interests
         }
     }
 
@@ -374,7 +373,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         )
     }
 
-    private fun updatePhotoOnCloudStorage() {
+    private suspend fun updatePhotoOnCloudStorage() {
         sendPhotoToCloudStorage.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
 
     }
