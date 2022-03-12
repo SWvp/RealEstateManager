@@ -29,11 +29,13 @@ class RegisteredPhotoRepository @Inject constructor() {
     }
 
     fun deleteRegisteredPhoto(photoId: Int) {
+        val photoListToRemove = mutableListOf<PhotoEntity>()
         for (photo in originalRegisteredPhotoList) {
             if (photo.photoId == photoId) {
-                registeredPhotoList.remove(photo)
+                photoListToRemove.add(photo)
             }
         }
+        registeredPhotoList.removeAll(photoListToRemove)
         registeredPhotoLiveData.postValue(registeredPhotoList)
     }
 
