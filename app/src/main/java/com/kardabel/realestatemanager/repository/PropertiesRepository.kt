@@ -40,4 +40,9 @@ class PropertiesRepository @Inject constructor(
     suspend fun updateSaleStatus(saleStatus: String, propertyId: Long) {
         propertiesDao.updatePropertySaleStatus(saleStatus, propertyId)
     }
+
+    suspend fun updateSaleDate(saleDate: String, propertyId: Long) {
+        propertiesDao.updatePropertySaleDate(saleDate, propertyId)
+    }
+
 }

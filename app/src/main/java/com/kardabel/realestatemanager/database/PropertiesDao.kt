@@ -35,6 +35,9 @@ interface PropertiesDao {
     @Query("UPDATE property SET on_sale_status=:saleStatus WHERE propertyId =:id")
     suspend fun updatePropertySaleStatus(saleStatus: String, id : Long)
 
+    @Query("UPDATE property SET purchase_date=:saleDate WHERE propertyId =:id")
+    suspend fun updatePropertySaleDate(saleDate: String, id : Long)
+
     @Update(entity = PropertyEntity::class)
     suspend fun updateProperty(property: PropertyUpdate)
 
