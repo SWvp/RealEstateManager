@@ -42,12 +42,19 @@ class DetailsFragmentViewModel @Inject constructor(
                     zipcode = it.propertyEntity.zipcode,
                     country = it.propertyEntity.country,
                     startSale = it.propertyEntity.creationDateToFormat,
+                    soldDate = soldDateToString(it.propertyEntity.purchaseDate),
                     vendor = it.propertyEntity.vendor,
                     visibility = true,
                     staticMap = it.propertyEntity.staticMap
                 )
             }.asLiveData(applicationDispatchers.ioDispatcher)
         }
+
+    private fun soldDateToString(purchaseDate: String?): String {
+        return if(purchaseDate == "null" || purchaseDate == null){
+            "Ongoing sale !"
+        }else purchaseDate
+    }
 
     // When retrieve properties from firestore,
     // if interest are empty, it says we have one item empty,
