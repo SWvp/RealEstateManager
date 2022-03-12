@@ -49,9 +49,6 @@ class EditPropertyActivityViewModel @Inject constructor(
     private var propertyCreationDate by Delegates.notNull<String>()
     private var dateToFormat by Delegates.notNull<String>()
 
-    // Expose interest list to view
-    val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////  RETRIEVE AND DISPLAY PHOTOS  //////////////////////////////////
@@ -189,7 +186,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////  POPULATE CACHE REPOSITORY  /////////////////////////////////////
+    //////////////////////////////  POPULATE CACHE REPOSITORY ONCE WITH REGISTERED DATA  ///////////
 
     // Create a photo list with old photo
     private fun sendRegisteredPhotosToRepository(photoList: List<PhotoEntity>) {
@@ -214,7 +211,10 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////  EDIT PROPERTY ////////////////////////////////////////////////
+    ////////////////////////////////  MANAGE INTERESTS /////////////////////////////////////////////
+
+    // Expose interest list to view
+    val getInterest: LiveData<List<String>> = interestRepository.getInterestLiveData()
 
     fun addInterest(interest: String) {
         if (interest.length > 2) {
@@ -228,6 +228,10 @@ class EditPropertyActivityViewModel @Inject constructor(
         interestList.remove(interest)
 
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  CREATE PROPERTY //////////////////////////////////////////////
 
     fun editProperty(
         address: String,
@@ -248,8 +252,6 @@ class EditPropertyActivityViewModel @Inject constructor(
         // Must contain at least one photo and an address (street, zip, city)
         if (addedPhotoMutableList.isNotEmpty() || updatedRegisteredPhotoMutableList.isNotEmpty()) {
             if (address != "" && city != "" && zipcode != "") {
-
-                // Get value to entity format, string is for the view
 
                 val property = PropertyUpdate(
                     address = address,
@@ -273,7 +275,6 @@ class EditPropertyActivityViewModel @Inject constructor(
                     updateTimestamp = System.currentTimeMillis().toString(),
                 )
 
-                // Get the property id to update photoEntity
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
 
                     updatePropertyOnRoom(property)
@@ -325,6 +326,10 @@ class EditPropertyActivityViewModel @Inject constructor(
                 key
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  MANAGE AND BUILD PHOTO LIST  /////////////////////////////////
+
     // If new photo, create photo and send to room DB
     private suspend fun createPhotoEntity() {
 
@@ -342,7 +347,9 @@ class EditPropertyActivityViewModel @Inject constructor(
                 )
                 photoListWithPropertyId.add(photoEntity)
             }
+
             insertNewPhotoOnRoom(photoListWithPropertyId)
+
             photoFullList.addAll(photoListWithPropertyId)
         }
     }
@@ -363,10 +370,14 @@ class EditPropertyActivityViewModel @Inject constructor(
         photoFullList.addAll(updatedRegisteredPhotoMutableList)
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  UPDATE PROPERTY ON DATABASES /////////////////////////////////
+
     private suspend fun updatePropertyOnRoom(property: PropertyUpdate) =
         propertiesRepository.updateProperty(property)
 
-    private fun updatePropertyOnFirestore(property: PropertyUpdate) {
+    private suspend fun updatePropertyOnFirestore(property: PropertyUpdate) {
         sendPropertyToFirestore.updatePropertyDocumentFromEditView(
             property,
             propertyCreationDate,
@@ -374,16 +385,24 @@ class EditPropertyActivityViewModel @Inject constructor(
         )
     }
 
-    private suspend fun updatePhotoOnCloudStorage() {
-        sendPhotoToCloudStorage.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    }
+    ////////////////////////////////  UPDATE PHOTOS ON DATABASES ///////////////////////////////////
 
     private suspend fun insertNewPhotoOnRoom(photos: List<PhotoEntity>) =
         propertiesRepository.insertPhotos(photos)
 
     private suspend fun deletePhotoOnRoom(photoId: List<Int>) =
         propertiesRepository.deletePhotos(photoId)
+
+    private suspend fun updatePhotoOnCloudStorage() {
+        sendPhotoToCloudStorage.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  CLEAR CACHES /////////////////////////////////////////////////
 
     // Clear the photoRepoS for the next use
     fun emptyAllPhotoRepository() {
@@ -396,6 +415,12 @@ class EditPropertyActivityViewModel @Inject constructor(
         interestRepository.emptyInterestList()
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  WHEN PROPERTY IS SOLD ////////////////////////////////////////
+
+    // When user chose to sold the property,
+    // retrieve sale date, update all databases and close editPropertyActivity
     fun propertySold() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             val saleDate = Utils.todayDate()
