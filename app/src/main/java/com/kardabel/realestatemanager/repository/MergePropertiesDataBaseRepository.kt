@@ -75,7 +75,16 @@ class MergePropertiesDataBaseRepository @Inject constructor(
         }
         if (propertiesFromFirestore.isNotEmpty()) {
 
-            insertPropertiesInLocalDataBase(propertiesFromFirestore)
+            val finalProperty = mutableListOf<PropertyEntity>()
+
+            for (property in propertiesFromFirestore) {
+                if (property.interest?.isEmpty() == true) {
+                    property.interest = null
+                }
+                finalProperty.add(property)
+            }
+
+            insertPropertiesInLocalDataBase(finalProperty)
         }
     }
 
