@@ -107,7 +107,7 @@ class PropertiesViewModel @Inject constructor(
             propertyId = property.propertyEntity.propertyId,
             type = readableType(property.propertyEntity.type),
             county = property.propertyEntity.county,
-            price = currencyConverter(property.propertyEntity.price.toInt(), currencyStatus),
+            price = currencyConverter(property.propertyEntity.price, currencyStatus),
             saleStatus = property.propertyEntity.saleStatus,
             saleColor = colorToApply(property.propertyEntity.saleStatus),
             vendor = property.propertyEntity.vendor,
@@ -176,14 +176,14 @@ class PropertiesViewModel @Inject constructor(
 
 
     private fun currencyConverter(
-        price: Int?,
+        price: String,
         currencyStatus: Boolean
     ): String {
-        return if (price != null) {
+        return if (price != "") {
             return if (currencyStatus) {
                 "$$price"
             } else {
-                val priceConverted: String = Utils.convertDollarToEuro(price).toString()
+                val priceConverted: String = Utils.convertDollarToEuro(price.toInt()).toString()
                 "€$priceConverted"
             }
         } else {
