@@ -112,22 +112,25 @@ class SendPropertyToFirestore @Inject constructor(
 
     }
 
-    private fun interestsCantBeNull(interest: List<String>?): ArrayList<String> {
+    private fun interestsCantBeNull(interest: List<String>?): List<String> {
 
-        return if (interest == null) {
-            ArrayList()
-        } else {
-            interest as ArrayList<String>
-        }
+        return interest ?: ArrayList()
     }
 
     suspend fun updatePropertyWhenSold(
         uid: String,
-        propertyCreationDate: String
+        propertyCreationDate: String,
+        saleDate: String
     ) {
 
         getCollectionReference().document(uid + propertyCreationDate)
-            .update("saleStatus" , "Sold").await()
+            .update(
+                "saleStatus" , "Sold",
+
+                "purchaseDate" , saleDate
+
+
+            ).await()
 
     }
 
