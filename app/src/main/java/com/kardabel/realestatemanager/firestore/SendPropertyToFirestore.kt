@@ -27,7 +27,7 @@ class SendPropertyToFirestore @Inject constructor(
         }
     }
 
-    fun updatePropertyDocumentFromEditView(
+    suspend fun updatePropertyDocumentFromEditView(
         property: PropertyUpdate,
         createLocalDateTime: String,
         dateToFormat: String
@@ -37,9 +37,8 @@ class SendPropertyToFirestore @Inject constructor(
             createPropertyEntity(property, createLocalDateTime, dateToFormat)
 
         getCollectionReference().document(newProperty.uid + newProperty.propertyCreationDate)
-            .update(getMappedProperty(newProperty))
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+            .update(getMappedProperty(newProperty)).await()
+
     }
 
     private fun createPropertyEntity(
