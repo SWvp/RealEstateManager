@@ -40,7 +40,7 @@ class DetailsFragment : Fragment() {
         setAdapter()
 
         // Observe the selected property
-        viewModel.detailsLiveData.observe(this) { property ->
+        viewModel.detailsLiveData.observe(viewLifecycleOwner) { property ->
 
             setVisibility(property)
             setView(property)
@@ -48,7 +48,7 @@ class DetailsFragment : Fragment() {
         }
 
         // Observe if empty the view is needed (when back from a search)
-        viewModel.isFromSearchLiveData.observe(this){
+        viewModel.isFromSearchLiveData.observe(viewLifecycleOwner){
 
             setViewWhenBackFromSearchActivity(it)
 
@@ -87,6 +87,9 @@ class DetailsFragment : Fragment() {
         binding.locationIcon.isVisible = property.visibility
         binding.locationTitle.isVisible = property.visibility
         binding.startSaleDate.isVisible = property.visibility
+        binding.soldDate.isVisible = property.visibility
+        binding.creationDateTitle.isVisible = property.visibility
+        binding.soldDateTitle.isVisible = property.visibility
         binding.map.isVisible = property.visibility
 
         binding.emptyLayout?.setBackgroundColor(resources.getColor(R.color.transparent))
@@ -107,6 +110,7 @@ class DetailsFragment : Fragment() {
         binding.zipCode.text = property.zipcode
         binding.country.text = property.country
         binding.startSaleDate.text = property.startSale
+        binding.soldDate.text = property.soldDate
 
         Glide.with(binding.map.context).load(property.staticMap).into(binding.map)
 

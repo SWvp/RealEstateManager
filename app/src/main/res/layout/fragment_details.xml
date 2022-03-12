@@ -258,19 +258,59 @@
                 tools:visibility="visible" />
 
             <TextView
+                android:id="@+id/creation_date_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/creation_date_text"
+                android:textSize="@dimen/details_description_text"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toBottomOf="@+id/chip_group"
+                tools:visibility="visible" />
+
+            <TextView
                 android:id="@+id/start_sale_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textSize="@dimen/details_description_text"
+                android:textStyle="italic"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/creation_date_title"
+                app:layout_constraintStart_toStartOf="@+id/creation_date_title"
+                app:layout_constraintTop_toBottomOf="@id/creation_date_title"
+                tools:text="@string/details_start_sale"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/sold_date_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:text="@string/sold_date_text"
+                android:textSize="@dimen/details_description_text"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/start_sale_date"
+                app:layout_constraintStart_toEndOf="@id/interests_icon"
+                app:layout_constraintTop_toBottomOf="@+id/start_sale_date"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/sold_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textSize="@dimen/details_description_text"
                 android:textStyle="italic"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/chip_group"
-                app:layout_constraintStart_toStartOf="@+id/chip_group"
-                app:layout_constraintTop_toBottomOf="@id/chip_group"
-                tools:text="@string/details_start_sale"
+                app:layout_constraintEnd_toEndOf="@+id/sold_date_title"
+                app:layout_constraintStart_toStartOf="@+id/sold_date_title"
+                app:layout_constraintTop_toBottomOf="@id/sold_date_title"
+                tools:text="@string/details_sold_date"
                 tools:visibility="visible" />
 
 

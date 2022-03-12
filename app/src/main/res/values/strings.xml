@@ -50,8 +50,12 @@
     <string name="details_bedroom_value">3</string>
     <string name="details_bedroom_description">This is bedroom icon</string>
     <string name="details_interests_title">Point of interests:</string>
+    <string name="creation_date_text">Creation date:</string>
+    <string name="sold_date_text">Sold on:</string>
+
     <string name="details_interests_description">School, Church, Police station</string>
     <string name="details_start_sale">On sale date: 12/12/2021</string>
+    <string name="details_sold_date">Sold on: 12/12/2021</string>
     <string name="details_location_title">Location:</string>
     <string name="details_location_description">This is description icon</string>
     <string name="details_street">10 avenue de la corniche</string>
