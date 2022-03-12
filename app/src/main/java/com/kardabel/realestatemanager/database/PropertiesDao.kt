@@ -1,5 +1,6 @@
 package com.kardabel.realestatemanager.database
 
+import android.database.Cursor
 import androidx.room.*
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -44,4 +45,9 @@ interface PropertiesDao {
 
     @Query("DELETE FROM photo WHERE photoId IN (:photoId)")
     suspend fun deletePhotoById(photoId: List<Int>)
+
+
+
+    @Query("SELECT * FROM property WHERE propertyId = :id")
+    fun getPropertiesWithCursor(vararg id: Long): Cursor
 }
