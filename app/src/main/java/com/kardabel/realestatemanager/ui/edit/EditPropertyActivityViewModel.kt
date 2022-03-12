@@ -13,6 +13,7 @@ import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
+import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -397,8 +398,14 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     fun propertySold() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
+            val saleDate = Utils.todayDate()
             propertiesRepository.updateSaleStatus("Sold", propertyId)
-            sendPropertyToFirestore.updatePropertyWhenSold(uid, propertyCreationDate)
+            propertiesRepository.updateSaleDate(saleDate, propertyId)
+            sendPropertyToFirestore.updatePropertyWhenSold(uid, propertyCreationDate, saleDate)
+            withContext(applicationDispatchers.mainDispatcher) {
+                actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
+
+            }
         }
     }
 }
