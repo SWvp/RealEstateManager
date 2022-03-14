@@ -10,10 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.repository.*
-import com.kardabel.realestatemanager.utils.ActivityViewAction
-import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
-import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
-import com.kardabel.realestatemanager.utils.SingleLiveEvent
+import com.kardabel.realestatemanager.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +29,7 @@ class MainActivityViewModel @Inject constructor(
 
     private var isTablet: Boolean = false
 
-    val actionSingleLiveEvent: SingleLiveEvent<PermissionViewAction> = SingleLiveEvent()
+    val mActionSingleLiveEventMainActivity: SingleLiveEvent<MainActivityViewAction> = SingleLiveEvent()
     val screenPositionSingleLiveEvent: SingleLiveEvent<ScreenPositionViewAction> =
         SingleLiveEvent()
     val startEditActivitySingleLiveEvent: SingleLiveEvent<NavigateToEditViewAction> =
@@ -49,10 +46,10 @@ class MainActivityViewModel @Inject constructor(
                 activity,
                 permission.ACCESS_FINE_LOCATION
             ) -> {
-                actionSingleLiveEvent.setValue(PermissionViewAction.PERMISSION_DENIED)
+                mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_DENIED)
             }
             else -> {
-                actionSingleLiveEvent.setValue(PermissionViewAction.PERMISSION_ASKED)
+                mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_ASKED)
             }
         }
     }
@@ -77,14 +74,14 @@ class MainActivityViewModel @Inject constructor(
     // and currentPropertySaleStatus to check if sold
     fun checkPropertyStatus() {
         if(currentPropertyIdRepository.isProperty && currentPropertySaleStatus.isOnSale){
-            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.GO_TO_EDIT_PROPERTY)
+            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.GO_TO_EDIT_PROPERTY)
 
         }else if (currentPropertyIdRepository.isProperty && !currentPropertySaleStatus.isOnSale){
-            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.PROPERTY_SOLD)
+            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PROPERTY_SOLD)
 
         }else{
 
-            startEditActivitySingleLiveEvent.setValue(NavigateToEditViewAction.NO_PROPERTY_SELECTED)
+            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.NO_PROPERTY_SELECTED)
         }
     }
 
