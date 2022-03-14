@@ -23,10 +23,11 @@ import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
 import com.kardabel.realestatemanager.ui.map.MapActivity
 import com.kardabel.realestatemanager.ui.properties.PropertiesFragment
 import com.kardabel.realestatemanager.ui.search.SearchPropertyActivity
-import com.kardabel.realestatemanager.utils.NavigateToEditViewAction
+import com.kardabel.realestatemanager.utils.MainActivityViewAction
 import com.kardabel.realestatemanager.utils.ScreenPositionViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
+@Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -65,20 +66,34 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        // Permission work is doing by viewModel
-        viewModel.actionSingleLiveEvent.observe(this) {
-            when (it) {
-                PermissionViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
+        // Single live event to manage permission and property status
+        viewModel.mActionSingleLiveEventMainActivity.observe(this) { viewAction ->
+            when (viewAction) {
+                MainActivityViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
                     this@MainActivity,
                     arrayOf(permission.ACCESS_FINE_LOCATION),
                     LOCATION_PERMISSION_CODE
                 )
-                else -> {
+                MainActivityViewAction.PERMISSION_DENIED -> {
                     val alertDialogBuilder = MaterialAlertDialogBuilder(this@MainActivity)
                     alertDialogBuilder.setTitle("R.string.title_alert")
                     alertDialogBuilder.setMessage("rational")
                     alertDialogBuilder.show()
                 }
+                MainActivityViewAction.GO_TO_EDIT_PROPERTY ->
+                    startEditActivity()
+                MainActivityViewAction.PROPERTY_SOLD ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.sale),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                MainActivityViewAction.NO_PROPERTY_SELECTED ->
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.no_property_selected),
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
         }
 
@@ -100,28 +115,6 @@ class MainActivity : AppCompatActivity() {
                         DetailsActivity::class.java
                     )
                 )
-            }
-        }
-
-        // Single live event trigger when edit item is clicked
-        viewModel.startEditActivitySingleLiveEvent.observe(this) { viewAction ->
-            when (viewAction) {
-                NavigateToEditViewAction.GO_TO_EDIT_PROPERTY ->
-                    startEditActivity()
-
-                NavigateToEditViewAction.PROPERTY_SOLD ->
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.sale),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                NavigateToEditViewAction.NO_PROPERTY_SELECTED ->
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.no_property_selected),
-                        Toast.LENGTH_SHORT
-                    ).show()
             }
         }
 
