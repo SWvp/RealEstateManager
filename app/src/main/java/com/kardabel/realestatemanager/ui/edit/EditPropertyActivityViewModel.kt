@@ -45,6 +45,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val interestList = mutableListOf<String>()
 
     private var uid by Delegates.notNull<String>()
+    private var vendor by Delegates.notNull<String>()
     private var propertyId by Delegates.notNull<Long>()
     private var propertyCreationDate by Delegates.notNull<String>()
     private var dateToFormat by Delegates.notNull<String>()
@@ -143,6 +144,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             propertiesRepository.getPropertyById(id).map { property ->
 
                 uid = property.propertyEntity.uid
+                vendor = property.propertyEntity.vendor
                 propertyId = property.propertyEntity.propertyId
                 propertyCreationDate = property.propertyEntity.propertyCreationDate
                 dateToFormat = property.propertyEntity.creationDateToFormat
@@ -253,7 +255,9 @@ class EditPropertyActivityViewModel @Inject constructor(
         if (addedPhotoMutableList.isNotEmpty() || updatedRegisteredPhotoMutableList.isNotEmpty()) {
             if (address != "" && city != "" && zipcode != "") {
 
+                val timestamp = System.currentTimeMillis().toString()
                 val property = PropertyUpdate(
+                    uid = uid,
                     address = address,
                     apartmentNumber = apartmentNumber,
                     city = city,
@@ -272,7 +276,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                     interest = interestCanBeNull(interestList),
                     propertyId = propertyId,
                     staticMap = staticMapUrl(address, zipcode, city),
-                    updateTimestamp = System.currentTimeMillis().toString(),
+                    updateTimestamp = timestamp,
                 )
 
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
@@ -381,7 +385,8 @@ class EditPropertyActivityViewModel @Inject constructor(
         sendPropertyToFirestore.updatePropertyDocumentFromEditView(
             property,
             propertyCreationDate,
-            dateToFormat
+            dateToFormat,
+            vendor
         )
     }
 
