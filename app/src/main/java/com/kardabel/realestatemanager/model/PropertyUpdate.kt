@@ -21,6 +21,7 @@ data class PropertyUpdate(
     @ColumnInfo(name = "room") val room: String,
     @ColumnInfo(name = "bedroom") val bedroom: String,
     @ColumnInfo(name = "bathroom") val bathroom: String,
+    @ColumnInfo(name = "user_id") val uid: String = "",
     @ColumnInfo(name = "on_sale_status") val saleStatus: String,
     @ColumnInfo(name = "purchase_date") val purchaseDate: String?,
     @ColumnInfo(name = "interest") val interest: List<String>?,

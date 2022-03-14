@@ -26,7 +26,7 @@ class PropertiesRepository @Inject constructor(
     }
 
     suspend fun updateProperty(property: PropertyUpdate) {
-        propertiesDao.updateProperty(property)
+        propertiesDao.updateLightProperty(property)
     }
 
     suspend fun insertPhotos(photos: List<PhotoEntity>) {

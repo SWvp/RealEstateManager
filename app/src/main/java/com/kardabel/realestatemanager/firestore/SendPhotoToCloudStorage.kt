@@ -1,7 +1,6 @@
 package com.kardabel.realestatemanager.firestore
 
 import android.net.Uri
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storageMetadata
@@ -12,11 +11,10 @@ import javax.inject.Inject
 
 
 class SendPhotoToCloudStorage @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage,
 ) {
 
-    suspend fun createPhotoDocument(photos: List<PhotoEntity>) {
+    suspend fun createPhotoDocument(photos: List<PhotoEntity>, uid: String) {
 
         for (photo in photos) {
 
@@ -28,7 +26,7 @@ class SendPhotoToCloudStorage @Inject constructor(
                 setCustomMetadata("photoDescription", photo.photoDescription)
             }
 
-            getPhotoReference(firebaseAuth.uid, photo.photoCreationDate, photo.photoTimestamp)
+            getPhotoReference(uid, photo.photoCreationDate, photo.photoTimestamp)
                 .putFile(
                     file,
                     metadata
@@ -53,16 +51,16 @@ class SendPhotoToCloudStorage @Inject constructor(
 
         deleteOldDocument(createLocalDateTime, uid)
 
-        createPhotoDocument(photos)
+        createPhotoDocument(photos, uid)
 
     }
 
     private suspend fun deleteOldDocument(createLocalDateTime: String, uid: String) {
 
 
-        val PhotosFromCloudStorage = firebaseStorage.reference.child("photos/$uid/$createLocalDateTime").listAll().await()
+        val photosFromCloudStorage = firebaseStorage.reference.child("photos/$uid/$createLocalDateTime").listAll().await()
 
-        for (photo in PhotosFromCloudStorage.items) {
+        for (photo in photosFromCloudStorage.items) {
 
             photo.delete()
         }
