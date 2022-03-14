@@ -39,10 +39,19 @@ interface PropertiesDao {
     suspend fun updatePropertySaleDate(saleDate: String, id : Long)
 
     @Update(entity = PropertyEntity::class)
-    suspend fun updateProperty(property: PropertyUpdate)
+    suspend fun updateLightProperty(property: PropertyUpdate)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateProperty(property: PropertyEntity)
+
+    @Query("SELECT * FROM photo")
+    fun getPhotos(): List<PhotoEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPhotos(photos: List<PhotoEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPhoto(photos: PhotoEntity)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updatePhoto(photo: PhotoEntity)
@@ -52,6 +61,9 @@ interface PropertiesDao {
 
     @Query("DELETE FROM photo WHERE photoId IN (:photoId)")
     suspend fun deletePhotoById(photoId: List<Int>)
+
+    @Query("DELETE FROM photo WHERE property_owner_id = :propertyId")
+    suspend fun deleteAllPropertyPhotos(propertyId: Long)
 
 
 
