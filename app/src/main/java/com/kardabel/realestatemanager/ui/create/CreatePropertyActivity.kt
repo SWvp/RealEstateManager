@@ -54,7 +54,6 @@ class CreatePropertyActivity : AppCompatActivity() {
     private var uriImageSelected: Uri? = null
     private var propertyType: String? = null
 
-
     private val viewModel: CreatePropertyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -263,11 +262,10 @@ class CreatePropertyActivity : AppCompatActivity() {
 
                 if (uriImageSelected == null) {
                     uriImageSelected = data!!.data
-                    val uriPathHelper = UriPathHelper()
-                    val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
-                    confirmDialogFragment(filePath!!)
                 }
-
+                val uriPathHelper = UriPathHelper()
+                val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
+                confirmDialogFragment(filePath!!)
             }
         }
     }
