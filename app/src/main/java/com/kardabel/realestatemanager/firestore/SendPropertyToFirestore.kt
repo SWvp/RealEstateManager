@@ -30,11 +30,12 @@ class SendPropertyToFirestore @Inject constructor(
     suspend fun updatePropertyDocumentFromEditView(
         property: PropertyUpdate,
         createLocalDateTime: String,
-        dateToFormat: String
+        dateToFormat: String,
+        vendor: String
     ) {
 
         val newProperty: PropertyEntity =
-            createPropertyEntity(property, createLocalDateTime, dateToFormat)
+            createPropertyEntity(property, createLocalDateTime, dateToFormat, vendor)
 
         getCollectionReference().document(newProperty.uid + newProperty.propertyCreationDate)
             .update(getMappedProperty(newProperty)).await()
@@ -44,7 +45,8 @@ class SendPropertyToFirestore @Inject constructor(
     private fun createPropertyEntity(
         property: PropertyUpdate,
         createLocalDateTime: String,
-        dateToFormat: String
+        dateToFormat: String,
+        vendor: String
     ): PropertyEntity {
         return PropertyEntity(
             address = property.address,
@@ -60,8 +62,8 @@ class SendPropertyToFirestore @Inject constructor(
             room = property.room,
             bedroom = property.bedroom,
             bathroom = property.bathroom,
-            uid = firebaseAuth.currentUser!!.uid,
-            vendor = firebaseAuth.currentUser!!.displayName.toString(),
+            uid = property.uid,
+            vendor = vendor,
             staticMap = property.staticMap,
             propertyCreationDate = createLocalDateTime,
             creationDateToFormat = dateToFormat,
@@ -86,12 +88,12 @@ class SendPropertyToFirestore @Inject constructor(
 
         return hashMapOf(
             "address" to property.address,
-            "apartment_number" to property.apartmentNumber,
+            "apartmentNumber" to property.apartmentNumber,
             "city" to property.city,
             "zipcode" to property.zipcode,
             "county" to property.county,
             "country" to property.country,
-            "property_description" to property.propertyDescription,
+            "propertyDescription" to property.propertyDescription,
             "type" to property.type,
             "price" to property.price,
             "surface" to property.surface,
@@ -108,7 +110,6 @@ class SendPropertyToFirestore @Inject constructor(
             "interest" to interestsCantBeNull(property.interest),
             "updateTimestamp" to property.updateTimestamp,
         )
-
     }
 
     private fun interestsCantBeNull(interest: List<String>?): List<String> {
@@ -125,12 +126,8 @@ class SendPropertyToFirestore @Inject constructor(
         getCollectionReference().document(uid + propertyCreationDate)
             .update(
                 "saleStatus" , "Sold",
-
                 "purchaseDate" , saleDate
-
-
             ).await()
-
     }
 
     private fun getCollectionReference(): CollectionReference {
