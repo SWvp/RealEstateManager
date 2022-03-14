@@ -122,11 +122,10 @@ class CreatePropertyViewModel @Inject constructor(
                 updateTimestamp = System.currentTimeMillis().toString(),
             )
 
-
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
                 val newPropertyId = insertProperty(property)
-                createPhotoEntityWithPropertyId(newPropertyId, propertyCreationDate)
+                createPhotoEntityWithPropertyId(newPropertyId, propertyCreationDate, uid)
                 createPropertyOnFirestore(property)
 
                 emptyPhotoRepository()
@@ -166,7 +165,8 @@ class CreatePropertyViewModel @Inject constructor(
 
     private suspend fun createPhotoEntityWithPropertyId(
         newPropertyId: Long,
-        createLocalDateTime: String
+        createLocalDateTime: String,
+        uid: String
     ) {
 
         val photoListWithPropertyId = mutableListOf<PhotoEntity>()
@@ -183,7 +183,7 @@ class CreatePropertyViewModel @Inject constructor(
         }
 
         sendPhotosToLocalDataBase(photoListWithPropertyId)
-        sendPhotoToCloudStorage(photoListWithPropertyId)
+        sendPhotoToCloudStorage(photoListWithPropertyId, uid)
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
@@ -198,8 +198,9 @@ class CreatePropertyViewModel @Inject constructor(
 
     private suspend fun sendPhotoToCloudStorage(
         photos: List<PhotoEntity>,
+        uid: String
     ) {
-        sendPhotoToCloudStorage.createPhotoDocument(photos)
+        sendPhotoToCloudStorage.createPhotoDocument(photos, uid)
 
     }
 
