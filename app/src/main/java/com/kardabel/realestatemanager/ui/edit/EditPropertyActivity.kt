@@ -292,12 +292,19 @@ class EditPropertyActivity : AppCompatActivity() {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 if (uriImageSelected == null) {
-                    uriImageSelected = data!!.data
-                }
 
+                    uriImageSelected = data!!.data
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
                     confirmDialogFragment(filePath!!)
+
+                }else{
+
+                    //TODO: save file on storage !!!
+                    confirmDialogFragment(uriImageSelected.toString())
+
+                }
+
 
             }
         }

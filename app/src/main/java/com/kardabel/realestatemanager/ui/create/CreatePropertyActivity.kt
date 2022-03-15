@@ -262,15 +262,20 @@ class CreatePropertyActivity : AppCompatActivity() {
 
                 if (uriImageSelected == null) {
                     uriImageSelected = data!!.data
+                    val uriPathHelper = UriPathHelper()
+                    val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
+                    confirmDialogFragment(filePath!!)
                 }
-                val uriPathHelper = UriPathHelper()
-                val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
-                confirmDialogFragment(filePath!!)
+                else{
+
+                    //TODO: save file on storage !!!
+                    confirmDialogFragment(uriImageSelected.toString())
+                }
             }
         }
     }
 
-    // Create an alert dialog to ask user type a photo description,
+    // Create an alert dialog to ask user a photo description,
     // then, when validate, send whole photo object to a repo via VM
     private fun confirmDialogFragment(photoUriString: String) {
         val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(photoUriString)
