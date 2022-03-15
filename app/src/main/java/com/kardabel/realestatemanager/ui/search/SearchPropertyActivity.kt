@@ -39,7 +39,7 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         // On search button clicked
         binding.searchButton.setOnClickListener {
-            viewModel.search(
+            viewModel.onSearchClick(
                 binding.inputPropertyCounty.text.toString()
             )
         }

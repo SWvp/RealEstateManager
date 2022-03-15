@@ -10,7 +10,7 @@ import com.kardabel.realestatemanager.model.PhotoEntity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AddedPhotoConfirmationDialogFragment : DialogFragment() {
+class AddPhotoConfirmationDialogFragment : DialogFragment() {
 
     interface ConfirmDeleteListener {
         fun onDialogNegativeClick()
@@ -20,7 +20,7 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
     var photoUri: String? = null
 
     companion object {
-        fun newInstance(uriString: String) = AddedPhotoConfirmationDialogFragment().apply {
+        fun newInstance(uriString: String) = AddPhotoConfirmationDialogFragment().apply {
             photoUri = uriString
             photoTimestamp = System.currentTimeMillis().toString()
         }
@@ -31,7 +31,7 @@ class AddedPhotoConfirmationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
         val viewModel =
-            ViewModelProvider(this)[AddedPhotoConfirmationDialogFragmentViewModel::class.java]
+            ViewModelProvider(this)[AddPhotoConfirmationDialogFragmentViewModel::class.java]
         val editText = EditText(requireContext())
         builder
             .setMessage("Enter description")

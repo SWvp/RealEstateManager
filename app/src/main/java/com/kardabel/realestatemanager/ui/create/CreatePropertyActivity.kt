@@ -22,8 +22,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
-import com.kardabel.realestatemanager.ui.dialog.AddedPhotoConfirmationDialogFragment
-import com.kardabel.realestatemanager.ui.dialog.EditPhotoDialogFragment
+import com.kardabel.realestatemanager.ui.dialog.AddPhotoConfirmationDialogFragment
+import com.kardabel.realestatemanager.ui.dialog.ValidatePhotoDialogFragment
 import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -278,14 +278,14 @@ class CreatePropertyActivity : AppCompatActivity() {
     // Create an alert dialog to ask user a photo description,
     // then, when validate, send whole photo object to a repo via VM
     private fun confirmDialogFragment(photoUriString: String) {
-        val confirmFragment = AddedPhotoConfirmationDialogFragment.newInstance(photoUriString)
+        val confirmFragment = AddPhotoConfirmationDialogFragment.newInstance(photoUriString)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editPhotoDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
-        val confirmFragment = EditPhotoDialogFragment.createPropertyInstance(propertyPhotoViewState)
+        val confirmFragment = ValidatePhotoDialogFragment.createPropertyActivityInstance(propertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }

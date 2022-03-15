@@ -12,7 +12,7 @@ import com.kardabel.realestatemanager.ui.edit.EditPropertyPhotoViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditPhotoDialogFragment : DialogFragment() {
+class ValidatePhotoDialogFragment : DialogFragment() {
 
     var photoViewState: CreatePropertyPhotoViewState? = null
     var photoId: Int? = null
@@ -23,14 +23,14 @@ class EditPhotoDialogFragment : DialogFragment() {
     var isEditInstance: Boolean = false
 
     companion object {
-        fun createPropertyInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
-            EditPhotoDialogFragment().apply {
+        fun createPropertyActivityInstance(propertyPhotoViewState: CreatePropertyPhotoViewState) =
+            ValidatePhotoDialogFragment().apply {
                 photoViewState = propertyPhotoViewState
                 isEditInstance = false
             }
 
-        fun editPropertyInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
-            EditPhotoDialogFragment().apply {
+        fun editPropertyActivityInstance(editPropertyPhotoViewState: EditPropertyPhotoViewState) =
+            ValidatePhotoDialogFragment().apply {
                 photoViewState = CreatePropertyPhotoViewState(
                     photoDescription = editPropertyPhotoViewState.photoDescription,
                     photoUri = editPropertyPhotoViewState.photoUri,
@@ -49,7 +49,7 @@ class EditPhotoDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
         val viewModel =
-            ViewModelProvider(this)[EditPhotoDialogFragmentViewModel::class.java]
+            ViewModelProvider(this)[ValidatePhotoDialogFragmentViewModel::class.java]
         val editText = EditText(requireContext())
         editText.setText(photoViewState?.photoDescription)
         builder

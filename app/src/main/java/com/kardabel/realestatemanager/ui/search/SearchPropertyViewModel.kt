@@ -70,7 +70,7 @@ class SearchPropertyViewModel @Inject constructor(
         numberOfPhotoSliderValue = value
     }
 
-    fun search(county: String) {
+    fun onSearchClick(county: String) {
 
         val newSearchParams = SearchParams(
             priceRange = priceSliderMinValue?.let { priceMin ->
@@ -103,7 +103,7 @@ class SearchPropertyViewModel @Inject constructor(
             countyCanBeNull(county)
         )
 
-        if (userChooseParameter(newSearchParams)) {
+        if (userChooseAtLeastOneParameter(newSearchParams)) {
             sendSearchParamsToRepository(newSearchParams)
             emptyInterestRepository()
             emptyDetailsViewWhenDone()
@@ -127,7 +127,7 @@ class SearchPropertyViewModel @Inject constructor(
         }
     }
 
-    private fun userChooseParameter(newSearchParams: SearchParams): Boolean {
+    private fun userChooseAtLeastOneParameter(newSearchParams: SearchParams): Boolean {
         return !(newSearchParams.priceRange == null
                 && newSearchParams.surfaceRange == null
                 && newSearchParams.roomRange == null
@@ -147,7 +147,7 @@ class SearchPropertyViewModel @Inject constructor(
         interestRepository.emptyInterestList()
     }
 
-    // In case of search, inform details view that is nothing to display
+    // In case of search, inform details view that is nothing to display until user click on a property
     private fun emptyDetailsViewWhenDone() {
         currentPropertyIdRepository.isBackFromSearchActivity()
     }

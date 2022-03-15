@@ -12,19 +12,16 @@ import javax.inject.Inject
 
 
 class SendPropertyToFirestore @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
 ) {
 
     fun createPropertyDocument(property: PropertyEntity) {
 
-        if (firebaseAuth.currentUser != null) {
-
             getCollectionReference().document(property.uid + property.propertyCreationDate)
                 .set(getMappedProperty(property))
                 .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                 .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-        }
+
     }
 
     suspend fun updatePropertyDocumentFromEditView(

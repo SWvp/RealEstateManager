@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditPhotoDialogFragmentViewModel @Inject constructor(
+class ValidatePhotoDialogFragmentViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
     private val registeredPhotoRepository: RegisteredPhotoRepository,
     private val propertiesDao: PropertiesDao,

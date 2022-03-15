@@ -172,6 +172,14 @@ class PropertiesViewModel @Inject constructor(
 
     }
 
+    private fun matchInterest(
+        searchInterests: List<String>?,
+        propertyInterests: List<String>?,
+    ): Boolean {
+        return if (propertyInterests != null && searchInterests != null) {
+            propertyInterests.any { it in searchInterests }
+        } else searchInterests == null
+    }
 
     private fun currencyConverter(
         price: String,
@@ -212,15 +220,6 @@ class PropertiesViewModel @Inject constructor(
                 Color.RED
             }
         }
-    }
-
-    private fun matchInterest(
-        searchInterests: List<String>?,
-        propertyInterests: List<String>?,
-    ): Boolean {
-        return if (propertyInterests != null && searchInterests != null) {
-            propertyInterests.any { it in searchInterests }
-        } else searchInterests == null
     }
 
     fun onPropertyClicked(propertyId: Long) {

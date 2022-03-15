@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AddedPhotoConfirmationDialogFragmentViewModel @Inject constructor(
+class AddPhotoConfirmationDialogFragmentViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
 
 ) : ViewModel() {
