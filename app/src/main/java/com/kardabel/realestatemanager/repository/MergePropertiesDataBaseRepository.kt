@@ -36,12 +36,14 @@ class MergePropertiesDataBaseRepository @Inject constructor(
     suspend fun synchronisePropertiesDataBases() {
 
         val roomProperties: List<PropertyEntity> = propertiesDao.getProperties()
-
         val roomPropertiesToAddToFirestore = mutableListOf<PropertyEntity>()
 
+        // Get all documents
         val propertiesDocuments = firestore.collection("properties").get().await()
+        // Convert to data class
         val propertiesFromFirestore = propertiesDocuments.toObjects(PropertyEntity::class.java)
 
+        // Compare all data bases
         if (roomProperties.isNotEmpty() && propertiesFromFirestore.isNotEmpty()) {
 
             for (propertyFromRoom in roomProperties) {
@@ -52,16 +54,19 @@ class MergePropertiesDataBaseRepository @Inject constructor(
                                 && propertyFromFirestore.propertyCreationDate == propertyFromRoom.propertyCreationDate
                     }
                 when {
+                    // In case firestore does not have actual property
                     propertyFromFirestore == null -> {
                         roomPropertiesToAddToFirestore.add(propertyFromRoom)
                         propertiesFromFirestore.remove(propertyFromRoom)
 
                     }
+                    // In case user does not have internet connection
                     propertyFromFirestore.updateTimestamp < propertyFromRoom.updateTimestamp -> {
                         updateFirestoreProperties(propertyFromRoom)
                         // TODO update firestore photo
                         propertiesFromFirestore.remove(propertyFromFirestore)
                     }
+                    // In case firestore property is newer
                     propertyFromFirestore.updateTimestamp > propertyFromRoom.updateTimestamp -> {
 
                         updateRoomProperty(propertyFromFirestore, propertyFromRoom.propertyId)
@@ -121,7 +126,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
                     vendor = property.vendor,
                     propertyCreationDate = property.propertyCreationDate,
                     creationDateToFormat = property.creationDateToFormat,
-                    saleStatus = "On Sale !",
+                    saleStatus = property.saleStatus,
                     purchaseDate = null,
                     interest = interestCanBeNull(property.interest),
                     staticMap = property.staticMap,
@@ -172,7 +177,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
                 vendor = property.vendor,
                 propertyCreationDate = property.propertyCreationDate,
                 creationDateToFormat = property.creationDateToFormat,
-                saleStatus = "On Sale !",
+                saleStatus = property.saleStatus,
                 purchaseDate = null,
                 interest = interestCanBeNull(property.interest),
                 staticMap = property.staticMap,
