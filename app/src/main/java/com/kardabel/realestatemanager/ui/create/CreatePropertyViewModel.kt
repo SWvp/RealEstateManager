@@ -191,7 +191,7 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    private fun createPropertyOnFirestore(property: PropertyEntity) {
+    private suspend fun createPropertyOnFirestore(property: PropertyEntity) {
         sendPropertyToFirestore.createPropertyDocument(property)
 
     }

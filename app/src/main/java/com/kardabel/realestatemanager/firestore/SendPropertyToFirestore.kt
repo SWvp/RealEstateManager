@@ -1,8 +1,5 @@
 package com.kardabel.realestatemanager.firestore
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kardabel.realestatemanager.model.PropertyEntity
@@ -15,12 +12,11 @@ class SendPropertyToFirestore @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
 ) {
 
-    fun createPropertyDocument(property: PropertyEntity) {
+    suspend fun createPropertyDocument(property: PropertyEntity) {
 
             getCollectionReference().document(property.uid + property.propertyCreationDate)
                 .set(getMappedProperty(property))
-                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+                .await()
 
     }
 
@@ -71,14 +67,13 @@ class SendPropertyToFirestore @Inject constructor(
         )
     }
 
-    fun updatePropertyDocumentFromRoom(
+    suspend fun updatePropertyDocumentFromRoom(
         property: PropertyEntity,
     ) {
 
         getCollectionReference().document(property.uid + property.propertyCreationDate)
             .update(getMappedProperty(property))
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+            .await()
     }
 
     private fun getMappedProperty(property: PropertyEntity): HashMap<String, Any> {

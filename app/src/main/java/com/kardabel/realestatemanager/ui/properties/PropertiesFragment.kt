@@ -35,14 +35,13 @@ class PropertiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView = binding.root
         val adapter = PropertiesAdapter {
             viewModel.onPropertyClicked(it)
         }
-        recyclerView.adapter = adapter
 
         binding.recyclerViewProperties.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewProperties.adapter = adapter
+        binding.recyclerViewProperties.itemAnimator = null
 
         viewModel.viewStateLiveData.observe(viewLifecycleOwner){
             adapter.submitList(it)

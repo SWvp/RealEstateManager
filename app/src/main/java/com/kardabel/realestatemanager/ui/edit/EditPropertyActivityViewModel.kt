@@ -44,7 +44,7 @@ class EditPropertyActivityViewModel @Inject constructor(
 
     private val interestList = mutableListOf<String>()
 
-    private var uid by Delegates.notNull<String>()
+    private lateinit var uid : String
     private var vendor by Delegates.notNull<String>()
     private var propertyId by Delegates.notNull<Long>()
     private var propertyCreationDate by Delegates.notNull<String>()
@@ -282,7 +282,7 @@ class EditPropertyActivityViewModel @Inject constructor(
                 viewModelScope.launch(applicationDispatchers.ioDispatcher) {
 
                     updatePropertyOnRoom(property)
-                    updatePropertyOnFirestore(property)
+                    // TODO STEPHANE plus besoin je pense ? updatePropertyOnFirestore(property)
 
                     checkForRegisteredPhoto()
                     createPhotoEntity()

@@ -13,6 +13,10 @@ import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.utils.ImageStoreManager
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.io.File.createTempFile
@@ -29,129 +33,113 @@ class MergePropertiesDataBaseRepository @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
     private val firebaseStorage: FirebaseStorage,
     private val context: Application,
+    private val firestore: FirebaseFirestore,
 ) {
 
-    var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     suspend fun synchronisePropertiesDataBases() {
+        propertiesDao.getProperties().collect { roomProperties ->
+            supervisorScope {
+                // Get all documents
+                val propertiesDocuments = firestore.collection("properties").get().await()
+                // Convert to data class
+                val propertiesFromFirestore = propertiesDocuments.toObjects(PropertyEntity::class.java)
 
-        val roomProperties: List<PropertyEntity> = propertiesDao.getProperties()
-        val roomPropertiesToAddToFirestore = mutableListOf<PropertyEntity>()
+                // Compare all data bases
+                for (propertyFromRoom in roomProperties) {
 
-        // Get all documents
-        val propertiesDocuments = firestore.collection("properties").get().await()
-        // Convert to data class
-        val propertiesFromFirestore = propertiesDocuments.toObjects(PropertyEntity::class.java)
+                    launch {
+                        val propertyFromFirestore = propertiesFromFirestore.firstOrNull { propertyFromFirestore ->
+                            propertyFromFirestore.uid == propertyFromRoom.uid
+                                    && propertyFromFirestore.propertyCreationDate == propertyFromRoom.propertyCreationDate
+                        }
+                        when {
+                            // In case firestore does not have actual property
+                            propertyFromFirestore == null -> {
+                                createFirestoreProperty(propertyFromRoom)
+                                propertiesFromFirestore.remove(propertyFromRoom)
+                            }
+                            // In case user does not have internet connection
+                            propertyFromFirestore.updateTimestamp < propertyFromRoom.updateTimestamp -> {
+                                updateFirestoreProperties(propertyFromRoom)
+                                // TODO update firestore photo
+                                propertiesFromFirestore.remove(propertyFromFirestore)
+                            }
+                            // In case firestore property is newer
+                            propertyFromFirestore.updateTimestamp > propertyFromRoom.updateTimestamp -> {
 
-        // Compare all data bases
-        if (roomProperties.isNotEmpty() && propertiesFromFirestore.isNotEmpty()) {
-
-            for (propertyFromRoom in roomProperties) {
-
-                val propertyFromFirestore =
-                    propertiesFromFirestore.firstOrNull { propertyFromFirestore ->
-                        propertyFromFirestore.uid == propertyFromRoom.uid
-                                && propertyFromFirestore.propertyCreationDate == propertyFromRoom.propertyCreationDate
+                                updateRoomProperty(propertyFromFirestore, propertyFromRoom.propertyId)
+                                updateRoomPhoto(
+                                    propertyFromRoom.propertyId,
+                                    propertyFromRoom.uid,
+                                    propertyFromRoom.propertyCreationDate
+                                )
+                                propertiesFromFirestore.remove(propertyFromFirestore)
+                            }
+                            else -> propertiesFromFirestore.remove(propertyFromFirestore)
+                        }
                     }
-                when {
-                    // In case firestore does not have actual property
-                    propertyFromFirestore == null -> {
-                        roomPropertiesToAddToFirestore.add(propertyFromRoom)
-                        propertiesFromFirestore.remove(propertyFromRoom)
+                }
 
-                    }
-                    // In case user does not have internet connection
-                    propertyFromFirestore.updateTimestamp < propertyFromRoom.updateTimestamp -> {
-                        updateFirestoreProperties(propertyFromRoom)
-                        // TODO update firestore photo
-                        propertiesFromFirestore.remove(propertyFromFirestore)
-                    }
-                    // In case firestore property is newer
-                    propertyFromFirestore.updateTimestamp > propertyFromRoom.updateTimestamp -> {
 
-                        updateRoomProperty(propertyFromFirestore, propertyFromRoom.propertyId)
-                        updateRoomPhoto(
-                            propertyFromRoom.propertyId,
-                            propertyFromRoom.uid,
-                            propertyFromRoom.propertyCreationDate
-                        )
-                        propertiesFromFirestore.remove(propertyFromFirestore)
-                    }
-                    else -> {
 
-                        propertiesFromFirestore.remove(propertyFromFirestore)
+                if (propertiesFromFirestore.isNotEmpty()) {
+
+                    for (property in propertiesFromFirestore) {
+                        if (property.interest?.isEmpty() == true) {
+                            property.interest = null
+                        }
+                        launch {
+                            insertPropertyInLocalDataBase(property)
+                        }
                     }
                 }
             }
-        }
-        if (roomPropertiesToAddToFirestore.isNotEmpty()) {
-
-            createFirestoreProperties(roomPropertiesToAddToFirestore)
-
-        }
-
-        if (propertiesFromFirestore.isNotEmpty()) {
-
-            val finalProperty = mutableListOf<PropertyEntity>()
-
-            for (property in propertiesFromFirestore) {
-                if (property.interest?.isEmpty() == true) {
-                    property.interest = null
-                }
-                finalProperty.add(property)
-            }
-
-            insertPropertiesInLocalDataBase(finalProperty)
         }
     }
 
-    private suspend fun insertPropertiesInLocalDataBase(propertiesFromFirestore: List<PropertyEntity>) {
-        for (property in propertiesFromFirestore) {
-            val newPropertyId = insertProperty(
-                PropertyEntity(
-                    address = property.address,
-                    apartmentNumber = property.apartmentNumber,
-                    city = property.city,
-                    zipcode = property.zipcode,
-                    county = property.county,
-                    country = property.country,
-                    propertyDescription = property.propertyDescription,
-                    type = property.type,
-                    price = property.price,
-                    surface = property.surface,
-                    room = property.room,
-                    bedroom = property.bedroom,
-                    bathroom = property.bathroom,
-                    uid = property.uid,
-                    vendor = property.vendor,
-                    propertyCreationDate = property.propertyCreationDate,
-                    creationDateToFormat = property.creationDateToFormat,
-                    saleStatus = property.saleStatus,
-                    purchaseDate = null,
-                    interest = interestCanBeNull(property.interest),
-                    staticMap = property.staticMap,
-                    updateTimestamp = property.updateTimestamp,
+    private suspend fun insertPropertyInLocalDataBase(property: PropertyEntity) {
+        val newPropertyId = insertProperty(
+            PropertyEntity(
+                address = property.address,
+                apartmentNumber = property.apartmentNumber,
+                city = property.city,
+                zipcode = property.zipcode,
+                county = property.county,
+                country = property.country,
+                propertyDescription = property.propertyDescription,
+                type = property.type,
+                price = property.price,
+                surface = property.surface,
+                room = property.room,
+                bedroom = property.bedroom,
+                bathroom = property.bathroom,
+                uid = property.uid,
+                vendor = property.vendor,
+                propertyCreationDate = property.propertyCreationDate,
+                creationDateToFormat = property.creationDateToFormat,
+                saleStatus = property.saleStatus,
+                purchaseDate = null,
+                interest = interestCanBeNull(property.interest),
+                staticMap = property.staticMap,
+                updateTimestamp = property.updateTimestamp,
 
-                    )
-            )
-            val uid = property.uid
-            createRoomPhotoWithPropertyId(newPropertyId, property.propertyCreationDate, uid)
+                )
+        )
+        val uid = property.uid
+        createRoomPhotoWithPropertyId(newPropertyId, property.propertyCreationDate, uid)
 
-        }
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
         return propertiesRepository.insertProperty(property)
     }
 
-    private fun createFirestoreProperties(propertyList: List<PropertyEntity>) {
+    private suspend fun createFirestoreProperty(property: PropertyEntity) {
 
-        for (property in propertyList) {
-            sendPropertyToFirestore.createPropertyDocument(property)
-        }
+        sendPropertyToFirestore.createPropertyDocument(property)
     }
 
-    private fun updateFirestoreProperties(property: PropertyEntity) {
+    private suspend fun updateFirestoreProperties(property: PropertyEntity) {
 
         sendPropertyToFirestore.updatePropertyDocumentFromRoom(property)
 
@@ -219,7 +207,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
     private suspend fun updateRoomPhoto(
         propertyId: Long,
         uid: String,
-        propertyCreationDate: String
+        propertyCreationDate: String,
     ) {
 
         propertiesDao.deleteAllPropertyPhotos(propertyId)
@@ -237,7 +225,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
     private suspend fun createPhoto(
         photo: StorageReference,
         propertyId: Long,
-        propertyCreationDate: String
+        propertyCreationDate: String,
     ) {
 
         val photoTimestamp = photo.name
