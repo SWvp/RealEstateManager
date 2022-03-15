@@ -15,7 +15,7 @@ import java.lang.IllegalArgumentException
 class RealEstateContentProvider: ContentProvider() {
 
     companion object {
-        val AUTHORITY: String = "com.kardabel.realestatemanager.provider"
+        const val AUTHORITY: String = "com.kardabel.realestatemanager.provider"
         val TABLE_REAL_ESTATE: String = PropertyEntity::class.java.simpleName
     }
 
@@ -43,7 +43,7 @@ class RealEstateContentProvider: ContentProvider() {
         throw IllegalArgumentException("Failed to query row for uri -> $uri")
     }
 
-    override fun getType(uri: Uri): String? {
+    override fun getType(uri: Uri): String {
         return "vnd.android.cursor.item/$AUTHORITY.$TABLE_REAL_ESTATE"
     }
 
