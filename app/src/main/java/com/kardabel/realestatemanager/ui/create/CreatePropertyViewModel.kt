@@ -10,7 +10,7 @@ import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
+import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
@@ -33,7 +33,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
-    private val sendPropertyToFirestore: SendPropertyToFirestore,
+    private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
     private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
     private val clock: Clock,
     private val context: Application,
@@ -191,8 +191,8 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    private fun createPropertyOnFirestore(property: PropertyEntity) {
-        sendPropertyToFirestore.createPropertyDocument(property)
+    private suspend fun createPropertyOnFirestore(property: PropertyEntity) {
+        sendPropertyToFirestoreRepository.createPropertyDocument(property)
 
     }
 

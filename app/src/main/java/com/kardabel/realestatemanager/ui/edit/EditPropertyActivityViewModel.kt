@@ -6,7 +6,7 @@ import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
+import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
@@ -28,7 +28,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val createPhotoRepository: CreatePhotoRepository,
     private val registeredPhotoRepository: RegisteredPhotoRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
-    private val sendPropertyToFirestore: SendPropertyToFirestore,
+    private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
     private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
     private val interestRepository: InterestRepository,
     private val context: Application,
@@ -382,7 +382,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.updateProperty(property)
 
     private suspend fun updatePropertyOnFirestore(property: PropertyUpdate) {
-        sendPropertyToFirestore.updatePropertyDocumentFromEditView(
+        sendPropertyToFirestoreRepository.updatePropertyDocumentFromEditView(
             property,
             propertyCreationDate,
             dateToFormat,
@@ -431,7 +431,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             val saleDate = Utils.todayDate()
             propertiesRepository.updateSaleStatus("Sold", propertyId)
             propertiesRepository.updateSaleDate(saleDate, propertyId)
-            sendPropertyToFirestore.updatePropertyWhenSold(uid, propertyCreationDate, saleDate)
+            sendPropertyToFirestoreRepository.updatePropertyWhenSold(uid, propertyCreationDate, saleDate)
             withContext(applicationDispatchers.mainDispatcher) {
                 actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
 
