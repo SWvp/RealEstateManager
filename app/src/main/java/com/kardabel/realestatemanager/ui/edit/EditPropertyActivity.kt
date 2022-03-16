@@ -44,7 +44,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreatePropertyBinding
 
-    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
+    private var isFromCamera = false
 
     private lateinit var currentPhotoPath: String
     private var uriImageSelected: Uri? = null
@@ -227,43 +227,24 @@ class EditPropertyActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
     private fun addPhotoFromStorage() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
-        if (!EasyPermissions.hasPermissions(this, PERMS)) {
-            EasyPermissions.requestPermissions(
-                this,
-                getString(R.string.popup_title_permission_files_access),
-                RC_IMAGE_PERMS,
-                PERMS
-            )
-            return
-        }
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, RC_CHOOSE_PHOTO)
     }
 
     private fun capturePhoto() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        isFromCamera = true
+        val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val photoFile: File = createImageFile()
-
         uriImageSelected = FileProvider.getUriForFile(
             this,
             getString(R.string.authority),
             photoFile
         )
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        cameraInt.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
+        startActivityForResult(cameraInt, REQUEST_IMAGE_CAPTURE)
     }
 
     // When photo is created, we need to create an image file
@@ -278,7 +259,7 @@ class EditPropertyActivity : AppCompatActivity() {
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
+            // Save a file: path for use with CAMERA
             currentPhotoPath = absolutePath
         }
     }
@@ -291,21 +272,17 @@ class EditPropertyActivity : AppCompatActivity() {
     private fun handleResponse(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if (uriImageSelected == null) {
 
+                if (!isFromCamera) {
                     uriImageSelected = data!!.data
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
                     confirmDialogFragment(filePath!!)
 
                 }else{
-
-                    //TODO: save file on storage !!!
-                    confirmDialogFragment(uriImageSelected.toString())
+                    confirmDialogFragment(currentPhotoPath)
 
                 }
-
-
             }
         }
     }

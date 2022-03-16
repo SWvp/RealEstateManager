@@ -3,6 +3,7 @@ package com.kardabel.realestatemanager.ui.create
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +30,6 @@ import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -46,9 +47,9 @@ class CreatePropertyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePropertyBinding
     private lateinit var interestChipGroup: ChipGroup
 
-    private lateinit var photosAdapter: CreatePropertyPhotosAdapter
+    private var isFromCamera = false
 
-    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
+    private lateinit var photosAdapter: CreatePropertyPhotosAdapter
 
     lateinit var currentPhotoPath: String
     private var uriImageSelected: Uri? = null
@@ -63,6 +64,15 @@ class CreatePropertyActivity : AppCompatActivity() {
 
         // Set chip group binding
         interestChipGroup = binding.chipGroup
+
+        if (ContextCompat.checkSelfPermission(
+                applicationContext, Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_DENIED
+        )
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.CAMERA),
+                REQUEST_IMAGE_CAPTURE
+            )
 
         manageToolbar()
         managePropertyTypeDropdownMenu()
@@ -193,45 +203,27 @@ class CreatePropertyActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     private fun addPhotoFromStorage() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
-        if (!EasyPermissions.hasPermissions(this, PERMS)) {
-            EasyPermissions.requestPermissions(
-                this,
-                getString(R.string.popup_title_permission_files_access),
-                RC_IMAGE_PERMS,
-                PERMS
-            )
-            return
-        }
+        isFromCamera = false
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, RC_CHOOSE_PHOTO)
     }
 
     private fun capturePhoto() {
-
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        isFromCamera = true
+        val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val photoFile: File = createImageFile()
-
         uriImageSelected = FileProvider.getUriForFile(
             this,
             getString(R.string.authority),
             photoFile
         )
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        cameraInt.putExtra(MediaStore.EXTRA_OUTPUT, uriImageSelected)
+        startActivityForResult(cameraInt, REQUEST_IMAGE_CAPTURE)
+
     }
 
     // When photo is created, we need to create an image file
@@ -246,7 +238,7 @@ class CreatePropertyActivity : AppCompatActivity() {
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
+            // Save a file: path for use with CAMERA
             currentPhotoPath = absolutePath
         }
     }
@@ -260,16 +252,13 @@ class CreatePropertyActivity : AppCompatActivity() {
         if (requestCode == RC_CHOOSE_PHOTO || requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
 
-                if (uriImageSelected == null) {
+                if (!isFromCamera) {
                     uriImageSelected = data!!.data
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriImageSelected?.let { uriPathHelper.getPath(this, it) }
                     confirmDialogFragment(filePath!!)
-                }
-                else{
-
-                    //TODO: save file on storage !!!
-                    confirmDialogFragment(uriImageSelected.toString())
+                } else {
+                    confirmDialogFragment(currentPhotoPath)
                 }
             }
         }
@@ -285,7 +274,8 @@ class CreatePropertyActivity : AppCompatActivity() {
 
     // Create an alert dialog to allow user change description or delete photo
     private fun editPhotoDialogFragment(propertyPhotoViewState: CreatePropertyPhotoViewState) {
-        val confirmFragment = ValidatePhotoDialogFragment.createPropertyActivityInstance(propertyPhotoViewState)
+        val confirmFragment =
+            ValidatePhotoDialogFragment.createPropertyActivityInstance(propertyPhotoViewState)
         confirmFragment.show(supportFragmentManager, getString(R.string.confirm_Photo_Message))
 
     }
