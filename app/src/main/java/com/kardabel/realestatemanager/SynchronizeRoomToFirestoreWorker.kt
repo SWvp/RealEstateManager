@@ -6,22 +6,15 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kardabel.realestatemanager.database.PropertiesDao
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestore
-import com.kardabel.realestatemanager.model.PropertyEntity
+import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.withContext
 
 @HiltWorker
 class SynchronizeRoomToFirestoreWorker @AssistedInject constructor(
     context: Context,
     params: WorkerParameters,
     private val propertiesDao: PropertiesDao,
-    private val sendPropertyToFirestore: SendPropertyToFirestore,
+    private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
     private val applicationDispatchers: ApplicationDispatchers,
 
     ) : CoroutineWorker(
