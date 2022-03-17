@@ -1,6 +1,5 @@
 package com.kardabel.realestatemanager.ui.properties
 
-import android.net.Uri
 import androidx.annotation.ColorInt
 
 data class PropertyViewState(
@@ -12,5 +11,5 @@ data class PropertyViewState(
     @ColorInt
     val saleColor: Int,
     val vendor: String,
-    val photoUri: Uri?,
+    val photoUri: String?,
 )
