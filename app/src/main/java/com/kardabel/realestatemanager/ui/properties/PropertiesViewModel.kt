@@ -1,7 +1,6 @@
 package com.kardabel.realestatemanager.ui.properties
 
 import android.graphics.Color
-import android.net.Uri
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.database.PropertiesDao
@@ -38,6 +37,7 @@ class PropertiesViewModel @Inject constructor(
         priceConverterRepository
             .getCurrentCurrencyLiveData
 
+
     // Due to the fact we have both liveData and flow, i must combine with a mediator
     private val propertiesMediatorLiveData = MediatorLiveData<List<PropertyViewState>>().apply {
         addSource(propertiesLiveData) { propertyWithPhoto ->
@@ -52,8 +52,9 @@ class PropertiesViewModel @Inject constructor(
         }
     }
 
+
     // Exposed LiveData for the beautiful view
-    val viewStateLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
+    val getPropertiesLiveData: LiveData<List<PropertyViewState>> = propertiesMediatorLiveData
 
 
     private fun combine(
@@ -66,23 +67,34 @@ class PropertiesViewModel @Inject constructor(
         if (searchParams == null && currencyStatus == null) {
             propertiesMediatorLiveData.value = propertyWithPhoto.map {
                 toViewState(it)
+
             }
-
         } else if (searchParams != null) {
-            val filteredList = mutableListOf<PropertyViewState>()
-            for (property in propertyWithPhoto) {
-                if (applySearchParams(property, searchParams)) {
-                    filteredList.add(toViewState(property))
 
+            val filteredList = mutableListOf<PropertyViewState>()
+
+            if (currencyStatus == null) {
+                for (property in propertyWithPhoto) {
+                    if (applySearchParams(property, searchParams)) {
+                        filteredList.add(toViewState(property))
+
+                    }
+                }
+            } else {
+                for (property in propertyWithPhoto) {
+                    if (applySearchParams(property, searchParams)) {
+                        filteredList.add(toViewStateWithCurrencyUpdated(property, currencyStatus))
+
+                    }
                 }
             }
 
             propertiesMediatorLiveData.value = filteredList
 
         } else if (currencyStatus != null) {
-            propertiesMediatorLiveData.postValue(propertyWithPhoto.map { properties ->
-                toViewStateWithCurrencyUpdated(properties, currencyStatus)
-            })
+            propertiesMediatorLiveData.value = propertyWithPhoto.map { property ->
+                toViewStateWithCurrencyUpdated(property, currencyStatus)
+            }
         }
     }
 
@@ -113,10 +125,10 @@ class PropertiesViewModel @Inject constructor(
 
         )
 
-    private fun photoListCanBeEmpty(property: PropertyWithPhoto): Uri? {
-        return if(property.photo.isNotEmpty()){
-            Uri.parse(property.photo[0].photoUri)
-        }else{
+    private fun photoListCanBeEmpty(property: PropertyWithPhoto): String? {
+        return if (property.photo.isNotEmpty()) {
+            property.photo[0].photoUri
+        } else {
             null
         }
     }
@@ -144,7 +156,8 @@ class PropertiesViewModel @Inject constructor(
             surfaceCanBeNull = null
         }
 
-        return surfaceRange?.let { surfaceCanBeNull?.let { surfaceRange.contains(it.toInt()) } } ?: true
+        return surfaceRange?.let { surfaceCanBeNull?.let { surfaceRange.contains(it.toInt()) } }
+            ?: true
 
     }
 
