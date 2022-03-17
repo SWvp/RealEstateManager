@@ -4,20 +4,22 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.kardabel.realestatemanager.TestCoroutineRule
 import com.kardabel.realestatemanager.database.PropertiesDao
+import com.kardabel.realestatemanager.getApplicationDispatchersTest
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.model.SearchParams
-import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
-import com.kardabel.realestatemanager.repository.CurrentSearchRepository
-import com.kardabel.realestatemanager.repository.PriceConverterRepository
-import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.observeForTesting
+import com.kardabel.realestatemanager.repository.*
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class PropertyViewModelTest {
@@ -52,6 +54,8 @@ class PropertyViewModelTest {
         private const val EXPECTED_TIMESTAMP = "first_timestamp"
         private const val EXPECTED_PHOTO_ID = 666
 
+        private const val EXPECTED_DEFAULT_COLOR = -1
+
 
         private const val PRICE_MIN_EXPECTED = 100000
         private const val PRICE_MAX_EXPECTED = 10000000
@@ -68,11 +72,14 @@ class PropertyViewModelTest {
 
     private val currentPropertyIdRepository: CurrentPropertyIdRepository = mockk()
 
+    private val currentPropertySaleStatus: CurrentPropertySaleStatus = mockk()
+
     private val priceConverterRepository: PriceConverterRepository = mockk()
 
     private val currentSearchRepository: CurrentSearchRepository = mockk()
 
     private val propertiesDao: PropertiesDao = mockk()
+
 
     @Before
     fun setUp() {
@@ -86,16 +93,36 @@ class PropertyViewModelTest {
         }
 
         every { priceConverterRepository.getCurrentCurrencyLiveData } returns MutableLiveData<Boolean>().apply {
-            value = true
+            value = null
         }
 
-        every { currentSearchRepository.searchParamsParamsFlow() } returns flowOf {
-            getDefaultSearchParams()
-        }
-
+        every { currentSearchRepository.searchParamsParamsFlow() } returns flowOf(
+            null
+        )
 
     }
 
+    @Test
+    fun `nominal case`() = runTest {
+        // When
+        getViewModel().getPropertiesLiveData.observeForTesting { result ->
+            // Then
+            Assert.assertEquals(
+                getDefaultPropertiesViewState(),
+                result
+            )
+        }
+    }
+
+    private fun getViewModel() = PropertiesViewModel(
+        currentPropertyIdRepository = currentPropertyIdRepository,
+        currentPropertySaleStatus = currentPropertySaleStatus,
+        propertiesDao = propertiesDao,
+        propertiesRepository = propertiesRepository,
+        priceConverterRepository = priceConverterRepository,
+        currentSearchRepository = currentSearchRepository,
+        applicationDispatchers = getApplicationDispatchersTest(testCoroutineRule)
+    )
 
     // region IN
     private fun getDefaultPropertiesWithPhoto(): List<PropertyWithPhoto> {
@@ -159,7 +186,7 @@ class PropertyViewModelTest {
                     staticMap = EXPECTED_STATIC_MAP + 1,
                     propertyCreationDate = EXPECTED_CREATION_DATE + 1,
                     creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT + 1,
-                    saleStatus = EXPECTED_SALE_STATUS + 1,
+                    saleStatus = EXPECTED_SALE_STATUS,
                     purchaseDate = EXPECTED_PURCHASE_DATE,
                     interest = EXPECTED_INTERESTS,
                     propertyId = EXPECTED_CURRENT_PROPERTY_ID + 1
@@ -197,7 +224,7 @@ class PropertyViewModelTest {
                     staticMap = EXPECTED_STATIC_MAP + 2,
                     propertyCreationDate = EXPECTED_CREATION_DATE + 2,
                     creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT + 2,
-                    saleStatus = EXPECTED_SALE_STATUS + 2,
+                    saleStatus = EXPECTED_SALE_STATUS,
                     purchaseDate = EXPECTED_PURCHASE_DATE,
                     interest = EXPECTED_INTERESTS,
                     propertyId = EXPECTED_CURRENT_PROPERTY_ID + 2
@@ -238,6 +265,57 @@ class PropertyViewModelTest {
         county = null,
 
         )
+
+    // endregion IN
+
+    // region OUT
+
+    private fun getDefaultPropertiesViewState(): List<PropertyViewState> {
+
+        val propertiesList = mutableListOf<PropertyViewState>()
+
+        propertiesList.add(
+            PropertyViewState(
+               propertyId = EXPECTED_CURRENT_PROPERTY_ID,
+               type = EXPECTED_TYPE,
+               county = EXPECTED_COUNTY,
+               price = "$$EXPECTED_PRICE",
+               saleStatus = EXPECTED_SALE_STATUS,
+               saleColor = EXPECTED_DEFAULT_COLOR,
+               vendor = EXPECTED_VENDOR,
+               photoUri = EXPECTED_PHOTO_URI,
+            )
+        )
+        propertiesList.add(
+            PropertyViewState(
+                propertyId = EXPECTED_CURRENT_PROPERTY_ID + 1,
+                type = EXPECTED_TYPE + 1,
+                county = EXPECTED_COUNTY + 1,
+                price = "$$EXPECTED_PRICE" + 1,
+                saleStatus = EXPECTED_SALE_STATUS,
+                saleColor = EXPECTED_DEFAULT_COLOR,
+                vendor = EXPECTED_VENDOR + 1,
+                photoUri = EXPECTED_PHOTO_URI + 1,
+            )
+        )
+        propertiesList.add(
+            PropertyViewState(
+                propertyId = EXPECTED_CURRENT_PROPERTY_ID + 2,
+                type = EXPECTED_TYPE + 2,
+                county = EXPECTED_COUNTY + 2,
+                price = "$$EXPECTED_PRICE" + 2,
+                saleStatus = EXPECTED_SALE_STATUS,
+                saleColor = EXPECTED_DEFAULT_COLOR,
+                vendor = EXPECTED_VENDOR + 2,
+                photoUri = EXPECTED_PHOTO_URI + 2,
+            )
+        )
+
+
+        return propertiesList
+    }
+
+    // endregion OUT
 
 
 }
