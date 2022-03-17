@@ -123,7 +123,7 @@ class DetailsFragmentViewModelTest {
             propertyCreationDate = "createLocalDateTime",
             creationDateToFormat = "createDateToFormat",
             saleStatus = EXPECTED_IS_SOLD,
-            purchaseDate = "purchaseDate",
+            purchaseDate = null,
             interest = EXPECTED_INTERESTS,
             propertyId = EXPECTED_CURRENT_PROPERTY_ID
         ),
@@ -160,7 +160,7 @@ class DetailsFragmentViewModelTest {
             propertyCreationDate = "createLocalDateTime",
             creationDateToFormat = "createDateToFormat",
             saleStatus = EXPECTED_IS_SOLD,
-            purchaseDate = "purchaseDate",
+            purchaseDate = null,
             interest = listOf("first interest", "second interest"),
             propertyId = EXPECTED_CURRENT_PROPERTY_ID
         ),
@@ -200,6 +200,7 @@ class DetailsFragmentViewModelTest {
         zipcode = "zipcode",
         country = "country",
         startSale = "createDateToFormat",
+        purchaseDate = "Ongoing sale !",
         vendor = "vendor",
         staticMap = "staticMap",
         visibility = true,
@@ -227,6 +228,7 @@ class DetailsFragmentViewModelTest {
         zipcode = "zipcode",
         country = "country",
         startSale = "createDateToFormat",
+        purchaseDate = "Ongoing sale !",
         vendor = "vendor",
         staticMap = "staticMap",
         visibility = true,
