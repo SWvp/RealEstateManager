@@ -50,7 +50,7 @@ class PropertiesAdapter(
 
             Glide
                 .with(photo.context)
-                .load(propertyViewState.photoUri.toString())
+                .load(propertyViewState.photoUri)
                 .error(R.drawable.no_photo_available_yet)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
