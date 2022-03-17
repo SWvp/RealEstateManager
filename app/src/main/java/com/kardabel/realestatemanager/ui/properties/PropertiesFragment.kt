@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.kardabel.realestatemanager.databinding.FragmentPropertiesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +42,7 @@ class PropertiesFragment : Fragment() {
         binding.recyclerViewProperties.adapter = adapter
         binding.recyclerViewProperties.itemAnimator = null
 
-        viewModel.viewStateLiveData.observe(viewLifecycleOwner){
+        viewModel.getPropertiesLiveData.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
     }
