@@ -42,7 +42,7 @@ class DetailsFragmentViewModel @Inject constructor(
                     zipcode = it.propertyEntity.zipcode,
                     country = it.propertyEntity.country,
                     startSale = it.propertyEntity.creationDateToFormat,
-                    soldDate = soldDateToString(it.propertyEntity.purchaseDate),
+                    purchaseDate = soldDateToString(it.propertyEntity.purchaseDate),
                     vendor = it.propertyEntity.vendor,
                     visibility = true,
                     staticMap = it.propertyEntity.staticMap

@@ -110,7 +110,7 @@ class DetailsFragment : Fragment() {
         binding.zipCode.text = property.zipcode
         binding.country.text = property.country
         binding.startSaleDate.text = property.startSale
-        binding.soldDate.text = property.soldDate
+        binding.soldDate.text = property.purchaseDate
 
         Glide.with(binding.map.context).load(property.staticMap).into(binding.map)
 

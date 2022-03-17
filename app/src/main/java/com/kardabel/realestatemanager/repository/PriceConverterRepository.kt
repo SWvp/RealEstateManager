@@ -8,12 +8,12 @@ import javax.inject.Singleton
 @Singleton
 class PriceConverterRepository @Inject constructor(){
 
-    private var convertStatus: Boolean = true
+    private var isDollar: Boolean = true
     private val currentCurrencyMutableLiveData = MutableLiveData<Boolean>()
     val getCurrentCurrencyLiveData: LiveData<Boolean> = currentCurrencyMutableLiveData
 
     fun convertPricePlease(){
-        convertStatus = !convertStatus
-        currentCurrencyMutableLiveData.value = convertStatus
+        isDollar = !isDollar
+        currentCurrencyMutableLiveData.value = isDollar
     }
 }

@@ -15,13 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PropertiesViewModel @Inject constructor(
-    propertiesRepository: PropertiesRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val currentPropertySaleStatus: CurrentPropertySaleStatus,
+    private val propertiesDao: PropertiesDao,
+    val propertiesRepository: PropertiesRepository,
     priceConverterRepository: PriceConverterRepository,
     currentSearchRepository: CurrentSearchRepository,
     applicationDispatchers: ApplicationDispatchers,
-    private val propertiesDao: PropertiesDao,
 ) : ViewModel() {
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
