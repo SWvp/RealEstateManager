@@ -26,7 +26,7 @@ import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityCreatePropertyBinding
 import com.kardabel.realestatemanager.ui.dialog.AddPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.ValidatePhotoDialogFragment
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.CreateActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -307,17 +307,23 @@ class CreatePropertyActivity : AppCompatActivity() {
         // Inform user if fields are missing or close activity
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
-                ActivityViewAction.FIELDS_ERROR ->
+                CreateActivityViewAction.FIELDS_ERROR ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.fields_error),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                ActivityViewAction.FINISH_ACTIVITY ->
+                CreateActivityViewAction.FINISH_ACTIVITY -> {
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.creating_property_successful),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     onBackPressed()
+                }
 
-                ActivityViewAction.INTEREST_FIELD_ERROR ->
+                CreateActivityViewAction.INTEREST_FIELD_ERROR ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.interest_input_problem),

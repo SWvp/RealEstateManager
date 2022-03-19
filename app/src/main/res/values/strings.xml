@@ -101,7 +101,7 @@
     <!-- TOKEN GOOGLE SIGNING -->
     <string name="web_client_id">282238006271-jeeo49h76ialagpsoccpselgqc9q29ps.apps.googleusercontent.com</string>
 
-    <string name="logging_in">Logging In</string>
+    <string name="logging_in">Choose your account</string>
 
     <string name="popup_title_permission_files_access">Access</string>
 
@@ -114,6 +114,7 @@
     <!-- CREATE PROPERTY ACTIVITY -->
     <string name="fields_error">At least 1 photo, address, city and zipcode</string>
     <string name="interest_input_problem">Interest example: Atm, Bank, School</string>
+    <string name="creating_property_successful">Property created successfully</string>
     <string name="url_map_static">https://maps.googleapis.com/maps/api/staticmap?center=</string>
     <string name="coma">,</string>
     <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>

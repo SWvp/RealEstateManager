@@ -18,6 +18,7 @@ import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.usecase.GetCurrentUserIdUseCase
 import com.kardabel.realestatemanager.usecase.GetCurrentUserNameUseCase
 import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.CreateActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,7 @@ class CreatePropertyViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<CreateActivityViewAction>()
 
     private var photoMutableList = mutableListOf<PhotoEntity>()
 
@@ -65,7 +66,7 @@ class CreatePropertyViewModel @Inject constructor(
         if (interest.length > 2) {
             interestRepository.addInterest(interest)
         } else {
-            actionSingleLiveEvent.setValue(ActivityViewAction.INTEREST_FIELD_ERROR)
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.INTEREST_FIELD_ERROR)
         }
     }
 
@@ -133,9 +134,14 @@ class CreatePropertyViewModel @Inject constructor(
 
                 emptyPhotoRepository()
                 emptyInterestRepository()
+
+                withContext(applicationDispatchers.mainDispatcher) {
+                    actionSingleLiveEvent.postValue(CreateActivityViewAction.FINISH_ACTIVITY)
+
+                }
             }
         } else {
-            actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
+            actionSingleLiveEvent.setValue(CreateActivityViewAction.FIELDS_ERROR)
         }
     }
 
@@ -188,10 +194,6 @@ class CreatePropertyViewModel @Inject constructor(
         createRoomPhotos(photoListWithPropertyId)
         createCloudStoragePhotos(photoListWithPropertyId, uid)
 
-        withContext(applicationDispatchers.mainDispatcher) {
-            actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
-
-        }
     }
 
     private suspend fun createRoomProperty(property: PropertyEntity): Long {
