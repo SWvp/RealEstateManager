@@ -30,6 +30,7 @@ import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -50,6 +51,8 @@ class CreatePropertyActivity : AppCompatActivity() {
     private var isFromCamera = false
 
     private lateinit var photosAdapter: CreatePropertyPhotosAdapter
+
+    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
     lateinit var currentPhotoPath: String
     private var uriImageSelected: Uri? = null
@@ -203,11 +206,30 @@ class CreatePropertyActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     private fun addPhotoFromStorage() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
         isFromCamera = false
+        if (!EasyPermissions.hasPermissions(this, PERMS)) {
+            EasyPermissions.requestPermissions(
+                this,
+                getString(R.string.popup_title_permission_files_access),
+                RC_IMAGE_PERMS,
+                PERMS
+            )
+            return
+        }
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, RC_CHOOSE_PHOTO)
     }

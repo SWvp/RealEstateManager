@@ -50,6 +50,8 @@ class EditPropertyActivity : AppCompatActivity() {
     private var uriImageSelected: Uri? = null
     private var propertyType: String? = null
 
+    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
+
     private val viewModel by viewModels<EditPropertyActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -227,9 +229,29 @@ class EditPropertyActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
     private fun addPhotoFromStorage() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
+        isFromCamera = false
+        if (!EasyPermissions.hasPermissions(this, PERMS)) {
+            EasyPermissions.requestPermissions(
+                this,
+                getString(R.string.popup_title_permission_files_access),
+                RC_IMAGE_PERMS,
+                PERMS
+            )
+            return
+        }
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, RC_CHOOSE_PHOTO)
     }
