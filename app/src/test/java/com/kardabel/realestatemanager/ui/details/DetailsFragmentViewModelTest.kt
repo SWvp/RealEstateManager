@@ -36,9 +36,7 @@ class DetailsFragmentViewModelTest {
         private const val EXPECTED_DESCRIPTION = "propertyDescription"
         private val EXPECTED_INTERESTS = null
 
-
-
-        private const val EXPECTED_PHOTO_ID = 666
+        private const val EXPECTED_PHOTO_ID = 133
     }
 
     @get: Rule
@@ -57,6 +55,7 @@ class DetailsFragmentViewModelTest {
         every { currentPropertyIdRepository.currentPropertyIdLiveData } returns MutableLiveData<Long>().apply {
             value = EXPECTED_CURRENT_PROPERTY_ID
         }
+
         every { currentPropertyIdRepository.isFromSearchLiveData } returns MutableLiveData<Boolean>().apply {
             value = true
         }
@@ -64,7 +63,6 @@ class DetailsFragmentViewModelTest {
         every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
             getDefaultPropertyWithPhoto()
         )
-
     }
 
     @Test
