@@ -29,7 +29,7 @@ class MapViewModel @Inject constructor(
     val getMapInfo: LiveData<MapViewState> =
         combine(
             locationRepository.userLocation(),
-            propertiesRepository.getProperties()
+            propertiesRepository.getPropertiesWithPhotosFlow()
         ) { location, properties ->
             MapViewState(
                 properties.map { property ->

@@ -84,7 +84,7 @@ class PropertyViewModelTest {
     @Before
     fun setUp() {
 
-        every { propertiesRepository.getProperties() } returns flowOf(
+        every { propertiesRepository.getPropertiesWithPhotosFlow() } returns flowOf(
             getDefaultPropertiesWithPhoto()
         )
 

@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PropertiesDao {
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  PROPERTIES /////////////////////////////////////////////////
+
     @Transaction
     @Query("SELECT * FROM property")
     fun getPropertiesWithPhoto(): Flow<List<PropertyWithPhoto>>
@@ -44,6 +48,10 @@ interface PropertiesDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateProperty(property: PropertyEntity)
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  PHOTOS /////////////////////////////////////////////////
+
     @Query("SELECT * FROM photo")
     fun getPhotos(): List<PhotoEntity>
 
@@ -65,7 +73,9 @@ interface PropertiesDao {
     @Query("DELETE FROM photo WHERE property_owner_id = :propertyId")
     suspend fun deleteAllPropertyPhotos(propertyId: Long)
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////  CONTENT PROVIDER /////////////////////////////////////////////
 
     @Query("SELECT * FROM property WHERE propertyId = :id")
     fun getPropertiesWithCursor(vararg id: Long): Cursor

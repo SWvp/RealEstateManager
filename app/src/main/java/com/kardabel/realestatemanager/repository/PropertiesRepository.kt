@@ -16,25 +16,27 @@ class PropertiesRepository @Inject constructor(
     private val propertiesDao: PropertiesDao
 ) {
 
-    fun getProperties(): Flow<List<PropertyWithPhoto>> = propertiesDao.getPropertiesWithPhoto()
+    fun getPropertiesWithPhotosFlow(): Flow<List<PropertyWithPhoto>> = propertiesDao.getPropertiesWithPhoto()
+
+    fun getProperties(): List<PropertyEntity> = propertiesDao.getProperties()
 
     fun getPropertyById(id: Long): Flow<PropertyWithPhoto> = propertiesDao.getPropertyById(id)
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  PROPERTIES ///////////////////////////////////////////////////
 
     @WorkerThread
     suspend fun insertProperty(property: PropertyEntity) = withContext(Dispatchers.IO) {
         propertiesDao.insertProperty(property)
     }
 
-    suspend fun updateProperty(property: PropertyUpdate) {
+    suspend fun updateLightProperty(property: PropertyUpdate) {
         propertiesDao.updateLightProperty(property)
     }
 
-    suspend fun insertPhotos(photos: List<PhotoEntity>) {
-        propertiesDao.insertPhotos(photos)
-    }
-
-    suspend fun deletePhotos(photoId: List<Int>) {
-        propertiesDao.deletePhotoById(photoId)
+    suspend fun updateProperty(property: PropertyEntity) {
+        propertiesDao.updateProperty(property)
     }
 
     suspend fun updateSaleStatus(saleStatus: String, propertyId: Long) {
@@ -43,6 +45,26 @@ class PropertiesRepository @Inject constructor(
 
     suspend fun updateSaleDate(saleDate: String, propertyId: Long) {
         propertiesDao.updatePropertySaleDate(saleDate, propertyId)
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////  PHOTOS ///////////////////////////////////////////////////////
+
+    suspend fun insertPhotos(photos: List<PhotoEntity>) {
+        propertiesDao.insertPhotos(photos)
+    }
+
+    suspend fun insertPhoto(photo: PhotoEntity) {
+        propertiesDao.insertPhoto(photo)
+    }
+
+    suspend fun deletePhotosById(photoId: List<Int>) {
+        propertiesDao.deletePhotoById(photoId)
+    }
+
+    suspend fun deleteAllPropertyPhotos(propertyId: Long) {
+        propertiesDao.deleteAllPropertyPhotos(propertyId)
     }
 
 }

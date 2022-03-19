@@ -25,7 +25,7 @@ class PropertiesViewModel @Inject constructor(
 
     private val propertiesLiveData: LiveData<List<PropertyWithPhoto>> =
         propertiesRepository
-            .getProperties()
+            .getPropertiesWithPhotosFlow()
             .asLiveData(applicationDispatchers.ioDispatcher)
 
     private val searchParamsLiveData: LiveData<SearchParams?> =

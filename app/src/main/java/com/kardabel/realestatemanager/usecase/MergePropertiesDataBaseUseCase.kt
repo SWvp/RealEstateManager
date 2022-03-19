@@ -7,9 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
+import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.repository.SendPropertyToFirestoreRepository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -26,7 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 class MergePropertiesDataBaseUseCase @Inject constructor(
-    private val propertiesDao: PropertiesDao,
+    private val propertiesRepository: PropertiesRepository,
     private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
     private val firebaseStorage: FirebaseStorage,
     private val firebaseFirestore: FirebaseFirestore,
@@ -37,7 +37,7 @@ class MergePropertiesDataBaseUseCase @Inject constructor(
 
         supervisorScope {
 
-            val roomProperties: List<PropertyEntity> = propertiesDao.getProperties()
+            val roomProperties: List<PropertyEntity> = propertiesRepository.getProperties()
 
             // Get all documents
             val propertiesDocuments = firebaseFirestore.collection("properties").get().await()
@@ -144,7 +144,7 @@ class MergePropertiesDataBaseUseCase @Inject constructor(
     }
 
     private suspend fun insertProperty(property: PropertyEntity): Long {
-        return propertiesDao.insertProperty(property)
+        return propertiesRepository.insertProperty(property)
     }
 
     private suspend fun createFirestoreProperty(property: PropertyEntity) {
@@ -160,7 +160,7 @@ class MergePropertiesDataBaseUseCase @Inject constructor(
     }
 
     private suspend fun updateRoomProperty(property: PropertyEntity, propertyId: Long) {
-        propertiesDao.updateProperty(
+        propertiesRepository.updateProperty(
             PropertyEntity(
                 address = property.address,
                 apartmentNumber = property.apartmentNumber,
@@ -218,7 +218,7 @@ class MergePropertiesDataBaseUseCase @Inject constructor(
         propertyCreationDate: String
     ) {
 
-        propertiesDao.deleteAllPropertyPhotos(propertyId)
+        propertiesRepository.deleteAllPropertyPhotos(propertyId)
 
         val photosFromFirestore =
             firebaseStorage.reference.child("photos/$uid/$propertyCreationDate").listAll().await()
@@ -269,6 +269,6 @@ class MergePropertiesDataBaseUseCase @Inject constructor(
         )
     }
 
-    private suspend fun sendPhotoToLocalDataBase(photos: PhotoEntity) =
-        propertiesDao.insertPhoto(photos)
+    private suspend fun sendPhotoToLocalDataBase(photo: PhotoEntity) =
+        propertiesRepository.insertPhoto(photo)
 }

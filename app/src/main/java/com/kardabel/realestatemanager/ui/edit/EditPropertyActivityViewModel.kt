@@ -379,7 +379,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     ////////////////////////////////  UPDATE PROPERTY ON DATABASES /////////////////////////////////
 
     private suspend fun updatePropertyOnRoom(property: PropertyUpdate) =
-        propertiesRepository.updateProperty(property)
+        propertiesRepository.updateLightProperty(property)
 
     private suspend fun updatePropertyOnFirestore(property: PropertyUpdate) {
         sendPropertyToFirestoreRepository.updatePropertyDocumentFromEditView(
@@ -398,7 +398,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.insertPhotos(photos)
 
     private suspend fun deletePhotoOnRoom(photoId: List<Int>) =
-        propertiesRepository.deletePhotos(photoId)
+        propertiesRepository.deletePhotosById(photoId)
 
     private suspend fun updatePhotoOnCloudStorage() {
         sendPhotoToCloudStorageRepository.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
