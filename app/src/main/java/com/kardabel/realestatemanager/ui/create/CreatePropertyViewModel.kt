@@ -5,17 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
+import com.kardabel.realestatemanager.repository.SendPhotoToCloudStorageRepository
+import com.kardabel.realestatemanager.repository.SendPropertyToFirestoreRepository
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
 import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
+import com.kardabel.realestatemanager.usecase.GetCurrentUserIdUseCase
+import com.kardabel.realestatemanager.usecase.GetCurrentUserNameUseCase
 import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
@@ -30,11 +31,12 @@ import javax.inject.Inject
 class CreatePropertyViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
     private val applicationDispatchers: ApplicationDispatchers,
-    private val firebaseAuth: FirebaseAuth,
+    private val getCurrentUserIdUseCase: GetCurrentUserIdUseCase,
+    private val getCurrentUserNameUseCase: GetCurrentUserNameUseCase,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
     private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
-    private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
+    private val sendPhotoToCloudStorageRepository: SendPhotoToCloudStorageRepository,
     private val clock: Clock,
     private val context: Application,
 
@@ -92,8 +94,8 @@ class CreatePropertyViewModel @Inject constructor(
         if (photoMutableList.isNotEmpty() && address.isNotEmpty() && city.isNotEmpty() && zipcode.isNotEmpty()) {
 
             // Get value to entity format, string is for the view, we don't trust anything else
-            val uid = firebaseAuth.currentUser!!.uid
-            val vendor = firebaseAuth.currentUser!!.displayName.toString()
+            val uid = getCurrentUserIdUseCase.invoke()
+            val vendor = getCurrentUserNameUseCase.invoke()
             val createDateToFormat = Utils.todayDate()
             val propertyCreationDate = LocalDateTime.now(clock).toString()
 
@@ -124,9 +126,10 @@ class CreatePropertyViewModel @Inject constructor(
 
             // Get the property id to update photoEntity
             viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-                val newPropertyId = insertProperty(property)
+                val newPropertyId = createRoomProperty(property)
                 createPhotoEntityWithPropertyId(newPropertyId, propertyCreationDate, uid)
-                createPropertyOnFirestore(property)
+                createFirestoreProperty(property)
+
 
                 emptyPhotoRepository()
                 emptyInterestRepository()
@@ -182,8 +185,8 @@ class CreatePropertyViewModel @Inject constructor(
             photoListWithPropertyId.add(photoEntity)
         }
 
-        sendPhotosToLocalDataBase(photoListWithPropertyId)
-        sendPhotoToCloudStorage(photoListWithPropertyId, uid)
+        createRoomPhotos(photoListWithPropertyId)
+        createCloudStoragePhotos(photoListWithPropertyId, uid)
 
         withContext(applicationDispatchers.mainDispatcher) {
             actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
@@ -191,25 +194,27 @@ class CreatePropertyViewModel @Inject constructor(
         }
     }
 
-    private suspend fun createPropertyOnFirestore(property: PropertyEntity) {
+    private suspend fun createRoomProperty(property: PropertyEntity): Long {
+        return propertiesRepository.insertProperty(property)
+    }
+
+    private suspend fun createRoomPhotos(photos: List<PhotoEntity>) =
+        propertiesRepository.insertPhotos(photos)
+
+    private suspend fun createFirestoreProperty(property: PropertyEntity) {
         sendPropertyToFirestoreRepository.createPropertyDocument(property)
 
     }
 
-    private suspend fun sendPhotoToCloudStorage(
+    private suspend fun createCloudStoragePhotos(
         photos: List<PhotoEntity>,
         uid: String
     ) {
-        sendPhotoToCloudStorage.createPhotoDocument(photos, uid)
+        sendPhotoToCloudStorageRepository.createPhotoDocument(photos, uid)
 
     }
 
-    private suspend fun insertProperty(property: PropertyEntity): Long {
-        return propertiesRepository.insertProperty(property)
-    }
 
-    private suspend fun sendPhotosToLocalDataBase(photos: List<PhotoEntity>) =
-        propertiesRepository.insertPhotos(photos)
 
     // Clear the photoRepo for the next use
     fun emptyPhotoRepository() {

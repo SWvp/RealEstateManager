@@ -13,4 +13,7 @@ class MapViewModelTest {
 
     @get: Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+
+
 }

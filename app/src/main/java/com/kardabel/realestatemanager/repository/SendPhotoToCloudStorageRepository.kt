@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.firestore
+package com.kardabel.realestatemanager.repository
 
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
@@ -10,7 +10,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-class SendPhotoToCloudStorage @Inject constructor(
+class SendPhotoToCloudStorageRepository @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
 ) {
 

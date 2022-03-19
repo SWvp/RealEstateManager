@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.firestore
+package com.kardabel.realestatemanager.repository
 
 import android.content.ContentValues.TAG
 import android.util.Log

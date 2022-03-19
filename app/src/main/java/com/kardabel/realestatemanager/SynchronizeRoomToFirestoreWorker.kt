@@ -6,7 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kardabel.realestatemanager.database.PropertiesDao
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
+import com.kardabel.realestatemanager.repository.SendPropertyToFirestoreRepository
 import dagger.assisted.AssistedInject
 
 @HiltWorker

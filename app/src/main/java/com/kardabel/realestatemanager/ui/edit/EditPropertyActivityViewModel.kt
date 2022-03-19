@@ -5,8 +5,8 @@ import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.BuildConfig
 import com.kardabel.realestatemanager.R
-import com.kardabel.realestatemanager.firestore.SendPhotoToCloudStorage
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
+import com.kardabel.realestatemanager.repository.SendPhotoToCloudStorageRepository
+import com.kardabel.realestatemanager.repository.SendPropertyToFirestoreRepository
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
@@ -29,7 +29,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val registeredPhotoRepository: RegisteredPhotoRepository,
     currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
-    private val sendPhotoToCloudStorage: SendPhotoToCloudStorage,
+    private val sendPhotoToCloudStorageRepository: SendPhotoToCloudStorageRepository,
     private val interestRepository: InterestRepository,
     private val context: Application,
 ) : ViewModel() {
@@ -401,7 +401,7 @@ class EditPropertyActivityViewModel @Inject constructor(
         propertiesRepository.deletePhotos(photoId)
 
     private suspend fun updatePhotoOnCloudStorage() {
-        sendPhotoToCloudStorage.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
+        sendPhotoToCloudStorageRepository.updatePhotoOnCloudStorage(photoFullList, propertyCreationDate, uid)
 
     }
 

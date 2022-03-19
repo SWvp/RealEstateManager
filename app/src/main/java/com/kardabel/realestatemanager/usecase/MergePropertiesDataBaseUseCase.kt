@@ -1,4 +1,4 @@
-package com.kardabel.realestatemanager.repository
+package com.kardabel.realestatemanager.usecase
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -8,9 +8,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.database.PropertiesDao
-import com.kardabel.realestatemanager.firestore.SendPropertyToFirestoreRepository
 import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyEntity
+import com.kardabel.realestatemanager.repository.SendPropertyToFirestoreRepository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MergePropertiesDataBaseRepository @Inject constructor(
+class MergePropertiesDataBaseUseCase @Inject constructor(
     private val propertiesDao: PropertiesDao,
     private val sendPropertyToFirestoreRepository: SendPropertyToFirestoreRepository,
     private val firebaseStorage: FirebaseStorage,
@@ -130,7 +130,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
                 propertyCreationDate = property.propertyCreationDate,
                 creationDateToFormat = property.creationDateToFormat,
                 saleStatus = property.saleStatus,
-                purchaseDate = null,
+                purchaseDate = property.purchaseDate,
                 interest = interestCanBeNull(property.interest),
                 staticMap = property.staticMap,
                 updateTimestamp = property.updateTimestamp,
@@ -180,7 +180,7 @@ class MergePropertiesDataBaseRepository @Inject constructor(
                 propertyCreationDate = property.propertyCreationDate,
                 creationDateToFormat = property.creationDateToFormat,
                 saleStatus = property.saleStatus,
-                purchaseDate = null,
+                purchaseDate = property.purchaseDate,
                 interest = interestCanBeNull(property.interest),
                 staticMap = property.staticMap,
                 updateTimestamp = property.updateTimestamp,

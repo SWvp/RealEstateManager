@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.repository.*
+import com.kardabel.realestatemanager.usecase.MergePropertiesDataBaseUseCase
 import com.kardabel.realestatemanager.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class MainActivityViewModel @Inject constructor(
     private val currentPropertySaleStatus: CurrentPropertySaleStatus,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
-    private val mergePropertiesDataBaseRepository: MergePropertiesDataBaseRepository,
+    private val mergePropertiesDataBaseUseCase: MergePropertiesDataBaseUseCase,
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
@@ -96,7 +97,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun synchroniseWithFirestore() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
-            mergePropertiesDataBaseRepository.synchronisePropertiesDataBases()
+            mergePropertiesDataBaseUseCase.synchronisePropertiesDataBases()
         }
     }
 }
