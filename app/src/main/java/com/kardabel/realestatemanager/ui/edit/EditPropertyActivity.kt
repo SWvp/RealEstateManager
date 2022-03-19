@@ -30,7 +30,7 @@ import com.kardabel.realestatemanager.ui.create.RC_IMAGE_PERMS
 import com.kardabel.realestatemanager.ui.create.REQUEST_IMAGE_CAPTURE
 import com.kardabel.realestatemanager.ui.dialog.AddPhotoConfirmationDialogFragment
 import com.kardabel.realestatemanager.ui.dialog.ValidatePhotoDialogFragment
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.EditActivityViewAction
 import com.kardabel.realestatemanager.utils.UriPathHelper
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.EasyPermissions
@@ -50,7 +50,7 @@ class EditPropertyActivity : AppCompatActivity() {
     private var uriImageSelected: Uri? = null
     private var propertyType: String? = null
 
-    private val PERMS: String = Manifest.permission.READ_EXTERNAL_STORAGE
+    private val perms: String = Manifest.permission.READ_EXTERNAL_STORAGE
 
     private val viewModel by viewModels<EditPropertyActivityViewModel>()
 
@@ -193,14 +193,26 @@ class EditPropertyActivity : AppCompatActivity() {
         // Manage action after click save button
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
-                ActivityViewAction.FIELDS_ERROR ->
+                EditActivityViewAction.FIELDS_ERROR ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.fields_error),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                ActivityViewAction.FINISH_ACTIVITY ->
+                EditActivityViewAction.FINISH_ACTIVITY_AFTER_EDITING ->{
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.edit_done),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    onBackPressed()
+
+                }
+
+
+
+                EditActivityViewAction.FINISH_ACTIVITY ->
                     finish()
                 else -> {}
             }
@@ -243,12 +255,12 @@ class EditPropertyActivity : AppCompatActivity() {
         // uri could be non null if have already add photo for this property
         uriImageSelected = null
         isFromCamera = false
-        if (!EasyPermissions.hasPermissions(this, PERMS)) {
+        if (!EasyPermissions.hasPermissions(this, perms)) {
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.popup_title_permission_files_access),
                 RC_IMAGE_PERMS,
-                PERMS
+                perms
             )
             return
         }

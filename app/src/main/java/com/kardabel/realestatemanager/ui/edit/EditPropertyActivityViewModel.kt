@@ -11,7 +11,7 @@ import com.kardabel.realestatemanager.model.PhotoEntity
 import com.kardabel.realestatemanager.model.PropertyUpdate
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.repository.*
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.EditActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,7 @@ class EditPropertyActivityViewModel @Inject constructor(
     private val context: Application,
 ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<EditActivityViewAction>()
 
     private var addedPhotoMutableList = mutableListOf<PhotoEntity>()
     private var updatedRegisteredPhotoMutableList = mutableListOf<PhotoEntity>()
@@ -292,13 +292,13 @@ class EditPropertyActivityViewModel @Inject constructor(
                     emptyInterestRepository()
 
                     withContext(applicationDispatchers.mainDispatcher) {
-                        actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
+                        actionSingleLiveEvent.postValue(EditActivityViewAction.FINISH_ACTIVITY_AFTER_EDITING)
 
                     }
                 }
             }
         } else {
-            actionSingleLiveEvent.setValue(ActivityViewAction.FIELDS_ERROR)
+            actionSingleLiveEvent.setValue(EditActivityViewAction.FIELDS_ERROR)
         }
     }
 
@@ -433,7 +433,7 @@ class EditPropertyActivityViewModel @Inject constructor(
             propertiesRepository.updateSaleDate(saleDate, propertyId)
             sendPropertyToFirestoreRepository.updatePropertyWhenSold(uid, propertyCreationDate, saleDate)
             withContext(applicationDispatchers.mainDispatcher) {
-                actionSingleLiveEvent.postValue(ActivityViewAction.FINISH_ACTIVITY)
+                actionSingleLiveEvent.postValue(EditActivityViewAction.FINISH_ACTIVITY)
 
             }
         }

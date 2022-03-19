@@ -1,11 +1,8 @@
 package com.kardabel.realestatemanager.utils
 
 
-enum class ActivityViewAction  {
+enum class SearchActivityViewAction  {
 
-    FIELDS_ERROR,
     FINISH_ACTIVITY,
     NO_PARAMETER_SELECTED,
-    ON_SALE,
-    SALE
 }

@@ -6,7 +6,7 @@ import com.kardabel.realestatemanager.model.SearchParams
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.CurrentSearchRepository
 import com.kardabel.realestatemanager.repository.InterestRepository
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.SearchActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class SearchPropertyViewModel @Inject constructor(
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
 ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<SearchActivityViewAction>()
 
     private var priceSliderMinValue: Int? = null
     private var priceSliderMaxValue: Int? = null
@@ -107,10 +107,10 @@ class SearchPropertyViewModel @Inject constructor(
             sendSearchParamsToRepository(newSearchParams)
             emptyInterestRepository()
             emptyDetailsViewWhenDone()
-            actionSingleLiveEvent.setValue(ActivityViewAction.FINISH_ACTIVITY)
+            actionSingleLiveEvent.setValue(SearchActivityViewAction.FINISH_ACTIVITY)
 
         } else {
-            actionSingleLiveEvent.setValue(ActivityViewAction.NO_PARAMETER_SELECTED)
+            actionSingleLiveEvent.setValue(SearchActivityViewAction.NO_PARAMETER_SELECTED)
 
         }
     }

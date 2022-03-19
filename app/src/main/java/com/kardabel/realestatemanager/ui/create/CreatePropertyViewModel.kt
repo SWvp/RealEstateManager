@@ -17,7 +17,6 @@ import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import com.kardabel.realestatemanager.usecase.GetCurrentUserIdUseCase
 import com.kardabel.realestatemanager.usecase.GetCurrentUserNameUseCase
-import com.kardabel.realestatemanager.utils.ActivityViewAction
 import com.kardabel.realestatemanager.utils.CreateActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import com.kardabel.realestatemanager.utils.Utils

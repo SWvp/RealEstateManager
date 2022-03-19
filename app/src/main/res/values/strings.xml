@@ -113,6 +113,7 @@
 
     <!-- CREATE PROPERTY ACTIVITY -->
     <string name="fields_error">At least 1 photo, address, city and zipcode</string>
+    <string name="edit_done">Property successfully edited</string>
     <string name="interest_input_problem">Interest example: Atm, Bank, School</string>
     <string name="creating_property_successful">Property created successfully</string>
     <string name="url_map_static">https://maps.googleapis.com/maps/api/staticmap?center=</string>

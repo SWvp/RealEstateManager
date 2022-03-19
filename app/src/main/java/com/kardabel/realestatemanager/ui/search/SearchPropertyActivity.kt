@@ -14,7 +14,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.RangeSlider
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivitySearchPropertyBinding
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.SearchActivityViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -173,10 +173,10 @@ class SearchPropertyActivity : AppCompatActivity() {
 
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
-                ActivityViewAction.FINISH_ACTIVITY ->
+                SearchActivityViewAction.FINISH_ACTIVITY ->
                     finishSearchActivity()
 
-                ActivityViewAction.NO_PARAMETER_SELECTED ->
+                SearchActivityViewAction.NO_PARAMETER_SELECTED ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.select_parameter),

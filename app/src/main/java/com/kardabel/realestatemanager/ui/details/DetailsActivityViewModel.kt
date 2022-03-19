@@ -3,7 +3,7 @@ package com.kardabel.realestatemanager.ui.details
 import androidx.lifecycle.ViewModel
 import com.kardabel.realestatemanager.repository.CreatePhotoRepository
 import com.kardabel.realestatemanager.repository.CurrentPropertySaleStatus
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.DetailsActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class DetailsActivityViewModel @Inject constructor(
     private val currentPropertySaleStatus: CurrentPropertySaleStatus,
 ) : ViewModel() {
 
-    val actionSingleLiveEvent = SingleLiveEvent<ActivityViewAction>()
+    val actionSingleLiveEvent = SingleLiveEvent<DetailsActivityViewAction>()
 
 
     // Clear the createdPhotoRepoS for the next use
@@ -25,9 +25,9 @@ class DetailsActivityViewModel @Inject constructor(
     fun checkSaleStatusBeforeAccessToEditPropertyActivity() {
 
         if (currentPropertySaleStatus.isOnSale) {
-            actionSingleLiveEvent.setValue(ActivityViewAction.ON_SALE)
+            actionSingleLiveEvent.setValue(DetailsActivityViewAction.ON_SALE)
         } else {
-            actionSingleLiveEvent.setValue(ActivityViewAction.SALE)
+            actionSingleLiveEvent.setValue(DetailsActivityViewAction.SALE)
         }
 
     }

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.ActivityDetailsBinding
 import com.kardabel.realestatemanager.ui.edit.EditPropertyActivity
-import com.kardabel.realestatemanager.utils.ActivityViewAction
+import com.kardabel.realestatemanager.utils.DetailsActivityViewAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,14 +38,14 @@ class DetailsActivity: AppCompatActivity() {
 
         viewModel.actionSingleLiveEvent.observe(this) { viewAction ->
             when (viewAction) {
-                ActivityViewAction.SALE ->
+                DetailsActivityViewAction.SALE ->
                     Toast.makeText(
                         applicationContext,
                         getString(R.string.sale),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                ActivityViewAction.ON_SALE ->{
+                DetailsActivityViewAction.ON_SALE ->{
                     val intent = Intent(this, EditPropertyActivity::class.java)
                     startActivity(intent)
                     finish()
