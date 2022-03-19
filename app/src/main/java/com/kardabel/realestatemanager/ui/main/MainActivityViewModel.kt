@@ -30,13 +30,11 @@ class MainActivityViewModel @Inject constructor(
 
     private var isTablet: Boolean = false
 
-    val mActionSingleLiveEventMainActivity: SingleLiveEvent<MainActivityViewAction> = SingleLiveEvent()
+    val actionSingleLiveEventMainActivity: SingleLiveEvent<MainActivityViewAction> = SingleLiveEvent()
     val screenPositionSingleLiveEvent: SingleLiveEvent<ScreenPositionViewAction> =
         SingleLiveEvent()
-    val startEditActivitySingleLiveEvent: SingleLiveEvent<NavigateToEditViewAction> =
-        SingleLiveEvent()
 
-    // CHECK PERMISSIONS WITH MVVM PATTERN
+    // Check permission (mvvm friendly)
     fun checkPermission(activity: Activity) {
         when {
             ContextCompat.checkSelfPermission(
@@ -47,24 +45,26 @@ class MainActivityViewModel @Inject constructor(
                 activity,
                 permission.ACCESS_FINE_LOCATION
             ) -> {
-                mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_DENIED)
+                actionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_DENIED)
             }
             else -> {
-                mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_ASKED)
+                actionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PERMISSION_ASKED)
             }
         }
     }
 
+    // On resume, the activity send a boolean to know which position the device is
+    fun onConfigurationChanged(isTablet: Boolean) {
+        this.isTablet = isTablet
+    }
+
+    // Update actionView with tablet boolean value
     init {
         screenPositionSingleLiveEvent.addSource(currentPropertyIdRepository.currentPropertyIdLiveData) {
             if (!isTablet) {
                 screenPositionSingleLiveEvent.setValue(ScreenPositionViewAction.IsPortraitMode)
             }
         }
-    }
-
-    fun onConfigurationChanged(isTablet: Boolean) {
-        this.isTablet = isTablet
     }
 
     fun convertPrice() {
@@ -75,26 +75,28 @@ class MainActivityViewModel @Inject constructor(
     // and currentPropertySaleStatus to check if sold
     fun checkPropertyStatus() {
         if(currentPropertyIdRepository.isProperty && currentPropertySaleStatus.isOnSale){
-            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.GO_TO_EDIT_PROPERTY)
+            actionSingleLiveEventMainActivity.setValue(MainActivityViewAction.GO_TO_EDIT_PROPERTY)
 
         }else if (currentPropertyIdRepository.isProperty && !currentPropertySaleStatus.isOnSale){
-            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PROPERTY_SOLD)
+            actionSingleLiveEventMainActivity.setValue(MainActivityViewAction.PROPERTY_SOLD)
 
         }else{
 
-            mActionSingleLiveEventMainActivity.setValue(MainActivityViewAction.NO_PROPERTY_SELECTED)
+            actionSingleLiveEventMainActivity.setValue(MainActivityViewAction.NO_PROPERTY_SELECTED)
         }
     }
 
-    // Clear the createdPhotoRepoS for the next use
+    // Photo repository flush
     fun emptyCreatedPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
     }
 
+    // Interest repository flush
     fun emptyInterestRepository() {
         interestRepository.emptyInterestList()
     }
 
+    // Launch a synchronisation between room and firestore
     fun synchroniseWithFirestore() {
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             mergePropertiesDataBaseUseCase.synchronisePropertiesDataBases()

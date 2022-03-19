@@ -31,10 +31,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val LOCATION_PERMISSION_CODE = 100
+    private val locationPermissionCode = 100
 
     lateinit var googleSignInClient: GoogleSignInClient
-
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -46,6 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
+
+        // call requestIdToken for the Auth work
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         // Master details is not enable
         if (savedInstanceState == null) {
@@ -67,17 +73,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Single live event to manage permission and property status
-        viewModel.mActionSingleLiveEventMainActivity.observe(this) { viewAction ->
+        viewModel.actionSingleLiveEventMainActivity.observe(this) { viewAction ->
             when (viewAction) {
                 MainActivityViewAction.PERMISSION_ASKED -> ActivityCompat.requestPermissions(
                     this@MainActivity,
                     arrayOf(permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_CODE
+                    locationPermissionCode
                 )
                 MainActivityViewAction.PERMISSION_DENIED -> {
                     val alertDialogBuilder = MaterialAlertDialogBuilder(this@MainActivity)
-                    alertDialogBuilder.setTitle("R.string.title_alert")
-                    alertDialogBuilder.setMessage("rational")
+                    alertDialogBuilder.setTitle(getString(R.string.title_alert))
+                    alertDialogBuilder.setMessage(getString(R.string.rational))
                     alertDialogBuilder.show()
                 }
                 MainActivityViewAction.GO_TO_EDIT_PROPERTY ->
@@ -97,14 +103,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // call requestIdToken for the Auth work
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        // When this livedata is trigger by property ID update,
         // check if we are on landscape or portrait to chose the correct view to display,
         // if portrait, start details activity
         viewModel.screenPositionSingleLiveEvent.observe(this) {
@@ -126,7 +124,6 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(intent)
         }
-
         viewModel.synchroniseWithFirestore()
     }
 
@@ -171,7 +168,11 @@ class MainActivity : AppCompatActivity() {
             R.id.logout_item -> {
                 googleSignInClient.signOut().addOnCompleteListener {
                     val intent = Intent(this, AuthActivity::class.java)
-                    Toast.makeText(this, "Logging Out", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.login_out),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     startActivity(intent)
                     finish()
                 }

@@ -134,7 +134,11 @@
     <string name="search_complete">Search complete</string>
     <string name="select_parameter">Select at least one parameter or back pressed</string>
 
+    <!-- MAIN ACTIVITY -->
     <string name="sale">This property is already sold !</string>
+    <string name="title_alert">WARING!</string>
+    <string name="login_out">Login out</string>
+    <string name="rational">if you want to take full advantage of GO4LUNCH, please closed your app, select appInfo and go to permissions, then allow GO4LUNCH to access to your location. Reload GO4LUNCH, enjoy your lunch, thank you !</string>
 
 
 </resources>
