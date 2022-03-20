@@ -25,7 +25,7 @@ class LocationRepository @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun userLocation(): Flow<UserLocation> = callbackFlow {
+    fun getUserLocation(): Flow<UserLocation> = callbackFlow {
         val locationRequest = LocationRequest.create().apply {
             interval = TimeUnit.SECONDS.toMillis(UPDATE_INTERVAL_SECS)
             fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_UPDATE_INTERVAL_SECS)

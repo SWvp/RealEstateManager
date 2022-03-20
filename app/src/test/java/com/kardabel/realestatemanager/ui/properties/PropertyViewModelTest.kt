@@ -96,7 +96,7 @@ class PropertyViewModelTest {
             value = null
         }
 
-        every { currentSearchRepository.searchParamsParamsFlow() } returns flowOf(
+        every { currentSearchRepository.getSearchParamsParamsFlow() } returns flowOf(
             null
         )
 

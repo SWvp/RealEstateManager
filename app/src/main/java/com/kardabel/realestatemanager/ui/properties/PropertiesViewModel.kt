@@ -30,7 +30,7 @@ class PropertiesViewModel @Inject constructor(
 
     private val searchParamsLiveData: LiveData<SearchParams?> =
         currentSearchRepository
-            .searchParamsParamsFlow()
+            .getSearchParamsParamsFlow()
             .asLiveData(applicationDispatchers.ioDispatcher)
 
     private val currentCurrencyLiveData: LiveData<Boolean> =
