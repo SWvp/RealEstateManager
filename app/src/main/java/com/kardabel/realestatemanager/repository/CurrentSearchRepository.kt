@@ -17,4 +17,7 @@ class CurrentSearchRepository @Inject constructor() {
         searchParamsMutableStateFlow.value = searchParamsParams
     }
 
+    fun resetSearchParams() {
+        searchParamsMutableStateFlow.value = null
+    }
 }

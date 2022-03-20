@@ -165,6 +165,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+            R.id.reset_search_item -> {
+                viewModel.resetSearch()
+                true
+            }
             R.id.logout_item -> {
                 googleSignInClient.signOut().addOnCompleteListener {
                     val intent = Intent(this, AuthActivity::class.java)

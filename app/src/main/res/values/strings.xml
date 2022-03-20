@@ -73,6 +73,7 @@
     <string name="edit_item">Edit property</string>
     <string name="converter_item">Converter</string>
     <string name="search_item">Search property</string>
+    <string name="reset_search_item">Reset Search</string>
     <string name="logout_item">Logout</string>
 
     <!-- SEARCH PROPERTY LAYOUT -->

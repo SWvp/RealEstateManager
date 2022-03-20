@@ -22,6 +22,7 @@ class MainActivityViewModel @Inject constructor(
     private val priceConverterRepository: PriceConverterRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val currentPropertySaleStatus: CurrentPropertySaleStatus,
+    private val currentSearchRepository: CurrentSearchRepository,
     private val createPhotoRepository: CreatePhotoRepository,
     private val interestRepository: InterestRepository,
     private val mergePropertiesDataBaseUseCase: MergePropertiesDataBaseUseCase,
@@ -101,5 +102,10 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(applicationDispatchers.ioDispatcher) {
             mergePropertiesDataBaseUseCase.synchronisePropertiesDataBases()
         }
+    }
+
+    fun resetSearch() {
+        currentSearchRepository.resetSearchParams()
+
     }
 }
