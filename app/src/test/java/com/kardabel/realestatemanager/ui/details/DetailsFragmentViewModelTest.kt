@@ -1,7 +1,9 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.TestCoroutineRule
 import com.kardabel.realestatemanager.getApplicationDispatchersTest
 import com.kardabel.realestatemanager.model.PhotoEntity
@@ -19,6 +21,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class DetailsFragmentViewModelTest {
@@ -49,9 +52,16 @@ class DetailsFragmentViewModelTest {
 
     private val propertiesRepository: PropertiesRepository = mockk()
 
+    private val context = Mockito.mock(Application::class.java)
+
     @Before
     fun setUp() {
 
+        // STRINGS RETURNS
+        Mockito.doReturn("Ongoing sale !").`when`(context).getString(R.string.ongoing_sale)
+        Mockito.doReturn("m²").`when`(context).getString(R.string.meter)
+
+        // REPOSITORY RETURNS
         every { currentPropertyIdRepository.currentPropertyIdLiveData } returns MutableLiveData<Long>().apply {
             value = EXPECTED_CURRENT_PROPERTY_ID
         }
@@ -68,11 +78,11 @@ class DetailsFragmentViewModelTest {
     @Test
     fun `nominal case`() = runTest {
         // When
-        getViewModel().detailsLiveData.observeForTesting {
+        getViewModel().detailsLiveData.observeForTesting { result ->
             // Then
             assertEquals(
                 getDefaultDetailsViewState(),
-                it
+                result
             )
         }
     }
@@ -83,11 +93,11 @@ class DetailsFragmentViewModelTest {
         every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
             getDefaultPropertyWithInterests()
         )
-        getViewModel().detailsLiveData.observeForTesting {
+        getViewModel().detailsLiveData.observeForTesting { result ->
             // Then
             assertEquals(
                 getDetailsViewStateWithInterests(),
-                it
+                result
             )
         }
     }
@@ -96,6 +106,7 @@ class DetailsFragmentViewModelTest {
     private fun getViewModel() = DetailsFragmentViewModel(
         currentPropertyIdRepository = currentPropertyIdRepository,
         propertiesRepository = propertiesRepository,
+        context = context,
         applicationDispatchers = getApplicationDispatchersTest(testCoroutineRule)
     )
 
