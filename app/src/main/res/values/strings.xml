@@ -120,6 +120,7 @@
     <string name="url_map_static">https://maps.googleapis.com/maps/api/staticmap?center=</string>
     <string name="coma">,</string>
     <string name="zoom_size">&amp;zoom=18&amp;size=400x400&amp;</string>
+    <string name="on_sale">On Sale !</string>
     <string name="marker">markers=color:blue|label:P|</string>
     <string name="key">&amp;key=</string>
     <string name="date_pattern">yyyyMMdd_HHmmss</string>
@@ -141,5 +142,13 @@
     <string name="login_out">Login out</string>
     <string name="rational">if you want to take full advantage of GO4LUNCH, please closed your app, select appInfo and go to permissions, then allow GO4LUNCH to access to your location. Reload GO4LUNCH, enjoy your lunch, thank you !</string>
 
+    <!-- DETAILS FRAGMENT VIEWMODEL -->
+    <string name="ongoing_sale">Ongoing sale !</string>
+    <string name="meter">m²</string>
+
+    <!-- PROPERTY VIEWMODEL -->
+    <string name="price_nc">Price N/C</string>
+    <string name="dollar">$</string>
+    <string name="euro">€</string>
 
 </resources>

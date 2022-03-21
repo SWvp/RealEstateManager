@@ -1,10 +1,12 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.PropertiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +17,7 @@ import javax.inject.Inject
 class DetailsFragmentViewModel @Inject constructor(
     currentPropertyIdRepository: CurrentPropertyIdRepository,
     private val propertiesRepository: PropertiesRepository,
+    private val context: Application,
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
@@ -52,7 +55,7 @@ class DetailsFragmentViewModel @Inject constructor(
 
     private fun soldDateToString(purchaseDate: String?): String {
         return if(purchaseDate == "null" || purchaseDate == null){
-            "Ongoing sale !"
+            context.getString(R.string.ongoing_sale)
         }else purchaseDate
     }
 
@@ -74,7 +77,7 @@ class DetailsFragmentViewModel @Inject constructor(
 
     private fun readableSurface(value: String?): String {
         return if (value != "") {
-            value + "m²"
+            value + context.getString(R.string.meter)
         } else {
             value
         }

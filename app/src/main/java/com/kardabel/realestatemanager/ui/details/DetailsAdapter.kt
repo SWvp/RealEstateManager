@@ -16,7 +16,6 @@ class DetailsAdapter(
     private val listener: (DetailsPhotoViewState) -> Unit
 ) : ListAdapter<DetailsPhotoViewState, DetailsAdapter.ViewHolder>(ListComparator) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.create(parent)
 

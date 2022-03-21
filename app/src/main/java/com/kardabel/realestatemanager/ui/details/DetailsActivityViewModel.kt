@@ -16,7 +16,6 @@ class DetailsActivityViewModel @Inject constructor(
 
     val actionSingleLiveEvent = SingleLiveEvent<DetailsActivityViewAction>()
 
-
     // Clear the createdPhotoRepoS for the next use
     fun emptyCreatedPhotoRepository() {
         createPhotoRepository.emptyCreatePhotoList()
@@ -29,8 +28,5 @@ class DetailsActivityViewModel @Inject constructor(
         } else {
             actionSingleLiveEvent.setValue(DetailsActivityViewAction.SALE)
         }
-
     }
-
-
 }

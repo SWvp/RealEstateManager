@@ -22,7 +22,6 @@ abstract class PropertiesRoomDatabase: RoomDatabase() {
 
         fun getDatabase(
             context: Context,
-            scope: CoroutineScope
         ): PropertiesRoomDatabase {
 
             return INSTANCE ?: synchronized(this) {
@@ -32,7 +31,6 @@ abstract class PropertiesRoomDatabase: RoomDatabase() {
                     "real_estate_database"
                 )
                     .fallbackToDestructiveMigration() // Wipes and rebuilds instead of migrating if no Migration object.
-                    //.addCallback(RealEstateDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance

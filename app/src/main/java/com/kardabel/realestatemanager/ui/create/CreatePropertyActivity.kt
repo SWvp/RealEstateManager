@@ -155,7 +155,7 @@ class CreatePropertyActivity : AppCompatActivity() {
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
+            OnItemClickListener { parent, _, position, _ ->
                 propertyType = parent.getItemAtPosition(position).toString()
             }
 

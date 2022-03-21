@@ -164,7 +164,7 @@ class EditPropertyActivity : AppCompatActivity() {
 
         // Manage type
         binding.propertyTypeDropdownMenu.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
                 propertyType = parent.getItemAtPosition(position).toString()
             }
 

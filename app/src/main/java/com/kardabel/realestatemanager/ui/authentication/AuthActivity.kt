@@ -45,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
         auth = FirebaseAuth.getInstance()
 
-        binding.signingButton.setOnClickListener { view: View? ->
+        binding.signingButton.setOnClickListener { _: View? ->
             Toast.makeText(this,
                 this@AuthActivity.getString(R.string.logging_in), Toast.LENGTH_SHORT).show()
             signInGoogle()

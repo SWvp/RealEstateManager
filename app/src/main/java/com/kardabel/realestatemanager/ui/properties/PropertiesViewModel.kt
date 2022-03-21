@@ -1,8 +1,10 @@
 package com.kardabel.realestatemanager.ui.properties
 
+import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.*
 import com.kardabel.realestatemanager.ApplicationDispatchers
+import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.database.PropertiesDao
 import com.kardabel.realestatemanager.model.PropertyWithPhoto
 import com.kardabel.realestatemanager.model.SearchParams
@@ -18,6 +20,7 @@ class PropertiesViewModel @Inject constructor(
     private val currentPropertySaleStatus: CurrentPropertySaleStatus,
     private val propertiesDao: PropertiesDao,
     val propertiesRepository: PropertiesRepository,
+    private val context: Application,
     priceConverterRepository: PriceConverterRepository,
     currentSearchRepository: CurrentSearchRepository,
     applicationDispatchers: ApplicationDispatchers,
@@ -200,13 +203,13 @@ class PropertiesViewModel @Inject constructor(
     ): String {
         return if (price != "") {
             return if (currencyStatus) {
-                "$$price"
+                context.getString(R.string.dollar) + price
             } else {
                 val priceConverted: String = Utils.convertDollarToEuro(price.toInt()).toString()
-                "€$priceConverted"
+                context.getString(R.string.euro) + priceConverted
             }
         } else {
-            "Price N/C"
+            context.getString(R.string.price_nc)
         }
     }
 
@@ -220,9 +223,9 @@ class PropertiesViewModel @Inject constructor(
 
     private fun readablePrice(price: String?): String {
         return if (price != "") {
-            "$$price"
+            context.getString(R.string.dollar) + price
         } else {
-            "Price N/C"
+            context.getString(R.string.price_nc)
         }
     }
 

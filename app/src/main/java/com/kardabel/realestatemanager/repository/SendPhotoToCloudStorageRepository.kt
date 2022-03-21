@@ -14,6 +14,8 @@ class SendPhotoToCloudStorageRepository @Inject constructor(
     private val firebaseStorage: FirebaseStorage,
 ) {
 
+    private val folderPhotos = "photos"
+
     suspend fun createPhotoDocument(photos: List<PhotoEntity>, uid: String) {
 
         for (photo in photos) {
@@ -40,7 +42,7 @@ class SendPhotoToCloudStorageRepository @Inject constructor(
         photoCreationDate: String,
         photoTimestamp: String
     ): StorageReference {
-        return firebaseStorage.reference.child("photos/$uid/$photoCreationDate/$photoTimestamp")
+        return firebaseStorage.reference.child("$folderPhotos/$uid/$photoCreationDate/$photoTimestamp")
     }
 
     suspend fun updatePhotoOnCloudStorage(
@@ -58,7 +60,7 @@ class SendPhotoToCloudStorageRepository @Inject constructor(
     private suspend fun deleteOldDocument(createLocalDateTime: String, uid: String) {
 
 
-        val photosFromCloudStorage = firebaseStorage.reference.child("photos/$uid/$createLocalDateTime").listAll().await()
+        val photosFromCloudStorage = firebaseStorage.reference.child("$folderPhotos/$uid/$createLocalDateTime").listAll().await()
 
         for (photo in photosFromCloudStorage.items) {
 

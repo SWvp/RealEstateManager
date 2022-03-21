@@ -47,7 +47,6 @@ class AddPhotoConfirmationDialogFragment : DialogFragment() {
 
                         )
                     viewModel.addPhoto(newPhoto)
-                    //TODO: save file on storage !!!
                 }
                 dismiss()
             }

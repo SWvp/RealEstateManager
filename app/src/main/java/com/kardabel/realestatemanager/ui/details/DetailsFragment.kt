@@ -23,7 +23,6 @@ class DetailsFragment : Fragment() {
 
     private lateinit var photosAdapter: DetailsAdapter
 
-
     private val viewModel by viewModels<DetailsFragmentViewModel>()
 
     override fun onCreateView(

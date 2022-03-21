@@ -34,7 +34,7 @@ class RealEstateContentProvider: ContentProvider() {
         if (context != null) {
             val idRealEstate = ContentUris.parseId(uri)
             val cursor: Cursor =
-                PropertiesRoomDatabase.getDatabase(context!!, CoroutineScope(SupervisorJob()))
+                PropertiesRoomDatabase.getDatabase(context!!)
                     .propertiesDao().getPropertiesWithCursor(idRealEstate)
             cursor.setNotificationUri(context!!.contentResolver, uri)
             return cursor

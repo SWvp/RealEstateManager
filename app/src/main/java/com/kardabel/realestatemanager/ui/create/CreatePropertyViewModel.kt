@@ -30,7 +30,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CreatePropertyViewModel @Inject constructor(
     private val propertiesRepository: PropertiesRepository,
-    private val applicationDispatchers: ApplicationDispatchers,
     private val getCurrentUserIdUseCase: GetCurrentUserIdUseCase,
     private val getCurrentUserNameUseCase: GetCurrentUserNameUseCase,
     private val createPhotoRepository: CreatePhotoRepository,
@@ -39,6 +38,7 @@ class CreatePropertyViewModel @Inject constructor(
     private val sendPhotoToCloudStorageRepository: SendPhotoToCloudStorageRepository,
     private val clock: Clock,
     private val context: Application,
+    private val applicationDispatchers: ApplicationDispatchers,
 
     ) : ViewModel() {
 
@@ -117,7 +117,7 @@ class CreatePropertyViewModel @Inject constructor(
                 vendor = vendor,
                 propertyCreationDate = propertyCreationDate,
                 creationDateToFormat = createDateToFormat,
-                saleStatus = "On Sale !",
+                saleStatus = context.getString(R.string.on_sale),
                 purchaseDate = null,
                 interest = interestCanBeNull(interestRepository.getInterest()),
                 staticMap = staticMapUrl(address, zipcode, city),
