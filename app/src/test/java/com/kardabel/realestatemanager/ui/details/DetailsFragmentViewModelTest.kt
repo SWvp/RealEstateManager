@@ -27,19 +27,35 @@ import org.mockito.Mockito
 class DetailsFragmentViewModelTest {
 
     companion object {
+        private const val EXPECTED_ADDRESS = "first_address"
+        private const val EXPECTED_APARTMENT_NUMBER = "first_apartment_number"
+        private const val EXPECTED_CITY = "first_city"
+        private const val EXPECTED_ZIPCODE = "first_zipcode"
+        private const val EXPECTED_COUNTY = "first_county"
+        private const val EXPECTED_COUNTRY = "first_country"
+        private const val EXPECTED_DESCRIPTION = "first_propertyDescription"
+        private const val EXPECTED_TYPE = "first_type"
+        private const val EXPECTED_PRICE_DOLLARS = "1000000"
+        private const val EXPECTED_SURFACE = "100"
+        private const val EXPECTED_ROOM = "5"
+        private const val EXPECTED_BEDROOM = "first_bedroom"
+        private const val EXPECTED_BATHROOM = "first_bathroom"
+        private const val EXPECTED_UID = "first_uid"
+        private const val EXPECTED_VENDOR = "first_vendor"
+        private const val EXPECTED_STATIC_MAP = "first_staticMap"
+        private const val EXPECTED_CREATION_DATE = "first_createLocalDateTime"
+        private const val EXPECTED_CREATION_DATE_FORMAT = "first_createDateToFormat"
+        private const val EXPECTED_SALE_STATUS = "On Sale !"
+        private val EXPECTED_PURCHASE_DATE = null
+        private const val EXPECTED_PURCHASE_AVAILABLE = "1234"
+        private val EXPECTED_EMPTY_INTERESTS = ArrayList<String>()
+        private val EXPECTED_INTERESTS = listOf("first interest", "second interest")
         private const val EXPECTED_CURRENT_PROPERTY_ID = 42L
-        private const val EXPECTED_TIMESTAMP = "1254845878"
-        private const val EXPECTED_CREATION_DATE = "987654"
-        private const val EXPECTED_PRICE = "400000"
-        private const val EXPECTED_SURFACE = "85"
-        private const val EXPECTED_ROOM = "4"
-        private const val EXPECTED_BEDROOM = "3"
-        private const val EXPECTED_BATHROOM = "1"
-        private const val EXPECTED_IS_SOLD = "On Sale !"
-        private const val EXPECTED_DESCRIPTION = "propertyDescription"
-        private val EXPECTED_INTERESTS = null
 
-        private const val EXPECTED_PHOTO_ID = 133
+        private const val EXPECTED_PHOTO_URI = "first_photoUri"
+        private const val EXPECTED_PHOTO_DESCRIPTION = "first_photo_description"
+        private const val EXPECTED_TIMESTAMP = "first_timestamp"
+        private const val EXPECTED_PHOTO_ID = 666
     }
 
     @get: Rule
@@ -88,7 +104,7 @@ class DetailsFragmentViewModelTest {
     }
 
     @Test
-    fun `property with interests`() = runTest {
+    fun `property with interests should display interest`() = runTest {
         // When
         every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
             getDefaultPropertyWithInterests()
@@ -102,6 +118,65 @@ class DetailsFragmentViewModelTest {
         }
     }
 
+    @Test
+    fun `property sold should display purchase date`() = runTest {
+        // When
+        every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
+            getSoldProperty()
+        )
+        getViewModel().detailsLiveData.observeForTesting { result ->
+            // Then
+            assertEquals(
+                getSoldPropertyViewState(),
+                result
+            )
+        }
+    }
+
+    @Test
+    fun `no property surface should not show suffix`() = runTest {
+        // When
+        every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
+            getNoSurfaceProperty()
+        )
+        getViewModel().detailsLiveData.observeForTesting { result ->
+            // Then
+            assertEquals(
+                getNoSurfacePropertyViewState(),
+                result
+            )
+        }
+    }
+
+    @Test
+    fun `property with minimum field required should display only required field`() = runTest {
+        // When
+        every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
+            getMinimumProperty()
+        )
+        getViewModel().detailsLiveData.observeForTesting { result ->
+            // Then
+            assertEquals(
+                getMinimumPropertyViewState(),
+                result
+            )
+        }
+    }
+
+    @Test
+    fun `property with two photos display two photos`() = runTest {
+        // When
+        every { propertiesRepository.getPropertyById(EXPECTED_CURRENT_PROPERTY_ID) } returns flowOf(
+            getPropertyWithTwoPhotos()
+        )
+        getViewModel().detailsLiveData.observeForTesting { result ->
+            // Then
+            assertEquals(
+                getPropertyWithTwoPhotosViewState(),
+                result
+            )
+        }
+    }
 
     private fun getViewModel() = DetailsFragmentViewModel(
         currentPropertyIdRepository = currentPropertyIdRepository,
@@ -113,33 +188,33 @@ class DetailsFragmentViewModelTest {
     // region IN
     private fun getDefaultPropertyWithPhoto() = PropertyWithPhoto(
         propertyEntity = PropertyEntity(
-            address = "address",
-            apartmentNumber = "apartmentNumber",
-            city = "city",
-            zipcode = "zipcode",
-            county = "county",
-            country = "country",
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = EXPECTED_APARTMENT_NUMBER,
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = EXPECTED_COUNTY,
+            country = EXPECTED_COUNTRY,
             propertyDescription = EXPECTED_DESCRIPTION,
-            type = "type",
-            price = EXPECTED_PRICE,
+            type = EXPECTED_TYPE,
+            price = EXPECTED_PRICE_DOLLARS,
             surface = EXPECTED_SURFACE,
             room = EXPECTED_ROOM,
             bedroom = EXPECTED_BEDROOM,
             bathroom = EXPECTED_BATHROOM,
-            uid = "uid",
-            vendor = "vendor",
-            staticMap = "staticMap",
-            propertyCreationDate = "createLocalDateTime",
-            creationDateToFormat = "createDateToFormat",
-            saleStatus = EXPECTED_IS_SOLD,
-            purchaseDate = null,
-            interest = EXPECTED_INTERESTS,
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_DATE,
+            interest = EXPECTED_EMPTY_INTERESTS,
             propertyId = EXPECTED_CURRENT_PROPERTY_ID
         ),
         photo = listOf(
             PhotoEntity(
-                photoUri = "photoUri",
-                photoDescription = "photoDescription",
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
                 propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
                 photoTimestamp = EXPECTED_TIMESTAMP,
                 photoCreationDate = EXPECTED_CREATION_DATE,
@@ -150,33 +225,33 @@ class DetailsFragmentViewModelTest {
 
     private fun getDefaultPropertyWithInterests() = PropertyWithPhoto(
         propertyEntity = PropertyEntity(
-            address = "address",
-            apartmentNumber = "apartmentNumber",
-            city = "city",
-            zipcode = "zipcode",
-            county = "county",
-            country = "country",
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = EXPECTED_APARTMENT_NUMBER,
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = EXPECTED_COUNTY,
+            country = EXPECTED_COUNTRY,
             propertyDescription = EXPECTED_DESCRIPTION,
-            type = "type",
-            price = EXPECTED_PRICE,
+            type = EXPECTED_TYPE,
+            price = EXPECTED_PRICE_DOLLARS,
             surface = EXPECTED_SURFACE,
             room = EXPECTED_ROOM,
             bedroom = EXPECTED_BEDROOM,
             bathroom = EXPECTED_BATHROOM,
-            uid = "uid",
-            vendor = "vendor",
-            staticMap = "staticMap",
-            propertyCreationDate = "createLocalDateTime",
-            creationDateToFormat = "createDateToFormat",
-            saleStatus = EXPECTED_IS_SOLD,
-            purchaseDate = null,
-            interest = listOf("first interest", "second interest"),
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_DATE,
+            interest = EXPECTED_INTERESTS,
             propertyId = EXPECTED_CURRENT_PROPERTY_ID
         ),
         photo = listOf(
             PhotoEntity(
-                photoUri = "photoUri",
-                photoDescription = "photoDescription",
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
                 propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
                 photoTimestamp = EXPECTED_TIMESTAMP,
                 photoCreationDate = EXPECTED_CREATION_DATE,
@@ -184,6 +259,163 @@ class DetailsFragmentViewModelTest {
             )
         )
     )
+
+    private fun getSoldProperty() = PropertyWithPhoto(
+        propertyEntity = PropertyEntity(
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = EXPECTED_APARTMENT_NUMBER,
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = EXPECTED_COUNTY,
+            country = EXPECTED_COUNTRY,
+            propertyDescription = EXPECTED_DESCRIPTION,
+            type = EXPECTED_TYPE,
+            price = EXPECTED_PRICE_DOLLARS,
+            surface = EXPECTED_SURFACE,
+            room = EXPECTED_ROOM,
+            bedroom = EXPECTED_BEDROOM,
+            bathroom = EXPECTED_BATHROOM,
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_AVAILABLE,
+            interest = EXPECTED_EMPTY_INTERESTS,
+            propertyId = EXPECTED_CURRENT_PROPERTY_ID
+        ),
+        photo = listOf(
+            PhotoEntity(
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
+                propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
+                photoId = EXPECTED_PHOTO_ID,
+            )
+        )
+    )
+
+    private fun getNoSurfaceProperty() = PropertyWithPhoto(
+        propertyEntity = PropertyEntity(
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = EXPECTED_APARTMENT_NUMBER,
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = EXPECTED_COUNTY,
+            country = EXPECTED_COUNTRY,
+            propertyDescription = EXPECTED_DESCRIPTION,
+            type = EXPECTED_TYPE,
+            price = EXPECTED_PRICE_DOLLARS,
+            surface = "",
+            room = EXPECTED_ROOM,
+            bedroom = EXPECTED_BEDROOM,
+            bathroom = EXPECTED_BATHROOM,
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_DATE,
+            interest = EXPECTED_EMPTY_INTERESTS,
+            propertyId = EXPECTED_CURRENT_PROPERTY_ID
+        ),
+        photo = listOf(
+            PhotoEntity(
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
+                propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
+                photoId = EXPECTED_PHOTO_ID,
+            )
+        )
+    )
+
+    private fun getMinimumProperty() = PropertyWithPhoto(
+        propertyEntity = PropertyEntity(
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = "",
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = "",
+            country = "",
+            propertyDescription = "",
+            type = "",
+            price = "",
+            surface = "",
+            room = "",
+            bedroom = "",
+            bathroom = "",
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_DATE,
+            interest = EXPECTED_EMPTY_INTERESTS,
+            propertyId = EXPECTED_CURRENT_PROPERTY_ID
+        ),
+        photo = listOf(
+            PhotoEntity(
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
+                propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
+                photoId = EXPECTED_PHOTO_ID,
+            )
+        )
+    )
+
+    private fun getPropertyWithTwoPhotos() = PropertyWithPhoto(
+        propertyEntity = PropertyEntity(
+            address = EXPECTED_ADDRESS,
+            apartmentNumber = "",
+            city = EXPECTED_CITY,
+            zipcode = EXPECTED_ZIPCODE,
+            county = "",
+            country = "",
+            propertyDescription = "",
+            type = "",
+            price = "",
+            surface = "",
+            room = "",
+            bedroom = "",
+            bathroom = "",
+            uid = EXPECTED_UID,
+            vendor = EXPECTED_VENDOR,
+            staticMap = EXPECTED_STATIC_MAP,
+            propertyCreationDate = EXPECTED_CREATION_DATE,
+            creationDateToFormat = EXPECTED_CREATION_DATE_FORMAT,
+            saleStatus = EXPECTED_SALE_STATUS,
+            purchaseDate = EXPECTED_PURCHASE_DATE,
+            interest = EXPECTED_EMPTY_INTERESTS,
+            propertyId = EXPECTED_CURRENT_PROPERTY_ID
+        ),
+        photo = listOf(
+            PhotoEntity(
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
+                propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
+                photoId = EXPECTED_PHOTO_ID,
+            ),
+            PhotoEntity(
+                photoUri = EXPECTED_PHOTO_URI,
+                photoDescription = EXPECTED_PHOTO_DESCRIPTION,
+                propertyOwnerId = EXPECTED_CURRENT_PROPERTY_ID,
+                photoTimestamp = EXPECTED_TIMESTAMP,
+                photoCreationDate = EXPECTED_CREATION_DATE,
+                photoId = EXPECTED_PHOTO_ID,
+            ),
+        )
+    )
+
     // endregion IN
 
     // region OUT
@@ -191,8 +423,36 @@ class DetailsFragmentViewModelTest {
         propertyId = EXPECTED_CURRENT_PROPERTY_ID,
         photos = listOf(
             DetailsPhotoViewState(
-                "photoUri",
-                "photoDescription"
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
+
+            )
+        ),
+        description = EXPECTED_DESCRIPTION,
+        surface = EXPECTED_SURFACE + "m²",
+        room = EXPECTED_ROOM,
+        bathroom = EXPECTED_BATHROOM,
+        bedroom = EXPECTED_BEDROOM,
+        interest = null,
+        address = EXPECTED_ADDRESS,
+        apartment = EXPECTED_APARTMENT_NUMBER,
+        city = EXPECTED_CITY,
+        county = EXPECTED_COUNTY,
+        zipcode = EXPECTED_ZIPCODE,
+        country = EXPECTED_COUNTRY,
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
+        purchaseDate = "Ongoing sale !",
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
+        visibility = true,
+    )
+
+    private fun getDetailsViewStateWithInterests() = DetailsViewState(
+        propertyId = EXPECTED_CURRENT_PROPERTY_ID,
+        photos = listOf(
+            DetailsPhotoViewState(
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
 
             )
         ),
@@ -202,44 +462,133 @@ class DetailsFragmentViewModelTest {
         bathroom = EXPECTED_BATHROOM,
         bedroom = EXPECTED_BEDROOM,
         interest = EXPECTED_INTERESTS,
-        address = "address",
-        apartment = "apartmentNumber",
-        city = "city",
-        county = "county",
-        zipcode = "zipcode",
-        country = "country",
-        startSale = "createDateToFormat",
+        address = EXPECTED_ADDRESS,
+        apartment = EXPECTED_APARTMENT_NUMBER,
+        city = EXPECTED_CITY,
+        county = EXPECTED_COUNTY,
+        zipcode = EXPECTED_ZIPCODE,
+        country = EXPECTED_COUNTRY,
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
         purchaseDate = "Ongoing sale !",
-        vendor = "vendor",
-        staticMap = "staticMap",
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
         visibility = true,
     )
 
-    private fun getDetailsViewStateWithInterests() = DetailsViewState(
+    private fun getSoldPropertyViewState() = DetailsViewState(
         propertyId = EXPECTED_CURRENT_PROPERTY_ID,
         photos = listOf(
             DetailsPhotoViewState(
-                "photoUri",
-                "photoDescription"
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
 
             )
         ),
-        description = "propertyDescription",
+        description = EXPECTED_DESCRIPTION,
         surface = EXPECTED_SURFACE + "m²",
         room = EXPECTED_ROOM,
         bathroom = EXPECTED_BATHROOM,
         bedroom = EXPECTED_BEDROOM,
-        interest = listOf("first interest", "second interest"),
-        address = "address",
-        apartment = "apartmentNumber",
-        city = "city",
-        county = "county",
-        zipcode = "zipcode",
-        country = "country",
-        startSale = "createDateToFormat",
+        interest = null,
+        address = EXPECTED_ADDRESS,
+        apartment = EXPECTED_APARTMENT_NUMBER,
+        city = EXPECTED_CITY,
+        county = EXPECTED_COUNTY,
+        zipcode = EXPECTED_ZIPCODE,
+        country = EXPECTED_COUNTRY,
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
+        purchaseDate = EXPECTED_PURCHASE_AVAILABLE,
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
+        visibility = true,
+    )
+
+    private fun getNoSurfacePropertyViewState() = DetailsViewState(
+        propertyId = EXPECTED_CURRENT_PROPERTY_ID,
+        photos = listOf(
+            DetailsPhotoViewState(
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
+
+            )
+        ),
+        description = EXPECTED_DESCRIPTION,
+        surface = "",
+        room = EXPECTED_ROOM,
+        bathroom = EXPECTED_BATHROOM,
+        bedroom = EXPECTED_BEDROOM,
+        interest = null,
+        address = EXPECTED_ADDRESS,
+        apartment = EXPECTED_APARTMENT_NUMBER,
+        city = EXPECTED_CITY,
+        county = EXPECTED_COUNTY,
+        zipcode = EXPECTED_ZIPCODE,
+        country = EXPECTED_COUNTRY,
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
         purchaseDate = "Ongoing sale !",
-        vendor = "vendor",
-        staticMap = "staticMap",
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
+        visibility = true,
+    )
+
+    private fun getMinimumPropertyViewState() = DetailsViewState(
+        propertyId = EXPECTED_CURRENT_PROPERTY_ID,
+        photos = listOf(
+            DetailsPhotoViewState(
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
+
+            )
+        ),
+        description = "",
+        surface = "",
+        room = "",
+        bathroom = "",
+        bedroom = "",
+        interest = null,
+        address = EXPECTED_ADDRESS,
+        apartment = "",
+        city = EXPECTED_CITY,
+        county = "",
+        zipcode = EXPECTED_ZIPCODE,
+        country = "",
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
+        purchaseDate = "Ongoing sale !",
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
+        visibility = true,
+    )
+
+    private fun getPropertyWithTwoPhotosViewState() = DetailsViewState(
+        propertyId = EXPECTED_CURRENT_PROPERTY_ID,
+        photos = listOf(
+            DetailsPhotoViewState(
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
+
+            ),
+            DetailsPhotoViewState(
+                EXPECTED_PHOTO_URI,
+                EXPECTED_PHOTO_DESCRIPTION
+
+            ),
+        ),
+        description = "",
+        surface = "",
+        room = "",
+        bathroom = "",
+        bedroom = "",
+        interest = null,
+        address = EXPECTED_ADDRESS,
+        apartment = "",
+        city = EXPECTED_CITY,
+        county = "",
+        zipcode = EXPECTED_ZIPCODE,
+        country = "",
+        startSale = EXPECTED_CREATION_DATE_FORMAT,
+        purchaseDate = "Ongoing sale !",
+        vendor = EXPECTED_VENDOR,
+        staticMap = EXPECTED_STATIC_MAP,
         visibility = true,
     )
     // endregion OUT
