@@ -2,6 +2,8 @@ package com.kardabel.realestatemanager.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kardabel.realestatemanager.ApplicationDispatchers
 import com.kardabel.realestatemanager.model.SearchParams
 import com.kardabel.realestatemanager.repository.CurrentPropertyIdRepository
 import com.kardabel.realestatemanager.repository.CurrentSearchRepository
@@ -9,6 +11,8 @@ import com.kardabel.realestatemanager.repository.InterestRepository
 import com.kardabel.realestatemanager.utils.SearchActivityViewAction
 import com.kardabel.realestatemanager.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,6 +20,7 @@ class SearchPropertyViewModel @Inject constructor(
     private val searchRepository: CurrentSearchRepository,
     private val interestRepository: InterestRepository,
     private val currentPropertyIdRepository: CurrentPropertyIdRepository,
+    private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
     val actionSingleLiveEvent = SingleLiveEvent<SearchActivityViewAction>()
@@ -104,10 +109,16 @@ class SearchPropertyViewModel @Inject constructor(
         )
 
         if (userChooseAtLeastOneParameter(newSearchParams)) {
-            sendSearchParamsToRepository(newSearchParams)
-            emptyInterestRepository()
-            emptyDetailsViewWhenDone()
-            actionSingleLiveEvent.setValue(SearchActivityViewAction.FINISH_ACTIVITY)
+            viewModelScope.launch {
+
+                sendSearchParamsToRepository(newSearchParams)
+                emptyInterestRepository()
+                emptyDetailsViewWhenDone()
+                withContext(applicationDispatchers.mainDispatcher) {
+                    actionSingleLiveEvent.postValue(SearchActivityViewAction.FINISH_ACTIVITY)
+
+                }
+            }
 
         } else {
             actionSingleLiveEvent.setValue(SearchActivityViewAction.NO_PARAMETER_SELECTED)
