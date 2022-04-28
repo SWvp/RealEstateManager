@@ -21,6 +21,8 @@ class DetailsFragmentViewModel @Inject constructor(
     private val applicationDispatchers: ApplicationDispatchers,
 ) : ViewModel() {
 
+    val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
+
     val detailsLiveData: LiveData<DetailsViewState> =
         currentPropertyIdRepository.currentPropertyIdLiveData.switchMap { id ->
             propertiesRepository.getPropertyById(id).map {
@@ -72,8 +74,6 @@ class DetailsFragmentViewModel @Inject constructor(
         }
 
     }
-
-    val isFromSearchLiveData = currentPropertyIdRepository.isFromSearchLiveData
 
     private fun readableSurface(value: String?): String {
         return if (value != "") {
