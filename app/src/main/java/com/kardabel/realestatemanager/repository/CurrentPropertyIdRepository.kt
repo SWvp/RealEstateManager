@@ -25,6 +25,9 @@ class CurrentPropertyIdRepository @Inject constructor(){
 
     // In case of search, inform details view that is nothing to display
     fun isBackFromSearchActivity(){
+        if(!isProperty){
+            isBackFromSearchActivityLiveData.postValue(true)
+        }
         isBackFromSearchActivityLiveData.postValue(false)
     }
 }
