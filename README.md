@@ -1,5 +1,5 @@
 
-# REALESTATE
+# REALESTATE MANAGER
 Android application that allows you to list properties for a real estate agency. It will be possible to login with Gmail, list new property with text and photos, modify them, be up-to-date with other agent, performing search with multiple parameters, convert price to euros/dollars, check your position and that of the properties, marked property as sold. The properties can't be deleted.
 This application allows user to get Master/detail view that allows to see property and its details view on same screen, when on tablet mode.
 
@@ -42,3 +42,13 @@ This application allows user to get Master/detail view that allows to see proper
 
 ## Unit tests
 * ViewModel and usecase with Mockk
+
+## How to use this app
+* Go to [build.gradle](https://github.com/SWvp/RealEstateManager/blob/main/app/build.gradle) line 20 & 21
+* replace GOOGLE_MAP_API_KEY by '"your-google-map-key-here"'
+* or edit/create gradle.properties in user\.gradle folder with GOOGLE_MAP_API_KEY="your-google-map-key-here"
+
+Feel free to send feedback about your experience !
+Happy coding !
+
+Stéphane
