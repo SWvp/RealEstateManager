@@ -12,6 +12,7 @@ import com.kardabel.realestatemanager.repository.*
 import com.kardabel.realestatemanager.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,7 +115,7 @@ class PropertiesViewModel @Inject constructor(
 
     private fun toViewStateWithCurrencyUpdated(
         property: PropertyWithPhoto,
-        currencyStatus: Boolean
+        currencyStatus: Boolean,
     ) =
         PropertyViewState(
             propertyId = property.propertyEntity.propertyId,
@@ -138,7 +139,7 @@ class PropertiesViewModel @Inject constructor(
 
     private fun applySearchParams(
         property: PropertyWithPhoto,
-        searchParams: SearchParams
+        searchParams: SearchParams,
     ): Boolean {
 
         return (surfaceMatchParams(searchParams.surfaceRange, property.propertyEntity.surface)
@@ -159,8 +160,7 @@ class PropertiesViewModel @Inject constructor(
             surfaceCanBeNull = null
         }
 
-        return surfaceRange?.let { surfaceCanBeNull?.let { surfaceRange.contains(it.toInt()) } }
-            ?: true
+        return surfaceRange?.let { surfaceCanBeNull?.let { surfaceRange.contains(it.toInt()) } } ?: true
 
     }
 
@@ -199,14 +199,14 @@ class PropertiesViewModel @Inject constructor(
 
     private fun currencyConverter(
         price: String,
-        currencyStatus: Boolean
+        currencyStatus: Boolean,
     ): String {
         return if (price != "") {
             return if (currencyStatus) {
-                context.getString(R.string.dollar) + price
+                context.getString(R.string.dollar) + formatPrice(price)
             } else {
                 val priceConverted: String = Utils.convertDollarToEuro(price.toInt()).toString()
-                context.getString(R.string.euro) + priceConverted
+                context.getString(R.string.euro) + formatPrice(priceConverted)
             }
         } else {
             context.getString(R.string.price_nc)
@@ -221,12 +221,22 @@ class PropertiesViewModel @Inject constructor(
         }
     }
 
-    private fun readablePrice(price: String?): String {
+    private fun readablePrice(price: String): String {
         return if (price != "") {
-            context.getString(R.string.dollar) + price
+            context.getString(R.string.dollar) + formatPrice(price)
         } else {
             context.getString(R.string.price_nc)
         }
+    }
+
+    private fun formatPrice(price: String): String{
+
+        val decimalFormat = DecimalFormat("#.##")
+        decimalFormat.isGroupingUsed = true
+        decimalFormat.groupingSize = 3
+
+        return decimalFormat.format(price.toInt()).toString()
+
     }
 
     private fun colorToApply(saleStatus: String): Int {
