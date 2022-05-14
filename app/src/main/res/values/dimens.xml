@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="property_image_size">100dp</dimen>
+    <dimen name="property_image_size">120dp</dimen>
     <dimen name="property_type_size">18sp</dimen>
     <dimen name="property_place_size">16sp</dimen>
     <dimen name="property_price_size">20sp</dimen>
@@ -8,7 +8,7 @@
     <!-- PROPERTY DETAILS -->
     <dimen name="details_media_size">20sp</dimen>
     <dimen name="details_recycler_height">120dp</dimen>
-    <dimen name="details_description_text">12sp</dimen>
+    <dimen name="details_description_text">16sp</dimen>
 
     <!-- CREATE ACTIVITY-->
     <dimen name="add_pic_storage">10sp</dimen>

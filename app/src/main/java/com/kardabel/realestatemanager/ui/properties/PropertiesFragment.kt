@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kardabel.realestatemanager.databinding.FragmentPropertiesBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class PropertiesFragment : Fragment() {
@@ -21,7 +23,7 @@ class PropertiesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPropertiesBinding.inflate(
             inflater,
@@ -41,6 +43,9 @@ class PropertiesFragment : Fragment() {
         binding.recyclerViewProperties.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewProperties.adapter = adapter
         binding.recyclerViewProperties.itemAnimator = null
+        binding.recyclerViewProperties.addItemDecoration(DividerItemDecoration(context,
+            DividerItemDecoration.VERTICAL))
+
 
         viewModel.getPropertiesLiveData.observe(viewLifecycleOwner){
             adapter.submitList(it)

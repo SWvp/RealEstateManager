@@ -40,18 +40,18 @@
     <string name="details_surface_title">Surface</string>
     <string name="details_surface_value">720m²</string>
     <string name="details_surface_description">This is surface icon</string>
-    <string name="details_room_title">Number of rooms:</string>
+    <string name="details_room_title">Rooms:</string>
     <string name="details_room_value">5</string>
     <string name="details_room_description">This is room icon</string>
-    <string name="details_bathroom_title">Number of bathrooms:</string>
+    <string name="details_bathroom_title">Bathrooms:</string>
     <string name="details_bathroom_value">2</string>
     <string name="details_bathroom_description">This is bathroom icon</string>
-    <string name="details_bedroom_title">Number of bedrooms:</string>
+    <string name="details_bedroom_title">Bedrooms:</string>
     <string name="details_bedroom_value">3</string>
     <string name="details_bedroom_description">This is bedroom icon</string>
     <string name="details_interests_title">Point of interests:</string>
     <string name="creation_date_text">Creation date:</string>
-    <string name="sold_date_text">Sold on:</string>
+    <string name="sold_date_text">Sold status:</string>
 
     <string name="details_interests_description">School, Church, Police station</string>
     <string name="details_start_sale">On sale date: 12/12/2021</string>

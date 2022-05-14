@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="RealEstateManager"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
 
     <FrameLayout
@@ -40,6 +41,7 @@
         android:id="@+id/property_details_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#0AEA6464"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/main_gl_list"
@@ -50,8 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:backgroundTint="#CDA96A"
         android:contentDescription="@string/it_s_a_fab"
         android:src="@drawable/add_fab"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

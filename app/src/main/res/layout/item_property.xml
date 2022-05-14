@@ -6,7 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_property"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:backgroundTint="#0AEA6464">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,49 +18,53 @@
             android:layout_width="@dimen/property_image_size"
             android:layout_height="@dimen/property_image_size"
             android:layout_margin="4dp"
+            android:contentDescription="@string/the_best_photo_you_want"
             android:scaleType="centerCrop"
             android:src="@drawable/property_sample"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/the_best_photo_you_want" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_property_sale_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:maxLines="1"
             android:textSize="@dimen/property_type_size"
             android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/item_property_photo"
             app:layout_constraintStart_toStartOf="@+id/item_property_photo"
-            app:layout_constraintTop_toBottomOf="@id/item_property_photo"
             tools:text="@string/property_sale_status" />
 
         <TextView
             android:id="@+id/item_property_vendor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="3dp"
+            android:background="#E2F4F0F0"
             android:maxLines="1"
+            android:textAlignment="center"
             android:textSize="@dimen/property_type_size"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/property_vendor"
-            android:textAlignment="textEnd"/>
+            app:layout_constraintTop_toTopOf="@+id/item_property_photo"
+            tools:text="@string/property_vendor" />
 
         <TextView
             android:id="@+id/item_property_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#0AEA6464"
             android:maxLines="1"
+            android:padding="8dp"
             android:text="@string/property_type"
             android:textSize="@dimen/property_type_size"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/item_property_county"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"
             app:layout_constraintTop_toBottomOf="@+id/item_property_vendor" />
@@ -68,25 +73,27 @@
             android:id="@+id/item_property_county"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#0AEA6464"
             android:maxLines="1"
+            android:padding="8dp"
             android:text="@string/property_county"
             android:textSize="@dimen/property_place_size"
+            app:layout_constraintBottom_toBottomOf="@+id/item_property_photo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_property_photo"
-            app:layout_constraintTop_toBottomOf="@+id/item_property_type" />
+            app:layout_constraintStart_toEndOf="@+id/item_property_photo"/>
 
         <TextView
             android:id="@+id/item_property_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:maxLines="1"
             android:text="@string/property_price"
-            android:textColor="@color/property_price_color"
+            android:textColor="#E32828"
             android:textSize="@dimen/property_price_size"
+            android:background="#F0FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/item_property_sale_status"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_property_photo"

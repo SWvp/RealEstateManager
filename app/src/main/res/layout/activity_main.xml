@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="RealEstateManager"
         app:menu="@menu/toolbar_menu"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
         app:titleTextColor="@color/white" />
 
 
@@ -36,8 +37,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:backgroundTint="#CDA96A"
         android:contentDescription="@string/it_s_a_fab"
         android:src="@drawable/add_fab"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
