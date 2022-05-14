@@ -1,19 +1,23 @@
 package com.kardabel.realestatemanager.ui.details
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.kardabel.realestatemanager.R
 import com.kardabel.realestatemanager.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -26,7 +30,7 @@ class DetailsFragment : Fragment() {
     private val viewModel by viewModels<DetailsFragmentViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
@@ -58,7 +62,31 @@ class DetailsFragment : Fragment() {
 
         // Set the adapter to retrieve photo recently added
         val recyclerView: RecyclerView = binding.detailPortraitRecyclerView
-        photosAdapter = DetailsAdapter {
+        photosAdapter = DetailsAdapter { detailPhoto ->
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            val inflater = layoutInflater
+            val dialogLayout: View = inflater.inflate(R.layout.custom_dialog, null)
+
+
+
+            Glide
+                .with(requireContext())
+                .load(detailPhoto.photoUri)
+                .override(1200, 1200)
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(dialogLayout.findViewById(R.id.imageView))
+
+            builder.setTitle(detailPhoto.photoDescription)
+            builder.setNegativeButton("Return to details") { dialog, which ->
+                dialog.cancel()
+            }
+            builder.setView(dialogLayout)
+            builder.show()
+
+
+
 
         }
 
@@ -90,6 +118,7 @@ class DetailsFragment : Fragment() {
         binding.creationDateTitle.isVisible = property.visibility
         binding.soldDateTitle.isVisible = property.visibility
         binding.map.isVisible = property.visibility
+        binding.firstDivider.isVisible = property.visibility
 
         binding.emptyLayout?.setBackgroundColor(resources.getColor(R.color.transparent))
     }
@@ -97,7 +126,9 @@ class DetailsFragment : Fragment() {
     private fun setView(property: DetailsViewState) {
 
         // Set text
+        binding.detailPortraitRecyclerView.setBackgroundColor(Color.parseColor("#2AD39A9A"))
         binding.descriptionText.text = property.description
+        binding.descriptionText.setBackgroundColor(Color.parseColor("#2AD39A9A"))
         binding.surfaceValue.text = property.surface
         binding.roomValue.text = property.room
         binding.bedroomValue.text = property.bedroom
