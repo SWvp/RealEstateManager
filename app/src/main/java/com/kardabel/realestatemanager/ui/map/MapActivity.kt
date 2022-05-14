@@ -56,7 +56,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
         map = googleMap
 
-        //    // CHECK IF USER CHOSE TO SHARE HIS LOCATION
+        // CHECK IF USER CHOSE TO SHARE HIS LOCATION
         if (ActivityCompat.checkSelfPermission(
                 applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
