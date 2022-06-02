@@ -1,7 +1,19 @@
+<p align="center">
+ 	<img 
+   		width="300"
+   		height="300"
+   		src="screenshot/logo_real-estate-manager_bck-white.png"
+		alt="accueil" 
+  	>
+</p>
 
 # REALESTATE MANAGER
 Android application that allows you to list properties for a real estate agency. It will be possible to login with Gmail, list new property with text and photos, modify them, be up-to-date with other agent, performing search with multiple parameters, convert price to euros/dollars, check your position and that of the properties, marked property as sold. The properties can't be deleted.
 This application allows user to get Master/detail view that allows to see property and its details view on same screen, when on tablet mode.
+
+<p align="center">
+ 	<img alt="demo" src="screenshot/demo2.gif" width="30%">
+</p>
 
 ## Features
 * Authentification with Gmail via Firebase Authentification
