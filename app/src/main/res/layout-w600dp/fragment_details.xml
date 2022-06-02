@@ -7,36 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <TextView
-            android:id="@+id/details_media_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/photo_title"
-            android:textSize="@dimen/details_media_size"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/detail_portrait_recycler_view"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/details_recycler_height"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="@color/transparent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_media_title"
-            tools:listitem="@layout/item_details_picture" />
+        android:layout_height="match_parent"
+        android:background="#6DF1F1F1">
 
         <TextView
             android:id="@+id/detail_description_title"
@@ -46,9 +18,10 @@
             android:text="@string/description_title"
             android:textSize="@dimen/details_media_size"
             android:textStyle="bold"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_portrait_recycler_view"
+            app:layout_constraintTop_toTopOf="parent"
             android:visibility="invisible"
             tools:visibility="visible"/>
 
@@ -57,12 +30,43 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:background="@color/transparent"
             tools:text="@string/description_text"
             android:textSize="@dimen/details_description_text"
+            android:background="#2AD39A9A"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detail_description_title" />
+
+
+        <TextView
+            android:id="@+id/details_media_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/white"
+            android:text="@string/photo_title"
+            android:textSize="@dimen/details_media_size"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_text"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detail_portrait_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/details_recycler_height"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@color/transparent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_media_title"
+            tools:listitem="@layout/item_details_picture" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/first_divider"
@@ -70,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/description_text"
+            app:layout_constraintTop_toBottomOf="@+id/detail_portrait_recycler_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -78,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:background="@color/white"
             app:layout_constraintTop_toBottomOf="@id/first_divider">
 
             <androidx.constraintlayout.widget.Guideline
@@ -433,7 +438,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/country"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                android:contentDescription="@string/map" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -444,7 +450,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/empty_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
