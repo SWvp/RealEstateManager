@@ -6,19 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8E5151">
 
-    <TextView
-        android:id="@+id/auth_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:fontFamily="serif"
-        android:text="REALESTATEMANAGER"
-        android:textColor="@color/white"
-        android:textSize="32dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:layout_width="400dp"
@@ -27,18 +15,19 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16sp"
         android:layout_marginBottom="16sp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logov2"
         app:layout_constraintBottom_toTopOf="@+id/signing_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/auth_title" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/logo" />
 
     <Button
         android:id="@+id/signing_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
-        android:text="Connection"
+        android:text="@string/connection"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
