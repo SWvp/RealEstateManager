@@ -30,6 +30,10 @@ This application allows user to get Master/detail view that allows to see proper
 	* A distant Firestore database
 	* All databases is up-to-date according to their timestamp creation/changes
 
+<p align="center">
+ 	<img alt="demo" src="screenshot/demo3portrait.gif" width="30%">
+</p>
+
 ## Library
 * Material Design:
 	* constraint layout
