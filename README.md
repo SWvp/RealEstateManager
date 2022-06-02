@@ -12,7 +12,7 @@ Android application that allows you to list properties for a real estate agency.
 This application allows user to get Master/detail view that allows to see property and its details view on same screen, when on tablet mode.
 
 <p align="center">
- 	<img alt="demo" src="screenshot/demo2.gif" width="30%">
+ 	<img alt="demo" src="screenshot/demo2.gif" width="70%">
 </p>
 
 ## Features
