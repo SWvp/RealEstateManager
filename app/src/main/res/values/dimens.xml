@@ -4,6 +4,7 @@
     <dimen name="property_type_size">18sp</dimen>
     <dimen name="property_place_size">16sp</dimen>
     <dimen name="property_price_size">20sp</dimen>
+    <dimen name="property_vendor_size">14sp</dimen>
 
     <!-- PROPERTY DETAILS -->
     <dimen name="details_media_size">20sp</dimen>

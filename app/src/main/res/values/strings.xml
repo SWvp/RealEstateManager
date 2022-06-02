@@ -65,6 +65,9 @@
     <string name="details_zip_code">10021</string>
     <string name="details_country">Uganda</string>
 
+    <string name="map">map</string>
+    <string name="empty_layout">empty layout</string>
+
     <!-- ITEM DETAILS PICTURE LAYOUT -->
     <string name="item_for_details_picture">item for details picture</string>
 
