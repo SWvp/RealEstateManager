@@ -154,4 +154,8 @@
     <string name="dollar">$</string>
     <string name="euro">€</string>
 
+    <!-- AUTH LAYOUT -->
+    <string name="logo">logo</string>
+    <string name="connection">Connection</string>
+
 </resources>
